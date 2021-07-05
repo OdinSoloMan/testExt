@@ -9,37 +9,37 @@ using WebApplication.DataAccess;
 
 namespace BackEnd.Repository
 {
-    public class UsersRepository : IUsersRepository
+    public class OrdersRepository : IOrdersRepository
     {
         private AppDatabaseContext db = new AppDatabaseContext();
-
-        public void Create(Users users)
+       
+        public void Create(Orders orders)
         {
-            db.Users.Add(users);
+            db.Orders.Add(orders);
             db.SaveChanges();
         }
 
-        public void Delete(Guid GuidUsersId)
+        public void Delete(Guid GuidOrdersId)
         {
-            Users user = db.Users.Find(GuidUsersId);
-            if (user != null)
-                db.Users.Remove(user);
+            Orders order = db.Orders.Find(GuidOrdersId);
+            if (order != null)
+                db.Orders.Remove(order);
             db.SaveChanges();
         }
 
-        public Users Read(Guid GuidUsersId)
+        public Orders Read(Guid GuidOrdersId)
         {
-            return db.Users.Find(GuidUsersId);
+            return db.Orders.Find(GuidOrdersId);
         }
 
         public IEnumerable ReadAll()
         {
-            return db.Users;
+            return db.Orders;
         }
 
-        public void Update(Users users)
+        public void Update(Orders orders)
         {
-            db.Entry(users).State = EntityState.Modified;
+            db.Entry(orders).State = EntityState.Modified;
             db.SaveChanges();
         }
     }

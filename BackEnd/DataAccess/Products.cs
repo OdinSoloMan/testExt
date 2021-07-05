@@ -14,5 +14,24 @@ namespace BackEnd.DataAccess
         public string Description { get; set; }
 
         public List<Orders> orders { get; set; } = new List<Orders>();
+
+        public Products()
+        {
+            Id_Product = new Guid();
+            Name = "";
+            Description = "";
+        }
+
+        public Products(string _Name, string _Description)
+        {
+            Name = _Name;
+            Description = _Description;
+        }
+
+        public void CreateProducts(string _Name, string _Description)
+        {
+            Name = _Name;
+            Description = _Description;
+        }
     }
 }

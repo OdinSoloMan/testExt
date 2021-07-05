@@ -25,6 +25,8 @@ namespace BackEnd
                 (c => c.UseSqlServer($"Data Source=WS-PC-16\\SQLEXPRESS;Initial Catalog={nameof(AppDatabaseContext)};Integrated Security=True"));
             services.AddControllers();
             services.AddTransient<IUsersRepository, UsersRepository>();
+            services.AddTransient<IProductsRepository, ProductsRepository>();
+            services.AddTransient<IOrdersRepository, OrdersRepository>();
             services.AddCors();
         }
 

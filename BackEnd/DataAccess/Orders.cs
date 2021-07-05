@@ -15,5 +15,27 @@ namespace BackEnd.DataAccess
         public Users Users { get; set; }
         public Guid ProductsId { get; set; }
         public Products Products { get; set; }
+
+        public Orders()
+        {
+            Id_Order = new Guid();
+            Count = 0;
+            UsersId = new Guid();
+            ProductsId = new Guid();
+        }
+
+        public Orders(int _Count, Guid _IdUsers, Guid _IdProducts)
+        {
+            Count = _Count;
+            UsersId = _IdUsers;
+            ProductsId = _IdProducts;
+        }
+
+        public void CreateOrders(int _Count, Guid _IdUsers, Guid _IdProducts)
+        {
+            Count = _Count;
+            UsersId = _IdUsers;
+            ProductsId = _IdProducts;
+        }
     }
 }
