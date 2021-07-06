@@ -13,7 +13,7 @@ namespace BackEnd.Controllers
     [ApiController]
     public class OrdersController : ControllerBase
     {
-        IOrdersRepository repo;
+        private readonly IOrdersRepository repo;
         public OrdersController(IOrdersRepository r)
         {
             repo = r;

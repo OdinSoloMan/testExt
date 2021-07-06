@@ -7,18 +7,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Ninject;
+using BackEnd.Filter;
+using System.Net;
+using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace BackEnd.Controllers
 {
+    [SimpleResourceFilter]
     [Route("users")]
     [ApiController]
     public class UsersController : ControllerBase
     {
-        IUsersRepository repo;
-        public UsersController(IUsersRepository r)
+        private readonly IUsersRepository repo;
+        readonly IDiagnosticContext _diagnosticContext;
+
+        public UsersController(IUsersRepository r, IDiagnosticContext diagnosticContext)
         {
             repo = r;
+            _diagnosticContext = diagnosticContext;
         }
+
 
         [Route("addusers")]
         [HttpPost]
@@ -29,18 +38,25 @@ namespace BackEnd.Controllers
             return new OkObjectResult(users);
         }
 
+        
         [Route("readallusers")]
         [HttpGet]
         public ActionResult<string> ReadAllUsers()
         {
+            _diagnosticContext.Set("CatalogLoadTime", 1423);
             return new OkObjectResult(repo.ReadAll());
         }
 
+        //[TimeElapsed]
         [Route("read/{id}")]
         [HttpGet]
         public ActionResult<string> ReadUsers(Guid id)
         {
-            return new OkObjectResult(repo.Read(id));
+            var res = repo.Read(id);
+            if (res != null)
+                return new OkObjectResult(repo.Read(id));
+            else
+                return BadRequest(new { message = "Not users under such id" });
         }
 
         [Route("updateusers")]

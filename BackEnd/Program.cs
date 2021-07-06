@@ -3,6 +3,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Serilog.Events;
+using Serilog.Formatting.Compact;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,24 +15,28 @@ namespace BackEnd
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static int Main(string[] args)
         {
-            //Read Configuration from appSettings
-            var config = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
-                .Build();
-            //Initialize Logger
             Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(config)
+                .MinimumLevel.Debug()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                // Filter out ASP.NET Core infrastructre logs that are Information and below
+                .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
+                .Enrich.FromLogContext()
+                .WriteTo.Console()
                 .CreateLogger();
+
+            // Wrap creating and running the host in a try-catch block
             try
             {
-                Log.Information("Application Starting.");
+                Log.Information("Starting host");
                 CreateHostBuilder(args).Build().Run();
+                return 0;
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex, "The Application failed to start.");
+                Log.Fatal(ex, "Host terminated unexpectedly");
+                return 1;
             }
             finally
             {
@@ -39,14 +45,64 @@ namespace BackEnd
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .UseSerilog() //Uses Serilog instead of default .NET Logger
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+        Host.CreateDefaultBuilder(args)
+            .UseSerilog() // <- Add this line
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            });
     }
 }
+
+//using Microsoft.AspNetCore.Hosting;
+//using Microsoft.Extensions.Configuration;
+//using Microsoft.Extensions.Hosting;
+//using Microsoft.Extensions.Logging;
+//using Serilog;
+//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Threading.Tasks;
+//using WebApplication;
+
+//namespace BackEnd
+//{
+//    public class Program
+//    {
+//        public static void Main(string[] args)
+//        {
+//            //Read Configuration from appSettings
+//            var config = new ConfigurationBuilder()
+//                .AddJsonFile("appsettings.json")
+//                .Build();
+//            //Initialize Logger
+//            Log.Logger = new LoggerConfiguration()
+//                .ReadFrom.Configuration(config)
+//                .CreateLogger();
+//            try
+//            {
+//                Log.Information("Application Starting.");
+//                CreateHostBuilder(args).Build().Run();
+//            }
+//            catch (Exception ex)
+//            {
+//                Log.Fatal(ex, "The Application failed to start.");
+//            }
+//            finally
+//            {
+//                Log.CloseAndFlush();
+//            }
+//        }
+
+//        public static IHostBuilder CreateHostBuilder(string[] args) =>
+//            Host.CreateDefaultBuilder(args)
+//                .UseSerilog() //Uses Serilog instead of default .NET Logger
+//                .ConfigureWebHostDefaults(webBuilder =>
+//                {
+//                    webBuilder.UseStartup<Startup>();
+//                });
+//    }
+//}
 
 //using System;
 //using System.Collections.Generic;

@@ -13,7 +13,7 @@ namespace BackEnd.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        IProductsRepository repo;
+        private readonly IProductsRepository repo;
         public ProductsController(IProductsRepository r)
         {
             repo = r;
