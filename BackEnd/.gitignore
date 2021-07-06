@@ -5,4 +5,5 @@
 .vs
 obj
 bin
+logs
 *.merge_file*
