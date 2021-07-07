@@ -11,6 +11,7 @@ using BackEnd.Filter;
 using System.Net;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Newtonsoft.Json;
 
 namespace BackEnd.Controllers
 {
@@ -20,12 +21,16 @@ namespace BackEnd.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUsersRepository repo;
+        private readonly ILogger<UsersController> _log;
         readonly IDiagnosticContext _diagnosticContext;
 
-        public UsersController(IUsersRepository r, IDiagnosticContext diagnosticContext)
+
+        public UsersController(IUsersRepository r, ILogger<UsersController> log, IDiagnosticContext diagnosticContext)
         {
             repo = r;
-            _diagnosticContext = diagnosticContext;
+            _log = log;
+            _diagnosticContext = diagnosticContext ??
+                throw new ArgumentNullException(nameof(diagnosticContext));
         }
 
 
@@ -33,8 +38,10 @@ namespace BackEnd.Controllers
         [HttpPost]
         public ActionResult<string> AddNewUsers([FromBody] Users users)
         {
+            _diagnosticContext.Set("CatalogLoadTime", 1423);
             users.Recording(users.Username, users.Password);
             repo.Create(users);
+            _log.LogInformation("Create user: {@users}", users);
             return new OkObjectResult(users);
         }
 
@@ -44,7 +51,9 @@ namespace BackEnd.Controllers
         public ActionResult<string> ReadAllUsers()
         {
             _diagnosticContext.Set("CatalogLoadTime", 1423);
-            return new OkObjectResult(repo.ReadAll());
+            var res = repo.ReadAll();
+            _log.LogInformation("Read all users: {@res}", res);
+            return new OkObjectResult(res);
         }
 
         //[TimeElapsed]
@@ -52,9 +61,13 @@ namespace BackEnd.Controllers
         [HttpGet]
         public ActionResult<string> ReadUsers(Guid id)
         {
+            _diagnosticContext.Set("CatalogLoadTime", 1423);
             var res = repo.Read(id);
             if (res != null)
+            {
+                _log.LogInformation("Read user: {@res}", res);
                 return new OkObjectResult(repo.Read(id));
+            }
             else
                 return BadRequest(new { message = "Not users under such id" });
         }
@@ -63,8 +76,11 @@ namespace BackEnd.Controllers
         [HttpPut]
         public ActionResult<string> UpdateUsers([FromBody] Users users)
         {
+            _diagnosticContext.Set("CatalogLoadTime", 1423);
             repo.Update(users);
-            return new OkObjectResult(repo.Read(users.Id_User));
+            var res = repo.Read(users.Id_User);
+            _log.LogInformation("Read user: {@res}", res);
+            return new OkObjectResult(res);
         }
 
         [Route("delete/{id}")]
@@ -73,6 +89,7 @@ namespace BackEnd.Controllers
         {
             try
             {
+                _diagnosticContext.Set("CatalogLoadTime", 1423);
                 Users users = new Users() { };
                 users.Id_User = id;
                 repo.Delete(users.Id_User);
@@ -80,32 +97,17 @@ namespace BackEnd.Controllers
             }
             catch
             {
-                return BadRequest();
+                return BadRequest(new { message = "Not delete users"});
             }
         }
 
-        //private IUsersRepository db;
 
-        //public UsersController()
-        //{
-        //    db = new UsersRepository();
-        //}
-
-
-        //[Route("addusers")]
-        //[HttpPost]
-        //public ActionResult<string> AddNewUsers([FromBody] Users users)
-        //{
-        //    users.Recording(users.Username, users.Password);
-        //    db.Create(users);
-        //    return new OkObjectResult(users);
-        //}
-
-        //[Route("readallusers")]
-        //[HttpGet]
-        //public ActionResult<string> ReadAllUsers()
-        //{
-        //    return new OkObjectResult(db.ReadAll());
-        //}
+        [Route("test")]
+        [HttpGet]
+        public IEnumerable<string> Get(string password)
+        {
+            //_log.LogInformation(JsonConvert.SerializeObject(new string[] { "value1", "value2" }));
+            return new string[] { "value1", "value2" };
+        }
     }
 }

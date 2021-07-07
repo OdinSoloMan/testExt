@@ -31,10 +31,6 @@ namespace BackEnd
             services.AddTransient<IProductsRepository, ProductsRepository>();
             services.AddTransient<IOrdersRepository, OrdersRepository>();
             services.AddCors();
-            services.AddControllers(opts =>
-            {
-                opts.Filters.Add<SerilogLoggingPageFilter>();
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,29 +41,25 @@ namespace BackEnd
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseSerilogRequestLogging(options =>
+            {
+                // Customize the message template
+                options.MessageTemplate = "Handled {RequestPath}";
+
+                // Emit debug-level events instead of the defaults
+                options.GetLevel = (httpContext, elapsed, ex) => LogEventLevel.Information;
+
+                // Attach additional properties to the request completion event
+                options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
+                {
+                    diagnosticContext.Set("RequestHost", httpContext.Request.Host.Value);
+                    diagnosticContext.Set("RequestScheme", httpContext.Request.Scheme);
+                    diagnosticContext.Set("ResponceHeaders", httpContext.Response.Headers);
+                    diagnosticContext.Set("ResponceContent", httpContext.Response.Body);
+                };
+            });
+
             app.UseHttpsRedirection();
-            //
-            // ... Error handling/HTTPS middleware
-            app.UseStaticFiles();
-            app.UseSerilogRequestLogging(opts => 
-                opts.EnrichDiagnosticContext = LogHelper.EnrichFromRequest);
-
-      
-            //app.UseSerilogRequestLogging(options =>
-            //{
-            //    // Customize the message template
-            //    options.MessageTemplate = "Handled {RequestPath}";
-
-            //    // Emit debug-level events instead of the defaults
-            //    options.GetLevel = (httpContext, elapsed, ex) => LogEventLevel.Debug;
-
-            //    // Attach additional properties to the request completion event
-            //    options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
-            //    {
-            //        diagnosticContext.Set("RequestHost", httpContext.Request.Host.Value);
-            //        diagnosticContext.Set("RequestScheme", httpContext.Request.Scheme);
-            //    };
-            //});
 
             app.UseRouting();
 
