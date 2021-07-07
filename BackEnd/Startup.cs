@@ -55,9 +55,9 @@ namespace BackEnd
                     diagnosticContext.Set("RequestHost", httpContext.Request.Host.Value);
                     diagnosticContext.Set("RequestScheme", httpContext.Request.Scheme);
                     diagnosticContext.Set("ResponceHeaders", httpContext.Response.Headers);
-                    diagnosticContext.Set("ResponceContent", httpContext.Response.Body);
                 };
             });
+
 
             app.UseHttpsRedirection();
 

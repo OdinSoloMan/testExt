@@ -26,5 +26,30 @@ namespace FrontEnd.Controllers
 
             return View();
         }
+        public ActionResult Products()
+        {
+            ViewBag.Message = "Your contact page.";
+
+            return View();
+        }
+
+        public ActionResult Orders()
+        {
+            ViewBag.Message = "Orders.";
+
+            return View();
+        }
+
+        public ActionResult CountBy(int count)
+        {
+            return View(count++);
+        }
+
+        public ActionResult Login()
+        {
+            ViewBag.Message = "Login.";
+
+            return View();
+        }
     }
 }
