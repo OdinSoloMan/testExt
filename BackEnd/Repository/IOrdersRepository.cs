@@ -14,5 +14,9 @@ namespace BackEnd.Repository
         Orders Read(Guid GuidOrdersId);
         void Update(Orders orders);
         void Delete(Guid GuidOrdersId);
+
+        //тестовый метод для фронта пока нету аторизации
+        //так же после нужно добавить при считывания название продукта а не его id
+        object ReadInfoOrders();
     }
 }

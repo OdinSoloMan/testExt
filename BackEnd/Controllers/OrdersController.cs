@@ -66,5 +66,14 @@ namespace BackEnd.Controllers
                 return BadRequest();
             }
         }
+
+
+        //тестовый метод вызова пока не сделана авторизация пользователя
+        [Route("readinforders")]
+        [HttpGet]
+        public ActionResult<string> ReadInfoOrders()
+        {
+            return new OkObjectResult(repo.ReadInfoOrders());
+        }
     }
 }

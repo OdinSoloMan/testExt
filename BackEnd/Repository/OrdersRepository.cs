@@ -12,7 +12,7 @@ namespace BackEnd.Repository
     public class OrdersRepository : IOrdersRepository
     {
         private AppDatabaseContext db = new AppDatabaseContext();
-       
+
         public void Create(Orders orders)
         {
             db.Orders.Add(orders);
@@ -41,6 +41,21 @@ namespace BackEnd.Repository
         {
             db.Entry(orders).State = EntityState.Modified;
             db.SaveChanges();
+        }
+
+        public object ReadInfoOrders()
+        {
+            var s = db.Orders.Join(db.Products,
+                u => u.ProductsId,
+                c => c.Id_Product,
+                (u, c) => new
+                {
+                    Id_Order = u.Id_Order,
+                    Name = c.Name,
+                    Count = u.Count
+                });
+            
+            return s;
         }
     }
 }

@@ -1,6 +1,11 @@
-﻿using System;
+﻿using FrontEnd.Models;
+using Newtonsoft.Json;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web;
 using System.Web.Mvc;
 
@@ -8,6 +13,7 @@ namespace FrontEnd.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly Uri URL = new Uri("https://localhost:5001/");
         public ActionResult Index()
         {
             return View();
@@ -30,28 +36,59 @@ namespace FrontEnd.Controllers
         {
             ViewBag.Message = "Your contact page.";
 
-            var products = new List<FrontEnd.Models.Products>
+            HttpClient client = new HttpClient();
+            client.BaseAddress = URL;
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
+
+            HttpResponseMessage response = client.GetAsync("products/readallproducts").Result;
+
+            var products = new List<FrontEnd.Models.Products> { };
+
+            if (response.IsSuccessStatusCode)
             {
-                new FrontEnd.Models.Products {Id = 1 , Name = "Test Name1", Description = "Test Description1"},
-                new FrontEnd.Models.Products {Id = 2 , Name = "Test Name2", Description = "Test Description2"},
-                new FrontEnd.Models.Products {Id = 3 , Name = "Test Name3", Description = "Test Description3"},
-                new FrontEnd.Models.Products {Id = 4 , Name = "Test Name4", Description = "Test Description4"},
-                new FrontEnd.Models.Products {Id = 4 , Name = "Test NameYes", Description = "Test DescriptionYes"}
-            };
+                //var test = response.Content.ReadAsStringAsync().Result;
+                //var test1 = JsonConvert.DeserializeObject<List<Products>>(test);
+                products = JsonConvert.DeserializeObject<List<Products>>(response.Content.ReadAsStringAsync().Result);
+            }
+            else
+            {
+                var error = response.StatusCode + " : Message - " + response.ReasonPhrase;
+            }
 
-
-            return View(products.ToList());
+            return View(products);
         }
 
         public ActionResult Orders()
         {
             ViewBag.Message = "Orders.";
-            var orders = new List<FrontEnd.Models.Orders>
+
+            HttpClient client = new HttpClient();
+            client.BaseAddress = URL;
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
+
+            HttpResponseMessage response = client.GetAsync("orders/readinforders").Result;
+
+            var orders = new List<FrontEnd.Models.Orders> { };
+
+            if (response.IsSuccessStatusCode)
             {
-                new FrontEnd.Models.Orders { Id = 1, Name="test", Count = 4 },
-                new FrontEnd.Models.Orders { Id = 2, Name="test1", Count = 2 },
-                new FrontEnd.Models.Orders { Id = 3, Name="test2", Count = 5 }
-            };
+                //var test = response.Content.ReadAsStringAsync().Result;
+                //var test1 = JsonConvert.DeserializeObject<List<Orders>>(test);
+                orders = JsonConvert.DeserializeObject<List<Orders>>(response.Content.ReadAsStringAsync().Result);
+            }
+            else
+            {
+                var error = response.StatusCode + " : Message - " + response.ReasonPhrase;
+            }
+
+            //var orders = new List<FrontEnd.Models.Orders>
+            //{
+            //    new FrontEnd.Models.Orders { Id_Order = 1, Name="test", Count = 4 },
+            //    new FrontEnd.Models.Orders { Id_Order = 2, Name="test1", Count = 2 },
+            //    new FrontEnd.Models.Orders { Id_Order = 3, Name="test2", Count = 5 }
+            //};
             return View(orders.ToList());
         }
 
@@ -64,6 +101,19 @@ namespace FrontEnd.Controllers
         {
             ViewBag.Message = "Login.";
 
+            return View();
+        }
+
+
+        public ActionResult GetMessage()
+        {
+            string message = "Welcome";
+            return new JsonResult { Data = message, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        [HttpPost]
+        public ActionResult Check()
+        {
             return View();
         }
     }
