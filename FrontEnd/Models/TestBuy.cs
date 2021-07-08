@@ -5,10 +5,10 @@ using System.Web;
 
 namespace FrontEnd.Models
 {
-    public class Products
+    public class TestBuy
     {
         public Guid Id_Product { get; set; }
+        public int Count { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
     }
 }

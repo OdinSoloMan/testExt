@@ -104,17 +104,10 @@ namespace FrontEnd.Controllers
             return View();
         }
 
-
-        public ActionResult GetMessage()
+        public void ActionMethodName(string id, string name)
         {
-            string message = "Welcome";
-            return new JsonResult { Data = message, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-        }
-
-        [HttpPost]
-        public ActionResult Check()
-        {
-            return View();
+            string myId = id;
+            string myName = name;
         }
     }
 }
