@@ -42,5 +42,18 @@ namespace BackEnd.Repository
             db.Entry(users).State = EntityState.Modified;
             db.SaveChanges();
         }
+
+        public object Authorization(string username, string password)
+        {
+            var isUser = db.Users.Where(s => s.Username == username).Where(c => c.Password == password).FirstOrDefault<Users>();
+            if(isUser != null)
+                return 
+                    new {
+                        Id_User = isUser.Id_User,
+                        username = isUser.Username
+                    };
+            else
+                return null;
+        }
     }
 }

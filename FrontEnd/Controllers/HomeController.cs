@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -104,10 +105,28 @@ namespace FrontEnd.Controllers
             return View();
         }
 
-        public void ActionMethodName(string id, string name)
+        public ActionResult Authorization(string username, string password)
         {
-            string myId = id;
-            string myName = name;
+            HttpClient client = new HttpClient();
+            client.BaseAddress = URL;
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var pocoObject = new
+            {
+                Username = username,
+                Password = password
+            };
+            HttpContent httpContent = new StringContent(JsonConvert.SerializeObject(pocoObject), Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = client.PostAsync("users/testAuthorization", httpContent).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                var test = response.Content.ReadAsStringAsync().Result;
+                return Redirect("/Home/Products");
+            }
+            return Redirect("/Home/Login");
         }
     }
 }

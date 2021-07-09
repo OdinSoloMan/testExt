@@ -12,6 +12,7 @@ using System.Net;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Newtonsoft.Json;
+using BackEnd.Models;
 
 namespace BackEnd.Controllers
 {
@@ -102,12 +103,15 @@ namespace BackEnd.Controllers
         }
 
 
-        [Route("test")]
-        [HttpGet]
-        public IEnumerable<string> Get(string password)
+        [Route("testAuthorization")]
+        [HttpPost]
+        public ActionResult<string> testAuthorization([FromBody] AccountLogin account)
         {
-            //_log.LogInformation(JsonConvert.SerializeObject(new string[] { "value1", "value2" }));
-            return new string[] { "value1", "value2" };
+            var a = repo.Authorization(account.Username, account.Password);
+            if(a != null)
+                return new OkObjectResult(a);
+            else
+                return BadRequest();
         }
     }
 }

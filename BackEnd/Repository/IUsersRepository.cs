@@ -14,5 +14,8 @@ namespace BackEnd.Repository
         Users Read(Guid GuidUsersId);
         void Update(Users users);
         void Delete(Guid GuidUsersId);
+
+        //тестовая проверка на что такой пользователь есть
+        object Authorization(string username, string password);
     }
 }
