@@ -38,13 +38,18 @@ namespace BackEnd
                 Configuration.GetSection("Position"));
             //services.AddScoped<MyActionFilterAttribute>();
             services.AddScoped<SimpleResourceFilter>();
-            services.AddScoped<TimeElapsed>();
+            //services.AddScoped<TimeElapsed>();
+            services.AddScoped<AddHeaderResultServiceFilter>();
+            services.AddScoped<LogRequestResponseAttribute>();
+
 
             services.AddControllersWithViews(options =>
             {
                 //options.Filters.Add(typeof(MyActionFilterAttribute));
                 options.Filters.Add(typeof(SimpleResourceFilter));
-                options.Filters.Add(typeof(TimeElapsed));
+                //options.Filters.Add(typeof(TimeElapsed));
+                options.Filters.Add(typeof(AddHeaderResultServiceFilter));
+                options.Filters.Add(typeof(LogRequestResponseAttribute));
             });
         }
 
@@ -75,6 +80,9 @@ namespace BackEnd
 
 
             app.UseHttpsRedirection();
+
+            app.UseMiddleware<ResponseRewindMiddleware>();
+
 
             app.UseRouting();
 
