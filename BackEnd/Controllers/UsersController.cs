@@ -16,14 +16,14 @@ using BackEnd.Models;
 
 namespace BackEnd.Controllers
 {
-    [SimpleResourceFilter]
+    //[SimpleResourceFilter]
     [Route("users")]
     [ApiController]
     public class UsersController : ControllerBase
     {
         private readonly IUsersRepository repo;
         private readonly ILogger<UsersController> _log;
-        readonly IDiagnosticContext _diagnosticContext;
+        private readonly IDiagnosticContext _diagnosticContext;
 
 
         public UsersController(IUsersRepository r, ILogger<UsersController> log, IDiagnosticContext diagnosticContext)
@@ -40,9 +40,9 @@ namespace BackEnd.Controllers
         public ActionResult<string> AddNewUsers([FromBody] Users users)
         {
             _diagnosticContext.Set("CatalogLoadTime", 1423);
+            _log.LogInformation("Add users: {@users}", users);
             users.Recording(users.Username, users.Password);
             repo.Create(users);
-            _log.LogInformation("Create user: {@users}", users);
             return new OkObjectResult(users);
         }
 
@@ -67,10 +67,12 @@ namespace BackEnd.Controllers
             if (res != null)
             {
                 _log.LogInformation("Read user: {@res}", res);
-                return new OkObjectResult(repo.Read(id));
+                return new OkObjectResult(res);
             }
             else
-                return BadRequest(new { message = "Not users under such id" });
+            {
+                return BadRequest(new { message = "Not user under such id" });
+            }
         }
 
         [Route("updateusers")]
@@ -78,9 +80,10 @@ namespace BackEnd.Controllers
         public ActionResult<string> UpdateUsers([FromBody] Users users)
         {
             _diagnosticContext.Set("CatalogLoadTime", 1423);
+            _log.LogInformation("Update user request: {@users}", users);
             repo.Update(users);
             var res = repo.Read(users.Id_User);
-            _log.LogInformation("Read user: {@res}", res);
+            _log.LogInformation("Update user: {@res}", res);
             return new OkObjectResult(res);
         }
 
@@ -91,6 +94,7 @@ namespace BackEnd.Controllers
             try
             {
                 _diagnosticContext.Set("CatalogLoadTime", 1423);
+                _log.LogInformation("Delete user to id request: {@id}", id);
                 Users users = new Users() { };
                 users.Id_User = id;
                 repo.Delete(users.Id_User);
@@ -107,6 +111,8 @@ namespace BackEnd.Controllers
         [HttpPost]
         public ActionResult<string> testAuthorization([FromBody] AccountLogin account)
         {
+            _diagnosticContext.Set("CatalogLoadTime", 1423);
+            _log.LogInformation("Authorization user: {@account}", account);
             var a = repo.Authorization(account.Username, account.Password);
             if(a != null)
                 return new OkObjectResult(a);

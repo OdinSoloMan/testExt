@@ -14,17 +14,50 @@
                 <th scope="col">Count</th>
             </tr>
         </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    @*<th scope="row">@orders[i].Id</th>*@
-                    <th scope="row">@Html.DisplayFor(modelItem => item.Id_Order)</th>
-                    <th scope="row">@Html.DisplayFor(modelItem => item.Name)</th>
-                    <th scope="row">@Html.DisplayFor(modelItem => item.Count)</th>
-                </tr>
+        <tbody id="todos">
 
-            }
         </tbody>
     </table>
 </div>
+
+<script type="text/javascript">
+    let todos = [];
+    check();
+
+    function check() {
+        if (localStorage.getItem("id_User") != null) {
+            const url = 'https://localhost:5001/orders/readinforders/';
+
+            fetch(url + localStorage.getItem("id_User"), {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(function (responce) {
+                    return responce.json();
+                })
+                .then(function (result) {
+                    var tableBody = document.getElementById("todos");
+                    console.log("result", result);
+                    for (var i = 0; i < result.length; i++) {
+                        var tr = document.createElement("tr")
+                        tableBody.appendChild(tr)
+                        for (var j = 0; j < Object.keys(result[i]).length; j++) {
+                            var rowValues = Object.values(result[i])
+                            var td = document.createElement('td');
+                            td.setAttribute('scope', 'row');
+                            td.innerHTML = rowValues[j]
+                            tr.appendChild(td);
+                        }
+                    }
+                })
+                .catch(function (error) {
+                    console.log('Request failed', error);
+                });
+        }
+        else {
+            alert("Need Authorization")
+        }
+    }
+</script>

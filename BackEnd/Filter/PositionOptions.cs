@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 
 namespace BackEnd.Filter
 {
-    public class ValidationFilterAttribute
+    public class PositionOptions
     {
+        public string Title { get; set; }
+        public string Name { get; set; }
     }
 }

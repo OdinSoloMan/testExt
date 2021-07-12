@@ -9,6 +9,7 @@ using BackEnd.Repository;
 using Serilog;
 using Serilog.Events;
 using BackEnd.logs;
+using BackEnd.Filter;
 
 namespace BackEnd
 {
@@ -27,10 +28,24 @@ namespace BackEnd
             services.AddDbContext<AppDatabaseContext>
                 (c => c.UseSqlServer($"Data Source=WS-PC-16\\SQLEXPRESS;Initial Catalog={nameof(AppDatabaseContext)};Integrated Security=True"));
             services.AddControllers();
+
             services.AddTransient<IUsersRepository, UsersRepository>();
             services.AddTransient<IProductsRepository, ProductsRepository>();
             services.AddTransient<IOrdersRepository, OrdersRepository>();
             services.AddCors();
+
+            services.Configure<PositionOptions>(
+                Configuration.GetSection("Position"));
+            //services.AddScoped<MyActionFilterAttribute>();
+            services.AddScoped<SimpleResourceFilter>();
+            services.AddScoped<TimeElapsed>();
+
+            services.AddControllersWithViews(options =>
+            {
+                //options.Filters.Add(typeof(MyActionFilterAttribute));
+                options.Filters.Add(typeof(SimpleResourceFilter));
+                options.Filters.Add(typeof(TimeElapsed));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

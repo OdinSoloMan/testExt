@@ -22,7 +22,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Test", "Login")'" >Buy</button>
+                    <button type="button" class="btn btn-primary" onclick="Buy()" >Buy</button>
                 </div>
             </div>
         </div>
@@ -71,7 +71,7 @@
     function modalInfo(ev) {
         document.getElementById('testGuid').innerHTML = "Id : " + ev.value;
         document.getElementById('testCoun').innerHTML = "Count : " + new Number(document.getElementById(ev.value).value);
-        document.getElementById('testName').innerHTML = "Name :" + document.getElementById('name_' + ev.value).getAttribute('value');
+        document.getElementById('testName').innerHTML = "Name : " + document.getElementById('name_' + ev.value).getAttribute('value');
         document.getElementById('testDisc').innerHTML = "Discription : " + document.getElementById('discription_' + ev.value).getAttribute('value');
     }
 
@@ -85,5 +85,35 @@
         var number = new Number(document.getElementById(ev).value);
         if (number < 99)
             document.getElementById(ev).value = number + 1;
+    }
+
+    async function Buy() {
+        if (localStorage.getItem("id_User") != null) {
+            var data = {
+                Count: Number(document.getElementById('testCoun').innerHTML.substr(8)),
+                UsersId: localStorage.getItem("id_User"),
+                ProductsId: document.getElementById('testGuid').innerHTML.substr(5)
+            }
+            console.log(data, null, 2)
+
+            const url = 'https://localhost:5001/orders/addorders';
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const json = await response.json();
+                console.log('Успех:', JSON.stringify(json));
+                alert("Order made");
+            } catch (error) {
+                console.error('Ошибка:', error);
+            }
+        } else {
+            alert("Need Authorization");
+        }
     }
 </script>

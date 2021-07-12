@@ -43,19 +43,18 @@ namespace BackEnd.Repository
             db.SaveChanges();
         }
 
-        public object ReadInfoOrders()
+        public object ReadInfoOrders(Guid id_user)
         {
-            var s = db.Orders.Join(db.Products,
-                u => u.ProductsId,
-                c => c.Id_Product,
-                (u, c) => new
-                {
-                    Id_Order = u.Id_Order,
-                    Name = c.Name,
-                    Count = u.Count
-                });
-            
-            return s;
+            return db.Orders.Where(c => c.UsersId == id_user)
+                .Join(db.Products,
+                    u => u.ProductsId,
+                    c => c.Id_Product,
+                    (u, c) => new
+                    {
+                        Id_Order = u.Id_Order,
+                        Name = c.Name,
+                        Count = u.Count
+                    });
         }
     }
 }

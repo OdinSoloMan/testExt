@@ -64,33 +64,34 @@ namespace FrontEnd.Controllers
         {
             ViewBag.Message = "Orders.";
 
-            HttpClient client = new HttpClient();
-            client.BaseAddress = URL;
-            client.DefaultRequestHeaders.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("application/json"));
+            //HttpClient client = new HttpClient();
+            //client.BaseAddress = URL;
+            //client.DefaultRequestHeaders.Accept.Add(
+            //    new MediaTypeWithQualityHeaderValue("application/json"));
 
-            HttpResponseMessage response = client.GetAsync("orders/readinforders").Result;
+            //HttpResponseMessage response = client.GetAsync("orders/readinforders").Result;
 
-            var orders = new List<FrontEnd.Models.Orders> { };
+            //var orders = new List<FrontEnd.Models.Orders> { };
 
-            if (response.IsSuccessStatusCode)
-            {
-                //var test = response.Content.ReadAsStringAsync().Result;
-                //var test1 = JsonConvert.DeserializeObject<List<Orders>>(test);
-                orders = JsonConvert.DeserializeObject<List<Orders>>(response.Content.ReadAsStringAsync().Result);
-            }
-            else
-            {
-                var error = response.StatusCode + " : Message - " + response.ReasonPhrase;
-            }
-
-            //var orders = new List<FrontEnd.Models.Orders>
+            //if (response.IsSuccessStatusCode)
             //{
-            //    new FrontEnd.Models.Orders { Id_Order = 1, Name="test", Count = 4 },
-            //    new FrontEnd.Models.Orders { Id_Order = 2, Name="test1", Count = 2 },
-            //    new FrontEnd.Models.Orders { Id_Order = 3, Name="test2", Count = 5 }
-            //};
-            return View(orders.ToList());
+            //    //var test = response.Content.ReadAsStringAsync().Result;
+            //    //var test1 = JsonConvert.DeserializeObject<List<Orders>>(test);
+            //    orders = JsonConvert.DeserializeObject<List<Orders>>(response.Content.ReadAsStringAsync().Result);
+            //}
+            //else
+            //{
+            //    var error = response.StatusCode + " : Message - " + response.ReasonPhrase;
+            //}
+
+            ////var orders = new List<FrontEnd.Models.Orders>
+            ////{
+            ////    new FrontEnd.Models.Orders { Id_Order = 1, Name="test", Count = 4 },
+            ////    new FrontEnd.Models.Orders { Id_Order = 2, Name="test1", Count = 2 },
+            ////    new FrontEnd.Models.Orders { Id_Order = 3, Name="test2", Count = 5 }
+            ////};
+            //return View(orders.ToList());
+            return View();
         }
 
         public ActionResult CountBy(int count)

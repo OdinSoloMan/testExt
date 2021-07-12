@@ -17,6 +17,6 @@ namespace BackEnd.Repository
 
         //тестовый метод для фронта пока нету аторизации
         //так же после нужно добавить при считывания название продукта а не его id
-        object ReadInfoOrders();
+        object ReadInfoOrders(Guid id_user);
     }
 }
