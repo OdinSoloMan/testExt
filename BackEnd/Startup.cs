@@ -9,6 +9,9 @@ using BackEnd.Repository;
 using Serilog;
 using Serilog.Events;
 using BackEnd.Filter;
+using IdentityServer4.Models;
+using System.Collections.Generic;
+using IdentityServer4.Test;
 
 namespace BackEnd
 {
@@ -39,6 +42,10 @@ namespace BackEnd
             services.AddScoped<AddHeaderResultServiceFilter>();
             services.AddScoped<LogRequestResponseAttribute>();
 
+            services.AddIdentityServer()
+                    .AddDeveloperSigningCredential()
+                    .AddInMemoryApiResources(BackEnd.Models.ResourceManager.Apis)
+                    .AddInMemoryClients(BackEnd.Models.ClientManager.Clients);
 
             services.AddControllersWithViews(options =>
             {
@@ -85,8 +92,11 @@ namespace BackEnd
                 options => options.SetIsOriginAllowed(x => _ = true).AllowAnyMethod().AllowAnyHeader().AllowCredentials()
             );
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+            app.UseIdentityServer();
+
+
+            //app.UseAuthentication();
+            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
