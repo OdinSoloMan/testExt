@@ -1,22 +1,13 @@
 ﻿using BackEnd.DataAccess;
 using BackEnd.Repository;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Ninject;
-using BackEnd.Filter;
-using System.Net;
 using Microsoft.Extensions.Logging;
 using Serilog;
-using Newtonsoft.Json;
 using BackEnd.Models;
 
 namespace BackEnd.Controllers
 {
-    //[SimpleResourceFilter]
     [Route("users")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -57,7 +48,6 @@ namespace BackEnd.Controllers
             return new OkObjectResult(res);
         }
 
-        //[TimeElapsed]
         [Route("read/{id}")]
         [HttpGet]
         public ActionResult<string> ReadUsers(Guid id)

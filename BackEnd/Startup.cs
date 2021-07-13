@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using BackEnd.Repository;
 using Serilog;
 using Serilog.Events;
-using BackEnd.logs;
 using BackEnd.Filter;
 
 namespace BackEnd
@@ -36,18 +35,14 @@ namespace BackEnd
 
             services.Configure<PositionOptions>(
                 Configuration.GetSection("Position"));
-            //services.AddScoped<MyActionFilterAttribute>();
             services.AddScoped<SimpleResourceFilter>();
-            //services.AddScoped<TimeElapsed>();
             services.AddScoped<AddHeaderResultServiceFilter>();
             services.AddScoped<LogRequestResponseAttribute>();
 
 
             services.AddControllersWithViews(options =>
             {
-                //options.Filters.Add(typeof(MyActionFilterAttribute));
                 options.Filters.Add(typeof(SimpleResourceFilter));
-                //options.Filters.Add(typeof(TimeElapsed));
                 options.Filters.Add(typeof(AddHeaderResultServiceFilter));
                 options.Filters.Add(typeof(LogRequestResponseAttribute));
             });
