@@ -13,6 +13,6 @@ namespace BackEnd.Repository
         void Delete(Guid GuidUsersId);
 
         //тестовая проверка на что такой пользователь есть
-        object Authorization(string username, string password);
+        Users Authorization(string username, string password);
     }
 }

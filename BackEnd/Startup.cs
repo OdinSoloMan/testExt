@@ -17,6 +17,49 @@ namespace BackEnd
 {
     public class Startup
     {
+        public static List<TestUser> GetUsers()
+        {
+            return new List<TestUser>
+            {
+                new TestUser
+                {
+                    SubjectId = "1",
+                    Username = "alice",
+                    Password = "password"
+                },
+                new TestUser
+                {
+                    SubjectId = "2",
+                    Username = "bob",
+                    Password = "password"
+                }
+            };
+        }
+
+        public static IEnumerable<Client> GetClients()
+        {
+            return new List<Client>
+            {
+                // other clients omitted...                
+                // resource owner password grant client
+                new Client
+                {
+                    ClientId = "ro.client",
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                    ClientSecrets = { new Secret("secret".Sha256()) },
+                    AllowedScopes = { "api1" }
+                }
+            };
+        }
+
+        public static IEnumerable<ApiResource> GetApiResources()
+        {
+            return new List<ApiResource>
+            {
+                new ApiResource("api1", "My API")
+            };
+        }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -43,9 +86,11 @@ namespace BackEnd
             services.AddScoped<LogRequestResponseAttribute>();
 
             services.AddIdentityServer()
-                    .AddDeveloperSigningCredential()
-                    .AddInMemoryApiResources(BackEnd.Models.ResourceManager.Apis)
-                    .AddInMemoryClients(BackEnd.Models.ClientManager.Clients);
+                .AddInMemoryClients(new List<Client>())
+                .AddInMemoryIdentityResources(new List<IdentityResource>())
+                .AddInMemoryApiResources(new List<ApiResource>())
+                .AddTestUsers(new List<TestUser>())
+                .AddDeveloperSigningCredential();
 
             services.AddControllersWithViews(options =>
             {
