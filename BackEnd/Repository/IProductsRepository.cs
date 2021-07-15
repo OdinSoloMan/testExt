@@ -1,15 +1,16 @@
 ﻿using BackEnd.DataAccess;
 using System;
-using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BackEnd.Repository
 {
     public interface IProductsRepository
     {
-        IEnumerable ReadAll();
-        void Create(Products products);
-        Products Read(Guid GuidProductsId);
-        void Update(Products products);
-        void Delete(Guid GuidProductsId);
+        Task<IEnumerable<Products>> ReadAll();
+        Task Create(Products products);
+        Task<Products> Read(Guid GuidProductsId);
+        Task Update(Products products);
+        Task Delete(Guid GuidProductsId);
     }
 }

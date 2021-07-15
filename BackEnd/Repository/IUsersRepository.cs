@@ -1,18 +1,19 @@
 ﻿using BackEnd.DataAccess;
 using System;
-using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BackEnd.Repository
 {
     public interface IUsersRepository
     {
-        IEnumerable ReadAll();
-        void Create(Users users);
-        Users Read(Guid GuidUsersId);
-        void Update(Users users);
-        void Delete(Guid GuidUsersId);
+        Task <IEnumerable<Users>> ReadAll();
+        Task Create(Users users);
+        Task<Users> Read(Guid GuidUsersId);
+        Task Update(Users users);
+        Task Delete(Guid GuidUsersId);
 
         //тестовая проверка на что такой пользователь есть
-        Users Authorization(string username, string password);
+        Task<Users> Authorization(string username, string password);
     }
 }

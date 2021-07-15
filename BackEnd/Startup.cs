@@ -9,56 +9,11 @@ using BackEnd.Repository;
 using Serilog;
 using Serilog.Events;
 using BackEnd.Filter;
-using IdentityServer4.Models;
-using System.Collections.Generic;
-using IdentityServer4.Test;
 
 namespace BackEnd
 {
     public class Startup
     {
-        public static List<TestUser> GetUsers()
-        {
-            return new List<TestUser>
-            {
-                new TestUser
-                {
-                    SubjectId = "1",
-                    Username = "alice",
-                    Password = "password"
-                },
-                new TestUser
-                {
-                    SubjectId = "2",
-                    Username = "bob",
-                    Password = "password"
-                }
-            };
-        }
-
-        public static IEnumerable<Client> GetClients()
-        {
-            return new List<Client>
-            {
-                // other clients omitted...                
-                // resource owner password grant client
-                new Client
-                {
-                    ClientId = "ro.client",
-                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
-                    ClientSecrets = { new Secret("secret".Sha256()) },
-                    AllowedScopes = { "api1" }
-                }
-            };
-        }
-
-        public static IEnumerable<ApiResource> GetApiResources()
-        {
-            return new List<ApiResource>
-            {
-                new ApiResource("api1", "My API")
-            };
-        }
 
         public Startup(IConfiguration configuration)
         {
@@ -84,13 +39,6 @@ namespace BackEnd
             services.AddScoped<SimpleResourceFilter>();
             services.AddScoped<AddHeaderResultServiceFilter>();
             services.AddScoped<LogRequestResponseAttribute>();
-
-            services.AddIdentityServer()
-                .AddInMemoryClients(new List<Client>())
-                .AddInMemoryIdentityResources(new List<IdentityResource>())
-                .AddInMemoryApiResources(new List<ApiResource>())
-                .AddTestUsers(new List<TestUser>())
-                .AddDeveloperSigningCredential();
 
             services.AddControllersWithViews(options =>
             {
@@ -137,11 +85,9 @@ namespace BackEnd
                 options => options.SetIsOriginAllowed(x => _ = true).AllowAnyMethod().AllowAnyHeader().AllowCredentials()
             );
 
-            app.UseIdentityServer();
 
-
-            //app.UseAuthentication();
-            //app.UseAuthorization();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

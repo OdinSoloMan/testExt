@@ -1,49 +1,49 @@
 ﻿using BackEnd.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections;
-using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using WebApplication.DataAccess;
 
 namespace BackEnd.Repository
 {
     public class UsersRepository : IUsersRepository
     {
-        private AppDatabaseContext db = new AppDatabaseContext();
+        private readonly AppDatabaseContext db = new AppDatabaseContext();
 
-        public void Create(Users users)
+        public async Task Create(Users users)
         {
-            db.Users.Add(users);
+            await db.Users.AddAsync(users);
             db.SaveChanges();
         }
 
-        public void Delete(Guid GuidUsersId)
+        public async Task Delete(Guid GuidUsersId)
         {
-            Users user = db.Users.Find(GuidUsersId);
+            Users user = await db.Users.FindAsync(GuidUsersId);
             if (user != null)
                 db.Users.Remove(user);
             db.SaveChanges();
         }
 
-        public Users Read(Guid GuidUsersId)
+        public async Task<Users> Read(Guid GuidUsersId)
         {
-            return db.Users.Find(GuidUsersId);
+            return await db.Users.FindAsync(GuidUsersId);
         }
 
-        public IEnumerable ReadAll()
+        public async Task<IEnumerable<Users>> ReadAll()
         {
-            return db.Users;
+            return await db.Users.ToListAsync();
         }
 
-        public void Update(Users users)
+        public async Task Update(Users users)
         {
             db.Entry(users).State = EntityState.Modified;
-            db.SaveChanges();
+            await db.SaveChangesAsync();
         }
 
-        public Users Authorization(string username, string password)
+        public async Task<Users> Authorization(string username, string password)
         {
-            return db.Users.FirstOrDefault(x => x.Username == username && x.Password == password);
+            return await db.Users.FirstOrDefaultAsync(x => x.Username == username && x.Password == password);
         }
     }
 }

@@ -1,15 +1,12 @@
 ﻿using BackEnd.Models;
 using BackEnd.Repository;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace BackEnd.Controllers
 {
@@ -58,22 +55,22 @@ namespace BackEnd.Controllers
 
         private ClaimsIdentity GetIdentity(string username, string password)
         {
-            var users = repo.Authorization(username, password);
-            if (users != null)
-            {
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.NameIdentifier, users.Id_User.ToString()),
-                    new Claim(ClaimTypes.Name, users.Username),
-                    //new Claim(ClaimsIdentity.DefaultRoleClaimType, users.Role)
-                };
+            //var users = repo.Authorization(username, password);
+            //if (users != null)
+            //{
+            //    var claims = new List<Claim>
+            //    {
+            //        new Claim(ClaimTypes.NameIdentifier, users.Id_User.ToString()),
+            //        new Claim(ClaimTypes.Name, users.Username),
+            //        //new Claim(ClaimsIdentity.DefaultRoleClaimType, users.Role)
+            //    };
 
-                ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, 
-                    "Token", 
-                    ClaimsIdentity.DefaultNameClaimType,
-                    ClaimsIdentity.DefaultRoleClaimType);
-                return claimsIdentity;
-            }
+            //    ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, 
+            //        "Token", 
+            //        ClaimsIdentity.DefaultNameClaimType,
+            //        ClaimsIdentity.DefaultRoleClaimType);
+            //    return claimsIdentity;
+            //}
             return null;
         }
 

@@ -1,50 +1,50 @@
 ﻿using BackEnd.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WebApplication.DataAccess;
 
 namespace BackEnd.Repository
 {
     public class OrdersRepository : IOrdersRepository
     {
-        private AppDatabaseContext db = new AppDatabaseContext();
+        private readonly AppDatabaseContext db = new AppDatabaseContext();
 
-        public void Create(Orders orders)
+        public async Task Create(Orders orders)
         {
-            db.Orders.Add(orders);
+            await db.Orders.AddAsync(orders);
             db.SaveChanges();
         }
 
-        public void Delete(Guid GuidOrdersId)
+        public async Task Delete(Guid GuidOrdersId)
         {
-            Orders order = db.Orders.Find(GuidOrdersId);
+            Orders order = await db.Orders.FindAsync(GuidOrdersId);
             if (order != null)
                 db.Orders.Remove(order);
             db.SaveChanges();
         }
 
-        public Orders Read(Guid GuidOrdersId)
+        public async Task<Orders> Read(Guid GuidOrdersId)
         {
-            return db.Orders.Find(GuidOrdersId);
+            return await db.Orders.FindAsync(GuidOrdersId);
         }
 
-        public IEnumerable ReadAll()
+        public async Task<IEnumerable<Orders>> ReadAll()
         {
-            return db.Orders;
+            return await db.Orders.ToListAsync();
         }
 
-        public void Update(Orders orders)
+        public async Task Update(Orders orders)
         {
             db.Entry(orders).State = EntityState.Modified;
-            db.SaveChanges();
+            await db.SaveChangesAsync();
         }
 
-        public object ReadInfoOrders(Guid id_user)
+        public async Task<object> ReadInfoOrders(Guid id_user)
         {
-            return db.Orders.Where(c => c.UsersId == id_user)
+            return await db.Orders.Where(c => c.UsersId == id_user)
                 .Join(db.Products,
                     u => u.ProductsId,
                     c => c.Id_Product,
@@ -53,7 +53,7 @@ namespace BackEnd.Repository
                         Id_Order = u.Id_Order,
                         Name = c.Name,
                         Count = u.Count
-                    });
+                    }).ToListAsync();
         }
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
+using System.Threading.Tasks;
 
 namespace BackEnd.Controllers
 {
@@ -11,13 +12,13 @@ namespace BackEnd.Controllers
     [ApiController]
     public class OrdersController : ControllerBase
     {
-        private readonly IOrdersRepository repo;
+        private readonly IOrdersRepository _repo;
         private readonly ILogger<OrdersController> _log;
         private readonly IDiagnosticContext _diagnosticContext;
 
-        public OrdersController(IOrdersRepository r, ILogger<OrdersController> log, IDiagnosticContext diagnosticContext)
+        public OrdersController(IOrdersRepository repo, ILogger<OrdersController> log, IDiagnosticContext diagnosticContext)
         {
-            repo = r;
+            _repo = repo;
             _log = log;
             _diagnosticContext = diagnosticContext ??
                 throw new ArgumentNullException(nameof(diagnosticContext));
@@ -25,31 +26,31 @@ namespace BackEnd.Controllers
 
         [Route("addorders")]
         [HttpPost]
-        public ActionResult<string> AddOrders([FromBody] Orders orders)
+        public async Task<ActionResult<string>> AddOrders([FromBody] Orders orders)
         {
             _diagnosticContext.Set("CatalogLoadTime", 1423);
             _log.LogInformation("Add orders : {@orders}", orders);
             orders.CreateOrders(orders.Count, orders.UsersId, orders.ProductsId);
-            repo.Create(orders);
+            await _repo.Create(orders);
             return new OkObjectResult(orders);
         }
 
         [Route("readallorders")]
         [HttpGet]
-        public ActionResult<string> ReadAllOrders()
+        public async Task<ActionResult<string>> ReadAllOrders()
         {
             _diagnosticContext.Set("CatalogLoadTime", 1423);
-            var res = repo.ReadAll();
+            var res = await _repo.ReadAll();
             _log.LogInformation("Read all orders : {@res}", res);
-            return new OkObjectResult(repo.ReadAll());
+            return new OkObjectResult(res);
         }
 
         [Route("read/{id}")]
         [HttpGet]
-        public ActionResult<string> ReadOrders(Guid id)
+        public async Task<ActionResult<string>> ReadOrders(Guid id)
         {
             _diagnosticContext.Set("CatalogLoadTime", 1423);
-            var res = repo.Read(id);
+            var res = await _repo.Read(id);
             if (res != null)
             {
                 _log.LogInformation("Read order: {@res}", res);
@@ -63,19 +64,19 @@ namespace BackEnd.Controllers
 
         [Route("updateorders")]
         [HttpPut]
-        public ActionResult<string> UpdateOrders([FromBody] Orders orders)
+        public async Task<ActionResult<string>> UpdateOrders([FromBody] Orders orders)
         {
             _diagnosticContext.Set("CatalogLoadTime", 1423);
             _log.LogInformation("Update order request: {@users}", orders);
-            repo.Update(orders);
-            var res = repo.Read(orders.Id_Order);
+            await _repo.Update(orders);
+            var res = await _repo.Read(orders.Id_Order);
             _log.LogInformation("Update order : {@res}", res);
             return new OkObjectResult(res);
         }
 
         [Route("delete/{id}")]
         [HttpDelete]
-        public ActionResult<string> DeleteOrders(Guid id)
+        public async Task<ActionResult<string>> DeleteOrders(Guid id)
         {
             try
             {
@@ -83,7 +84,7 @@ namespace BackEnd.Controllers
                 _log.LogInformation("Delete order to id request: {@id}", id);
                 Orders orders = new Orders() { };
                 orders.Id_Order = id;
-                repo.Delete(orders.Id_Order);
+                await _repo.Delete(orders.Id_Order);
                 return new OkObjectResult(new { delete_orders = id });
             }
             catch
@@ -96,10 +97,10 @@ namespace BackEnd.Controllers
         //тестовый метод вызова пока не сделана авторизация пользователя
         [Route("readinforders/{id_user}")]
         [HttpGet]
-        public ActionResult<string> ReadInfoOrders(Guid id_user)
+        public async Task<ActionResult<string>> ReadInfoOrders(Guid id_user)
         {
             _diagnosticContext.Set("CatalogLoadTime", 1423);
-            return new OkObjectResult(repo.ReadInfoOrders(id_user));
+            return new OkObjectResult(await _repo.ReadInfoOrders(id_user));
         }
     }
 }

@@ -1,43 +1,44 @@
 ﻿using BackEnd.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using WebApplication.DataAccess;
 
 namespace BackEnd.Repository
 {
     public class ProductsRepository : IProductsRepository
     {
-        private AppDatabaseContext db = new AppDatabaseContext();
+        private readonly AppDatabaseContext db = new AppDatabaseContext();
 
-        public void Create(Products products)
+        public async Task Create(Products products)
         {
-            db.Products.Add(products);
+            await db.Products.AddAsync(products);
             db.SaveChanges();
         }
 
-        public void Delete(Guid GuidProductsId)
+        public async Task Delete(Guid GuidProductsId)
         {
-            Products products = db.Products.Find(GuidProductsId);
+            Products products = await db.Products.FindAsync(GuidProductsId);
             if (products != null)
                 db.Products.Remove(products);
             db.SaveChanges();
         }
 
-        public Products Read(Guid GuidProductsId)
+        public async Task<Products> Read(Guid GuidProductsId)
         {
-            return db.Products.Find(GuidProductsId);
+            return  await db.Products.FindAsync(GuidProductsId);
         }
 
-        public IEnumerable ReadAll()
+        public async Task<IEnumerable<Products>> ReadAll()
         {
-            return db.Products;
+            return await db.Products.ToListAsync();
         }
 
-        public void Update(Products products)
+        public async Task Update(Products products)
         {
             db.Entry(products).State = EntityState.Modified;
-            db.SaveChanges();
+            await db.SaveChangesAsync();
         }
     }
 }
