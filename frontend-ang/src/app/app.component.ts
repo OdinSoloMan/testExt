@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { LanguageService } from './shared/language.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,12 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'frontend-ang';
+
+  constructor(
+    private languageService : LanguageService
+  ){  }
+
+  ngOnInit() {
+    this.languageService.setInitialAppLanguage("en");
+  }
 }

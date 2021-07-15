@@ -5,9 +5,9 @@ namespace BackEnd.Models
 {
     public class AuthOptions
     {
-        public const string ISSUER = "MyAuthServer";
+        public const string ISSUER = "textExt";
         public const string AUDIENCE = "http://localhost:5001/";
-        const string KEY = "mysupersecret_secretkey!123";
+        const string KEY = "OdinSolo_textExt-v1";
         public const int LIFETIME = 60;
         public static SymmetricSecurityKey GetSymmetricSecurityKey()
         {

@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace BackEnd.Controllers
 {
@@ -14,18 +16,18 @@ namespace BackEnd.Controllers
     public class AccountController : ControllerBase
     {
 
-        private readonly IUsersRepository repo;
+        private readonly IUsersRepository _repo;
 
-        public AccountController(IUsersRepository r)
+        public AccountController(IUsersRepository repo)
         {
-            repo = r;
+            _repo = repo;
         }
 
         [Route("login")]
         [HttpPost]
-        public ActionResult<string> Login([FromBody] AccountLogin value)
+        public async Task<ActionResult<string>> Login([FromBody] AccountLogin value)
         {
-            var identity = GetIdentity(value.Username, value.Password);
+            var identity = await GetIdentity(value.Username, value.Password);
 
             if (identity == null)
             {
@@ -53,24 +55,24 @@ namespace BackEnd.Controllers
             });
         }
 
-        private ClaimsIdentity GetIdentity(string username, string password)
+        private async Task<ClaimsIdentity> GetIdentity(string username, string password)
         {
-            //var users = repo.Authorization(username, password);
-            //if (users != null)
-            //{
-            //    var claims = new List<Claim>
-            //    {
-            //        new Claim(ClaimTypes.NameIdentifier, users.Id_User.ToString()),
-            //        new Claim(ClaimTypes.Name, users.Username),
-            //        //new Claim(ClaimsIdentity.DefaultRoleClaimType, users.Role)
-            //    };
+            var users = await _repo.Authorization(username, password);
+            if (users != null)
+            {
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.NameIdentifier, users.Id_User.ToString()),
+                    new Claim(ClaimTypes.Name, users.Username),
+                    //new Claim(ClaimsIdentity.DefaultRoleClaimType, users.Role)
+                };
 
-            //    ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, 
-            //        "Token", 
-            //        ClaimsIdentity.DefaultNameClaimType,
-            //        ClaimsIdentity.DefaultRoleClaimType);
-            //    return claimsIdentity;
-            //}
+                ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims,
+                    "Token",
+                    ClaimsIdentity.DefaultNameClaimType,
+                    ClaimsIdentity.DefaultRoleClaimType);
+                return claimsIdentity;
+            }
             return null;
         }
 
@@ -79,8 +81,7 @@ namespace BackEnd.Controllers
         [HttpPost]
         public ActionResult<string> Logout()
         {
-
-            return new OkObjectResult(new { message = "it`s logout" });
+            return new OkObjectResult(new { message = "Logout" });
         }
     }
 }

@@ -6,20 +6,34 @@ import { AppComponent } from './app.component';
 import { ScoreComponent } from './score/score.component';
 import { MenuComponent } from './menu/menu.component';
 import { OrdersComponent } from './orders/orders.component';
-import { ApiService } from './api.service';
-import { HttpClientModule } from '@angular/common/http';
+import { ApiService } from './shared/api.service';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
+
+export function createTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 
 @NgModule({
-  declarations: [			
+  declarations: [
     AppComponent,
     ScoreComponent,
     MenuComponent,
     OrdersComponent,
-   ],
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: (createTranslateLoader),
+        deps: [HttpClient]
+      }
+    })
   ],
   providers: [ApiService],
   bootstrap: [AppComponent]
