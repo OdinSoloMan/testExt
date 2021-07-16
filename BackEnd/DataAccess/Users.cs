@@ -12,6 +12,8 @@ namespace BackEnd.DataAccess
         public Guid Id_User { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
+        public string RefreshToken { get; set; }
+        public DateTime RefreshTokenExpiryTime { get; set; }
 
         public List<Orders> orders { get; set; } = new List<Orders>();
 
@@ -21,18 +23,24 @@ namespace BackEnd.DataAccess
             Id_User = new Guid();
             Username = "";
             Password = "";
+            RefreshToken = null;
+            RefreshTokenExpiryTime = new DateTime();
         }
 
-        public Users(string _Username, string _Password)
+        public Users(string _Username, string _Password, string _RefreshToken, DateTime _RefreshTokenExpiryTime)
         {
             Username = _Username;
             Password = _Password;
+            RefreshToken = _RefreshToken;
+            RefreshTokenExpiryTime = _RefreshTokenExpiryTime;
         }
 
-        public void Recording(string _Username, string _Password)
+        public void Recording(string _Username, string _Password, string _RefreshToken, DateTime _RefreshTokenExpiryTime)
         {
             Username = _Username;
             Password = _Password;
+            RefreshToken = _RefreshToken;
+            RefreshTokenExpiryTime = _RefreshTokenExpiryTime;
         }
     }
 }

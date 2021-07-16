@@ -17,7 +17,6 @@ namespace BackEnd.Controllers
         private readonly ILogger<UsersController> _log;
         private readonly IDiagnosticContext _diagnosticContext;
 
-
         public UsersController(IUsersRepository repo, ILogger<UsersController> log, IDiagnosticContext diagnosticContext)
         {
             _repo = repo;
@@ -33,7 +32,7 @@ namespace BackEnd.Controllers
         {
             _diagnosticContext.Set("CatalogLoadTime", 1423);
             _log.LogInformation("Add users: {@users}", users);
-            users.Recording(users.Username, users.Password);
+            users.Recording(users.Username, users.Password, null, new DateTime());
             await _repo.Create(users);
             return new OkObjectResult(users);
         }
@@ -100,7 +99,7 @@ namespace BackEnd.Controllers
 
         [Route("testAuthorization")]
         [HttpPost]
-        public async Task<ActionResult<string>> testAuthorization([FromBody] AccountLogin account)
+        public async Task<ActionResult<string>> TestAuthorization([FromBody] AccountLogin account)
         {
             _diagnosticContext.Set("CatalogLoadTime", 1423);
             _log.LogInformation("Authorization user: {@account}", account);

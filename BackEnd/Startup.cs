@@ -10,8 +10,9 @@ using Serilog;
 using Serilog.Events;
 using BackEnd.Filter;
 using Microsoft.IdentityModel.Tokens;
-using BackEnd.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using BackEnd.Services;
+using System.Text;
 
 namespace BackEnd
 {
@@ -35,6 +36,7 @@ namespace BackEnd
             services.AddTransient<IUsersRepository, UsersRepository>();
             services.AddTransient<IProductsRepository, ProductsRepository>();
             services.AddTransient<IOrdersRepository, OrdersRepository>();
+            services.AddTransient<ITokenService, TokenService>();
             services.AddCors();
 
             services.Configure<PositionOptions>(
@@ -50,30 +52,25 @@ namespace BackEnd
                 options.Filters.Add(typeof(LogRequestResponseAttribute));
             });
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                    .AddJwtBearer(options =>
-                    {
-                        options.RequireHttpsMetadata = false;
-                        options.TokenValidationParameters = new TokenValidationParameters
-                        {
-                                        // укзывает, будет ли валидироваться издатель при валидации токена
-                                        ValidateIssuer = true,
-                                        // строка, представляющая издателя
-                                        ValidIssuer = AuthOptions.ISSUER,
+            services.AddAuthentication(opt =>
+            {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    
+                    ValidIssuer = "http://localhost:5000",
+                    ValidAudience = "http://localhost:5000",
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"))
+                };
+            });
 
-                                        // будет ли валидироваться потребитель токена
-                                        ValidateAudience = true,
-                                        // установка потребителя токена
-                                        ValidAudience = AuthOptions.AUDIENCE,
-                                        // будет ли валидироваться время существования
-                                        ValidateLifetime = true,
-
-                                        // установка ключа безопасности
-                                        IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
-                                        // валидация ключа безопасности
-                                        ValidateIssuerSigningKey = true,
-                        };
-                    });
             services.AddControllersWithViews();
         }
     

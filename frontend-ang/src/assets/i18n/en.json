@@ -1,5 +1,21 @@
 {
     "btn" : {
         "btn-buy" : "Buy"
+    },
+    "navbar" : {
+        "name" : "Navbar",
+        "title-orders" : "Orders",
+        "title-score" : "Score"
+    },
+    "text": {
+        "scoper-form": {
+            "numbers" : "№ :",
+            "name" : "Name :",
+            "description" : "Description :"
+        }
+    },
+    "error" : {
+        "update" : "Update error.",
+        "not-content" : "Not content."
     }
 }

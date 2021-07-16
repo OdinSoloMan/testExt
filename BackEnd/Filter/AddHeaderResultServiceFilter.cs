@@ -5,7 +5,7 @@ namespace BackEnd.Filter
 {
     public class AddHeaderResultServiceFilter : IResultFilter
     {
-        private ILogger _logger;
+        private readonly ILogger _logger;
         public AddHeaderResultServiceFilter(ILoggerFactory loggerFactory)
         {
             _logger = loggerFactory.CreateLogger<AddHeaderResultServiceFilter>();

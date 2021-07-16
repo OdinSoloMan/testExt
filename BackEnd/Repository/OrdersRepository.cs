@@ -50,9 +50,9 @@ namespace BackEnd.Repository
                     c => c.Id_Product,
                     (u, c) => new
                     {
-                        Id_Order = u.Id_Order,
-                        Name = c.Name,
-                        Count = u.Count
+                        u.Id_Order,
+                        c.Name,
+                        u.Count
                     }).ToListAsync();
         }
     }

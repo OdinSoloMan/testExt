@@ -20,18 +20,16 @@ namespace BackEnd.Filter
 
             try
             {
-                using (var memStream = new MemoryStream())
-                {
-                    context.Response.Body = memStream;
+                using var memStream = new MemoryStream();
+                context.Response.Body = memStream;
 
-                    await next(context);
+                await next(context);
 
-                    //memStream.Position = 0;
-                    //string responseBody = new StreamReader(memStream).ReadToEnd();
+                //memStream.Position = 0;
+                //string responseBody = new StreamReader(memStream).ReadToEnd();
 
-                    memStream.Position = 0;
-                    await memStream.CopyToAsync(originalBody);
-                }
+                memStream.Position = 0;
+                await memStream.CopyToAsync(originalBody);
 
             }
             finally

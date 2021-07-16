@@ -10,6 +10,10 @@ import { ApiService } from '../shared/api.service';
 export class ScoreComponent implements OnInit {
   productsList : any = [];
   isNullList : any = -1;
+  modal_guid = "";
+  modal_name = "";
+  modal_description = "";
+  modal_coutn = "";
 
   constructor(
     private api: ApiService
@@ -40,5 +44,29 @@ export class ScoreComponent implements OnInit {
         console.log("full");
       }
     )  
+  }
+
+  decrement(val: any){
+    console.log(val)
+    if(Number(document.getElementById(val)?.getAttribute('value')) > 1) {
+      console.log("decrement")
+      document.getElementById(val)?.setAttribute('value', String(Number(document.getElementById(val)?.getAttribute('value')) - 1))
+    } 
+  }
+
+  increment(val: any){
+    console.log(val)
+    if(Number(document.getElementById(val)?.getAttribute('value')) < 99) {
+      console.log("increment")
+      document.getElementById(val)?.setAttribute('value', String(Number(document.getElementById(val)?.getAttribute('value')) + 1))
+    } 
+  }
+
+  modalInfo(val: any){
+    this.modal_guid = "Id : " + val;
+    this.modal_name = "Name : " + document.getElementById('name-' + val)?.getAttribute('data-value');
+    this.modal_description = "Discription : " + document.getElementById('description-' + val)?.getAttribute('data-value');
+    this.modal_coutn = "Count : " + String(document.getElementById(val)?.getAttribute('value'))
+    //document.getElementById('modal-guid')?.innerText = "Id : " + val;
   }
 }
