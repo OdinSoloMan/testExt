@@ -1,0 +1,30 @@
+<br />
+<div *ngIf="baskeList.length !== 0; else elseBlock">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Name</th>
+        <th scope="col">Description</th>
+        <th scope="col">Count</th>
+      </tr>
+    </thead>
+    <tbody *ngFor="let list of baskeList">
+      <tr>
+        <th scope="row">{{list.ProductsId}}</th>
+        <td>{{list.Name}}</td>
+        <td>{{list.Description}}</td>
+        <td>{{list.Count}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <button type="button" class="btn btn-danger" (click)="Clear()">
+    {{'btn.btn-clear'| translate}}
+  </button>
+  <button type="button" class="btn btn-primary" (click)="Buy()">
+    {{'btn.btn-buy'| translate}}
+  </button>
+</div>
+<ng-template #elseBlock>
+  <div>{{'error.empty-basket'|translate}}</div>
+</ng-template>

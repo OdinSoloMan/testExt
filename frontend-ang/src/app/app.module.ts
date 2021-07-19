@@ -10,6 +10,7 @@ import { ApiService } from './shared/api.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { BasketComponent } from './basket/basket.component';
 
 
 export function createTranslateLoader(http: HttpClient) {
@@ -17,12 +18,13 @@ export function createTranslateLoader(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [
+  declarations: [	
     AppComponent,
     ScoreComponent,
     MenuComponent,
     OrdersComponent,
-  ],
+      BasketComponent
+   ],
   imports: [
     BrowserModule,
     AppRoutingModule,

@@ -102,5 +102,15 @@ namespace BackEnd.Controllers
             _diagnosticContext.Set("CatalogLoadTime", 1423);
             return new OkObjectResult(await _repo.ReadInfoOrders(id_user));
         }
+
+        [Route("addorderslist")]
+        [HttpPost]
+        public async Task<ActionResult<string>> AddOrdersList([FromBody] Orders[] orders)
+        {
+            _diagnosticContext.Set("CatalogLoadTime", 1423);
+            _log.LogInformation("Add orders : {@orders}", orders);
+            await _repo.CraateList(orders);
+            return new OkObjectResult(orders);
+        }
     }
 }

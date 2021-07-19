@@ -21,4 +21,8 @@ export class ApiService {
   getProductsList(): Observable<any> {
     return this.http.get<any>(this.APIUrl + '/products/readallproducts')
   }
+
+  addListOrders(val: any){
+    return this.http.post(this.APIUrl + '/orders/addorderslist', val)
+  }
 }

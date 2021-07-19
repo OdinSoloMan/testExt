@@ -1,11 +1,12 @@
 {
     "btn" : {
-        "btn-buy" : "Buy"
+        "btn-buy" : "Buy",
+        "btn-close" : "Close",
+        "btn-basket": "Add basket",
+        "btn-clear": "Clear"
     },
     "navbar" : {
-        "name" : "Navbar",
-        "title-orders" : "Orders",
-        "title-score" : "Score"
+        "name" : "OdinSolo"
     },
     "text": {
         "scoper-form": {
@@ -16,6 +17,14 @@
     },
     "error" : {
         "update" : "Update error.",
-        "not-content" : "Not content."
+        "not-content" : "Not content.",
+        "empty-basket" : "Empty basket",
+        "not-orders" : "Not orders."
+    },
+    "title": {
+        "title-orders" : "Orders",
+        "title-score" : "Score",
+        "title-modal-order" : "Order",
+        "title-basket" : "Basket"
     }
 }

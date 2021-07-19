@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark container">
   <a class="navbar-brand" href="#">{{'navbar.name' | translate}}</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -8,15 +8,19 @@
     <ul class="navbar-nav mr-auto">
       <li>
         <a class="nav-link" [routerLink]="['/score']"
-        >{{'navbar.title-score' | translate}}</a>
+        >{{'title.title-score' | translate}}</a>
       </li>
       <li >
         <a class="nav-link" [routerLink]="['/orders']"
-        >{{'navbar.title-orders' | translate}}</a>
+        >{{'title.title-orders' | translate}}</a>
+      </li>
+      <li >
+        <a class="nav-link" [routerLink]="['/basket']"
+        >{{'title.title-basket' | translate}}</a>
       </li>
     </ul>
   </div>
 </nav>
-<div class="container-fluid">
+<div class="container">
   <router-outlet></router-outlet>
 </div>

@@ -55,5 +55,13 @@ namespace BackEnd.Repository
                         u.Count
                     }).ToListAsync();
         }
+
+        public async Task CraateList(Orders[] orders)
+        {
+            //for (int i = 0; i < orders.Length; i++)
+            //    await db.Orders.AddAsync(orders[i]);
+            await db.Orders.AddRangeAsync(orders);
+            db.SaveChanges();
+        }
     }
 }
