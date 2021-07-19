@@ -25,7 +25,7 @@ export class BasketComponent implements OnInit {
     var data = await this.baskeList;
     console.log("data", data);
 
-    data = data.map((u: { ProductsId: any; Count: any; }) => ({ ProductsId: u.ProductsId, Count: u.Count, UsersId: localStorage.getItem("user_id") }));
+    data = data.map((u: { ProductsId: any; Count: any; }) => ({ ProductsId: u.ProductsId, Count: u.Count, UsersId: localStorage.getItem("id_users") }));
     console.log("res", data)
 
     this.api.addListOrders(data)

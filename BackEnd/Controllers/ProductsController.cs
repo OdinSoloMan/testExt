@@ -1,5 +1,6 @@
 ﻿using BackEnd.DataAccess;
 using BackEnd.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace BackEnd.Controllers
 {
+    [Authorize]
     [Route("products")]
     [ApiController]
     public class ProductsController : ControllerBase

@@ -1,0 +1,71 @@
+<br />
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+        <label for="exampleInputUsername1">{{'text.login-form.username'|translate}}</label>
+        <input type="text" class="form-control" id="exampleInputUsername1" aria-describedby="UsernameHelp"
+            placeholder="{{'text.enter'|translate}} {{'text.login-form.username'|translate}}" formControlName="username"
+            [ngClass]="
+            (form.get('username')?.touched || form.get('username')?.dirty) &&
+            form.get('username')?.hasError('required')
+              ? 'is-invalid'
+              : '' || form.get('username')?.hasError('minlength')
+              ? 'is-invalid'
+              : '' || form.get('username')?.hasError('maxlength')
+              ? 'is-invalid'
+              : '' ||
+                ((form.get('username')?.touched || form.get('username')?.dirty) &&
+                  !form.get('username')?.invalid)
+              ? 'is-valid'
+              : ''
+          " formControlName="username" />
+        <div class="invalid-feedback">
+            {{
+            form.get("username")?.hasError("required") ? (("text.login-form.username" | translate) + ' ' + ("validators.text.is-required" | translate))  : ""
+            }}
+            {{
+            form.get("username")?.hasError("minlength") ? (("validators.number.4" | translate) + ' ' + ("validators.text.letters-required" | translate)) : ""
+            }}
+            {{
+            form.get("username")?.hasError("maxlength") ? (("validators.number.45" | translate) + ' ' + ("validators.text.letters-required" | translate))  : ""
+            }}
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1">{{'text.login-form.password'|translate}}</label>
+        <input type="password" class="form-control" id="exampleInputPassword1"
+            placeholder="{{'text.enter'|translate}} {{'text.login-form.password'|translate}}" formControlName="password"
+            [ngClass]="
+            (form.get('password')?.touched || form.get('password')?.dirty) &&
+            form.get('password')?.hasError('required')
+              ? 'is-invalid'
+              : '' || form.get('password')?.hasError('minlength')
+              ? 'is-invalid'
+              : '' || form.get('password')?.hasError('maxlength')
+              ? 'is-invalid'
+              : '' ||
+                ((form.get('password')?.touched || form.get('password')?.dirty) &&
+                  !form.get('password')?.invalid)
+              ? 'is-valid'
+              : ''
+          " formControlName="password" />
+        <div class="invalid-feedback">
+            {{
+            form.get("password")?.hasError("required")
+            ? (("text.login-form.password" | translate) + ' ' + ("validators.text.is-required" | translate))
+            : ""
+            }}
+            {{
+            form.get("password")?.hasError("minlength")
+            ? (("validators.number.4" | translate) + ' ' + ("validators.text.letters-required" | translate))
+            : ""
+            }}
+            {{
+            form.get("password")?.hasError("maxlength")
+            ? (("validators.number.45" | translate) + ' ' + ("validators.text.letters-required" | translate)) 
+            : ""
+            }}
+        </div>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Login</button>
+</form>

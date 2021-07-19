@@ -6,9 +6,11 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using BackEnd.Models;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BackEnd.Controllers
 {
+    [Authorize]
     [Route("users")]
     [ApiController]
     public class UsersController : ControllerBase
