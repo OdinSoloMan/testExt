@@ -1,3 +1,5 @@
+import { Router, RouterModule } from '@angular/router';
+import { MenuComponent } from './../../menu/menu.component';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { timeout } from 'rxjs/operators';
@@ -16,10 +18,16 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private api: ApiService,
+    private menu: MenuComponent,
+    private router: Router,
   ) { }
 
   ngOnInit() {
-
+    if (localStorage.getItem("id_users") && localStorage.getItem("refreshToken") && localStorage.getItem("accessToken")) {
+      this.router.navigateByUrl("/score");
+    } else {
+      localStorage.clear();
+    }
   }
 
   async onSubmit() {
@@ -34,6 +42,8 @@ export class LoginComponent implements OnInit {
             localStorage.setItem("id_users", result.id_users)
             localStorage.setItem("accessToken", result.accessToken)
             localStorage.setItem("refreshToken", result.refreshToken)
+            this.menu.refreshMenu();
+            this.router.navigateByUrl("/score");
           }
         },
         async (error) => {

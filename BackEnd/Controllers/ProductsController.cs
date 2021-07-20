@@ -26,8 +26,7 @@ namespace BackEnd.Controllers
                 throw new ArgumentNullException(nameof(diagnosticContext));
         }
 
-        [Route("addproducts")]
-        [HttpPost]
+        [HttpPost("addproducts")]
         public async Task<ActionResult<string>> AddNewProducts([FromBody] Products products)
         {
             _diagnosticContext.Set("CatalogLoadTime", 1423);
@@ -37,8 +36,7 @@ namespace BackEnd.Controllers
             return new OkObjectResult(products);
         }
 
-        [Route("readallproducts")]
-        [HttpGet]
+        [HttpGet("readallproducts")]
         public async Task<ActionResult<string>> ReadAllProducts()
         {
             _diagnosticContext.Set("CatalogLoadTime", 1423);
@@ -47,8 +45,7 @@ namespace BackEnd.Controllers
             return new OkObjectResult(res);
         }
 
-        [Route("read/{id}")]
-        [HttpGet]
+        [HttpGet("read/{id}")]
         public async Task<ActionResult<string>> ReadProduct(Guid id)
         {
             _diagnosticContext.Set("CatalogLoadTime", 1423);
@@ -64,8 +61,7 @@ namespace BackEnd.Controllers
             }
         }
 
-        [Route("updateproducts")]
-        [HttpPut]
+        [HttpPut("updateproducts")]
         public async Task<ActionResult<string>> UpdateProducts([FromBody] Products products)
         {
             _diagnosticContext.Set("CatalogLoadTime", 1423);
@@ -76,8 +72,7 @@ namespace BackEnd.Controllers
             return new OkObjectResult(res);
         }
 
-        [Route("delete/{id}")]
-        [HttpDelete]
+        [HttpDelete("delete/{id}")]
         public async Task<ActionResult<string>> DeleteProducts(Guid id)
         {
             try

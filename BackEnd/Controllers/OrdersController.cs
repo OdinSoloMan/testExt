@@ -26,8 +26,7 @@ namespace BackEnd.Controllers
                 throw new ArgumentNullException(nameof(diagnosticContext));
         }
 
-        [Route("addorders")]
-        [HttpPost]
+        [HttpPost("addorders")]
         public async Task<ActionResult<string>> AddOrders([FromBody] Orders orders)
         {
             _diagnosticContext.Set("CatalogLoadTime", 1423);
@@ -37,8 +36,7 @@ namespace BackEnd.Controllers
             return new OkObjectResult(orders);
         }
 
-        [Route("readallorders")]
-        [HttpGet]
+        [HttpGet("readallorders")]
         public async Task<ActionResult<string>> ReadAllOrders()
         {
             _diagnosticContext.Set("CatalogLoadTime", 1423);
@@ -47,8 +45,7 @@ namespace BackEnd.Controllers
             return new OkObjectResult(res);
         }
 
-        [Route("read/{id}")]
-        [HttpGet]
+        [HttpGet("read/{id}")]
         public async Task<ActionResult<string>> ReadOrders(Guid id)
         {
             _diagnosticContext.Set("CatalogLoadTime", 1423);
@@ -64,8 +61,7 @@ namespace BackEnd.Controllers
             }
         }
 
-        [Route("updateorders")]
-        [HttpPut]
+        [HttpPut("updateorders")]
         public async Task<ActionResult<string>> UpdateOrders([FromBody] Orders orders)
         {
             _diagnosticContext.Set("CatalogLoadTime", 1423);
@@ -76,8 +72,7 @@ namespace BackEnd.Controllers
             return new OkObjectResult(res);
         }
 
-        [Route("delete/{id}")]
-        [HttpDelete]
+        [HttpDelete("delete/{id}")]
         public async Task<ActionResult<string>> DeleteOrders(Guid id)
         {
             try
@@ -97,16 +92,14 @@ namespace BackEnd.Controllers
 
 
         //тестовый метод вызова пока не сделана авторизация пользователя
-        [Route("readinforders/{id_user}")]
-        [HttpGet]
+        [HttpGet("readinforders/{id_user}")]
         public async Task<ActionResult<string>> ReadInfoOrders(Guid id_user)
         {
             _diagnosticContext.Set("CatalogLoadTime", 1423);
             return new OkObjectResult(await _repo.ReadInfoOrders(id_user));
         }
 
-        [Route("addorderslist")]
-        [HttpPost]
+        [HttpPost("addorderslist")]
         public async Task<ActionResult<string>> AddOrdersList([FromBody] Orders[] orders)
         {
             _diagnosticContext.Set("CatalogLoadTime", 1423);

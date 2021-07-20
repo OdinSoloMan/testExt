@@ -26,7 +26,7 @@ export function createTranslateLoader(http: HttpClient) {
     MenuComponent,
     OrdersComponent,
     BasketComponent,
-    LoginComponent
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -42,6 +42,6 @@ export function createTranslateLoader(http: HttpClient) {
     })
   ],
   providers: [ApiService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

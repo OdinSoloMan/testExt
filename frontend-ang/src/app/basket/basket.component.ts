@@ -1,3 +1,4 @@
+import { MenuComponent } from './../menu/menu.component';
 import { Component, OnInit } from '@angular/core';
 import { timeout } from 'rxjs/operators';
 import { ApiService } from '../shared/api.service';
@@ -13,7 +14,8 @@ export class BasketComponent implements OnInit {
 
   constructor(
     private api: ApiService,
-    private basket: BasketService
+    private basket: BasketService,
+    private menu: MenuComponent
   ) { }
 
   ngOnInit() {
@@ -47,6 +49,7 @@ export class BasketComponent implements OnInit {
 
   Clear() {
     this.basket.removeBasketList();
+    this.menu.countPositionFn(this.basket.getBasketList().length)
     this.ngOnInit();
   }
 }

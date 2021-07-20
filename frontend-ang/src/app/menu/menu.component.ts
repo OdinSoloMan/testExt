@@ -8,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit {
+  countPosition = null;
   isLogin = false
 
   constructor(
@@ -22,8 +23,10 @@ export class MenuComponent implements OnInit {
   checkLoging() {
     if (localStorage.getItem("id_users") && localStorage.getItem("refreshToken") && localStorage.getItem("accessToken")) {
       this.isLogin = false;
+      console.log("else", this.isLogin)
     } else {
       this.isLogin = true;
+      console.log("else", this.isLogin)
     }
   }
 
@@ -47,5 +50,16 @@ export class MenuComponent implements OnInit {
         )
       console.log("logout()")
     }
+  }
+
+  refreshMenu() {
+    console.log("test()")
+    this.ngOnInit()
+  }
+
+  countPositionFn(val : any){
+    console.log("countPositionFn", val)
+    this.countPosition = val;
+    this.ngOnInit()
   }
 }

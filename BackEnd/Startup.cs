@@ -5,14 +5,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WebApplication.DataAccess;
 using Microsoft.EntityFrameworkCore;
-using BackEnd.Repository;
 using Serilog;
 using Serilog.Events;
 using BackEnd.Filter;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using BackEnd.Services;
 using System.Text;
+using Autofac;
 
 namespace BackEnd
 {
@@ -33,14 +32,16 @@ namespace BackEnd
                 (c => c.UseSqlServer($"Data Source=WS-PC-16\\SQLEXPRESS;Initial Catalog={nameof(AppDatabaseContext)};Integrated Security=True"));
             services.AddControllers();
 
-            services.AddTransient<IUsersRepository, UsersRepository>();
-            services.AddTransient<IProductsRepository, ProductsRepository>();
-            services.AddTransient<IOrdersRepository, OrdersRepository>();
-            services.AddTransient<ITokenService, TokenService>();
+            //services.AddTransient<IUsersRepository, UsersRepository>();
+            //services.AddTransient<IProductsRepository, ProductsRepository>();
+            //services.AddTransient<IOrdersRepository, OrdersRepository>();
+            //services.AddTransient<ITokenService, TokenService>();
+
+            services.AddOptions();
+
             services.AddCors();
 
-            services.Configure<PositionOptions>(
-                Configuration.GetSection("Position"));
+            //services.Configure<PositionOptions>(Configuration.GetSection("Position"));
             services.AddScoped<SimpleResourceFilter>();
             services.AddScoped<AddHeaderResultServiceFilter>();
             services.AddScoped<LogRequestResponseAttribute>();
@@ -64,7 +65,7 @@ namespace BackEnd
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    
+
                     ValidIssuer = "http://localhost:5000",
                     ValidAudience = "http://localhost:5000",
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"))
@@ -74,6 +75,11 @@ namespace BackEnd
             services.AddControllersWithViews();
         }
     
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterModule(new Dependency.DependencyRegister());
+        }
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

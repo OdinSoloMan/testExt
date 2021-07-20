@@ -21,7 +21,7 @@ const routes: Routes = [
       { path: 'basket', component: BasketComponent },
       { path: 'login', component: LoginComponent },
     ]
-  }
+  },
 ];
 
 @NgModule({

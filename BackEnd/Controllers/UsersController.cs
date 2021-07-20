@@ -28,8 +28,7 @@ namespace BackEnd.Controllers
         }
 
 
-        [Route("addusers")]
-        [HttpPost]
+        [HttpPost("addusers")]
         public async Task<ActionResult<string>> AddNewUsers([FromBody] Users users)
         {
             _diagnosticContext.Set("CatalogLoadTime", 1423);
@@ -40,8 +39,7 @@ namespace BackEnd.Controllers
         }
 
         
-        [Route("readallusers")]
-        [HttpGet]
+        [HttpGet("readallusers")]
         public async Task<ActionResult<string>> ReadAllUsers()
         {
             _diagnosticContext.Set("CatalogLoadTime", 1423);
@@ -50,8 +48,7 @@ namespace BackEnd.Controllers
             return new OkObjectResult(res);
         }
 
-        [Route("read/{id}")]
-        [HttpGet]
+        [HttpGet("read/{id}")]
         public async Task<ActionResult<string>> ReadUsers(Guid id)
         {
             _diagnosticContext.Set("CatalogLoadTime", 1423);
@@ -67,8 +64,7 @@ namespace BackEnd.Controllers
             }
         }
 
-        [Route("updateusers")]
-        [HttpPut]
+        [HttpPut("updateusers")]
         public async Task<ActionResult<string>> UpdateUsers([FromBody] Users users)
         {
             _diagnosticContext.Set("CatalogLoadTime", 1423);
@@ -79,8 +75,7 @@ namespace BackEnd.Controllers
             return new OkObjectResult(res);
         }
 
-        [Route("delete/{id}")]
-        [HttpDelete]
+        [HttpDelete("delete/{id}")]
         public async Task<ActionResult<string>> DeleteUsers(Guid id)
         {
             try
@@ -99,8 +94,7 @@ namespace BackEnd.Controllers
         }
 
 
-        [Route("testAuthorization")]
-        [HttpPost]
+        [HttpPost("testAuthorization")]
         public async Task<ActionResult<string>> TestAuthorization([FromBody] AccountLogin account)
         {
             _diagnosticContext.Set("CatalogLoadTime", 1423);
