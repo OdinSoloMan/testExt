@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Autofac;
+using BackEnd.Rabbit;
 
 namespace BackEnd
 {
@@ -73,8 +74,10 @@ namespace BackEnd
             });
 
             services.AddControllersWithViews();
+
+            services.AddSingleton(sp => RabbitHutch.CreateBus("localhost"));
         }
-    
+
         public void ConfigureContainer(ContainerBuilder builder)
         {
             builder.RegisterModule(new Dependency.DependencyRegister());

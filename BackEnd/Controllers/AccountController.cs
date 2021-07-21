@@ -1,4 +1,5 @@
 ﻿using BackEnd.Models;
+using BackEnd.Rabbit;
 using BackEnd.Repository;
 using BackEnd.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -16,11 +17,13 @@ namespace BackEnd.Controllers
 
         private readonly IUsersRepository _repo;
         private readonly ITokenService _tokenService;
+        private readonly IBus _bus;
 
-        public AccountController(IUsersRepository repo, ITokenService tokenService)
+        public AccountController(IUsersRepository repo, ITokenService tokenService, IBus bus)
         {
             _repo = repo;
             _tokenService = tokenService;
+            _bus = bus;
         }
 
         [HttpPost("login")]
@@ -44,12 +47,17 @@ namespace BackEnd.Controllers
                 users.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
                 await _repo.Update(users);
 
-                return new OkObjectResult(new
+
+                var responce = new
                 {
                     Id_users = users.Id_User,
                     AccessToken = accessToken,
                     RefreshToken = refreshToken
-                });
+                };
+
+                await _bus.SendAsync(Queue.Processing, responce);
+
+                return new OkObjectResult(responce);
             }
             return Unauthorized();
         }
