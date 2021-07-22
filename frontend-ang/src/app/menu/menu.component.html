@@ -14,24 +14,11 @@
         <a class="nav-link" [routerLink]="['/orders']">{{'title.title-orders' | translate}}</a>
       </li>
       <li>
-        <a class="nav-link" [routerLink]="['/basket']">{{'title.title-basket' | translate}} <div *ngIf="countPosition != 0" class="text-warning"
-            style="display: contents;">{{countPosition}}</div> </a>
+        <a class="nav-link" [routerLink]="['/basket']">{{'title.title-basket' | translate}}
+          <div *ngIf="countPosition != 0" class="text-warning countProductBasket">{{countPosition}}
+          </div>
+        </a>
       </li>
-      <!-- <li>
-        <a class="nav-link" [routerLink]="['/login']">{{'title.title-login' | translate}}</a>
-      </li>
-      <li>
-        <a class="nav-link" role="button" (click)="logout()">{{'title.title-logout' | translate}}</a>
-      </li> -->
-      <!-- <li *ngIf="isLogin !== false; else elseBlock">
-        <a class="nav-link" role="button" (click)="logout()">{{'title.title-logout' | translate}}</a>
-      </li>
-      <ng-template #elseBlock>
-        <li>
-          <a class="nav-link" [routerLink]="['/login']">{{'title.title-login' | translate}}</a>
-        </li>
-      </ng-template> -->
-
       <li [hidden]="isLogin">
         <a class="nav-link" role="button" (click)="logout()">{{'title.title-logout' | translate}}</a>
       </li>

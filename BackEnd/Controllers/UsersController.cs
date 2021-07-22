@@ -34,6 +34,10 @@ namespace BackEnd.Controllers
             _diagnosticContext.Set("CatalogLoadTime", 1423);
             _log.LogInformation("Add users: {@users}", users);
             users.Recording(users.Username, users.Password, null, new DateTime());
+            if(await _repo.Select(users.Username))
+            {
+                return BadRequest(new { message = "Error username busy" });
+            }
             await _repo.Create(users);
             return new OkObjectResult(users);
         }
@@ -69,6 +73,10 @@ namespace BackEnd.Controllers
         {
             _diagnosticContext.Set("CatalogLoadTime", 1423);
             _log.LogInformation("Update user request: {@users}", users);
+            if (await _repo.Select(users.Username))
+            {
+                return BadRequest(new { message = "Error username busy" });
+            }
             await _repo.Update(users);
             var res = await _repo.Read(users.Id_User);
             _log.LogInformation("Update user: {@res}", res);

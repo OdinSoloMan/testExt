@@ -1,5 +1,4 @@
-<br />
-<div *ngIf="orderList.length !== 0; else elseBlock">
+<div class="replacementTagBr"  *ngIf="orderList.length !== 0; else elseBlock">
   <table class="table">
     <thead>
       <tr>
@@ -18,5 +17,7 @@
   </table>
 </div>
 <ng-template #elseBlock>
-  <div>{{'error.not-orders'|translate}}</div>
+  <div class="d-flex justify-content-center replacementTagBr">
+    <h4>{{'error.not-orders'|translate}}</h4>
+  </div>
 </ng-template>

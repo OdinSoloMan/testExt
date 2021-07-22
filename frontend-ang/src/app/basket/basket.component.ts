@@ -35,8 +35,7 @@ export class BasketComponent implements OnInit {
       .subscribe(
         async (responce) => {
           console.log("responce", responce);
-          this.basket.removeBasketList();
-          this.ngOnInit();
+          this.Clear();
         },
         async (error) => {
           console.log(error);

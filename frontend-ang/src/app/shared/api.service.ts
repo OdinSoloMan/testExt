@@ -41,4 +41,8 @@ export class ApiService {
   logout(val: any) {
     return this.http.post(this.APIUrl + '/revoke/' + val, null, { headers: this.headers() })
   }
+
+  registration(val: any) {
+    return this.http.post(this.APIUrl + '/registration', val)
+  }
 }

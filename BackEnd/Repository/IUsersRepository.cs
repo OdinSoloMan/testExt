@@ -12,8 +12,9 @@ namespace BackEnd.Repository
         Task<Users> Read(Guid GuidUsersId);
         Task Update(Users users);
         Task Delete(Guid GuidUsersId);
-
         //тестовая проверка на что такой пользователь есть
         Task<Users> Authorization(string username, string password);
+        //checking that if such an entry
+        Task<bool> Select(string username);
     }
 }

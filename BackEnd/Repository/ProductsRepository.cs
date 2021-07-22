@@ -27,7 +27,7 @@ namespace BackEnd.Repository
 
         public async Task<Products> Read(Guid GuidProductsId)
         {
-            return  await db.Products.FindAsync(GuidProductsId);
+            return await db.Products.FindAsync(GuidProductsId);
         }
 
         public async Task<IEnumerable<Products>> ReadAll()
@@ -39,6 +39,11 @@ namespace BackEnd.Repository
         {
             db.Entry(products).State = EntityState.Modified;
             await db.SaveChangesAsync();
+        }
+
+        public async Task<bool> Select(string name)
+        {
+            return await db.Products.FirstOrDefaultAsync(c => c.Name == name) != null;
         }
     }
 }

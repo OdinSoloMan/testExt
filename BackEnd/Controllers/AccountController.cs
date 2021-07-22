@@ -1,9 +1,12 @@
-﻿using BackEnd.Models;
+﻿using BackEnd.DataAccess;
+using BackEnd.Models;
 using BackEnd.Rabbit;
 using BackEnd.Repository;
 using BackEnd.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
@@ -17,13 +20,33 @@ namespace BackEnd.Controllers
 
         private readonly IUsersRepository _repo;
         private readonly ITokenService _tokenService;
-        private readonly IBus _bus;
+        private readonly ILogger<AccountController> _log;
+        private readonly IDiagnosticContext _diagnosticContext;
 
-        public AccountController(IUsersRepository repo, ITokenService tokenService, IBus bus)
+        //private readonly IBus _bus;
+
+        public AccountController(IUsersRepository repo, ITokenService tokenService, ILogger<AccountController> log, IDiagnosticContext diagnosticContext)
         {
             _repo = repo;
             _tokenService = tokenService;
-            _bus = bus;
+            _log = log;
+            _diagnosticContext = diagnosticContext;
+            //Docker needs to be enabled first
+            //_bus = bus;
+        }
+
+        [HttpPost("registration")]
+        public async Task<ActionResult<string>> Registration(Users users)
+        {
+            _diagnosticContext.Set("CatalogLoadTime", 1423);
+            _log.LogInformation("Registration users: {@users}", users);
+            users.Recording(users.Username, users.Password, null, new DateTime());
+            if (await _repo.Select(users.Username))
+            {
+                return BadRequest(new { message = "Error username busy" });
+            }
+            await _repo.Create(users);
+            return new OkObjectResult(users);
         }
 
         [HttpPost("login")]
@@ -55,7 +78,8 @@ namespace BackEnd.Controllers
                     RefreshToken = refreshToken
                 };
 
-                await _bus.SendAsync(Queue.Processing, responce);
+                //Docker needs to be enabled first
+                //await _bus.SendAsync(Queue.Processing, responce.ToString());
 
                 return new OkObjectResult(responce);
             }

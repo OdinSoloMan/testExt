@@ -1,6 +1,4 @@
-<br />
-<div></div>
-<div *ngIf="baskeList.length !== 0; else elseBlock">
+<div class="replacementTagBr"  *ngIf="baskeList.length !== 0; else elseBlock">
   <table class="table">
     <thead>
       <tr>
@@ -27,5 +25,7 @@
   </button>
 </div>
 <ng-template #elseBlock>
-  <div>{{'error.empty-basket'|translate}}</div>
+  <div class="d-flex justify-content-center replacementTagBr">
+    <h4>{{'error.empty-basket'|translate}}</h4>
+  </div>
 </ng-template>

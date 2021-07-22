@@ -74,8 +74,9 @@ namespace BackEnd
             });
 
             services.AddControllersWithViews();
-
-            services.AddSingleton(sp => RabbitHutch.CreateBus("localhost"));
+            
+            //Docker needs to be enabled first
+            //services.AddSingleton(sp => RabbitHutch.CreateBus("localhost"));
         }
 
         public void ConfigureContainer(ContainerBuilder builder)

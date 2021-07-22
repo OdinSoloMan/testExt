@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { timeout } from 'rxjs/operators';
 import { ApiService } from 'src/app/shared/api.service';
 import { Component, OnInit } from '@angular/core';
@@ -13,6 +14,7 @@ export class MenuComponent implements OnInit {
 
   constructor(
     private api: ApiService,
+    private router: Router,
   ) { }
 
   ngOnInit() {
@@ -37,9 +39,9 @@ export class MenuComponent implements OnInit {
         .subscribe(
           async (responce) => {
             console.log("responce", responce);
-
             localStorage.clear();
             this.ngOnInit()
+            this.router.navigateByUrl("login")
           },
           async (error) => {
             console.log(error);
@@ -57,7 +59,7 @@ export class MenuComponent implements OnInit {
     this.ngOnInit()
   }
 
-  countPositionFn(val : any){
+  countPositionFn(val: any) {
     console.log("countPositionFn", val)
     this.countPosition = val;
     this.ngOnInit()

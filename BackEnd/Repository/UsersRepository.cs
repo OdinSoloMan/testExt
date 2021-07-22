@@ -45,5 +45,10 @@ namespace BackEnd.Repository
         {
             return await db.Users.FirstOrDefaultAsync(x => x.Username == username && x.Password == password);
         }
+
+        public async Task<bool> Select(string username)
+        {
+            return await db.Users.FirstOrDefaultAsync(c => c.Username == username) != null;
+        }
     }
 }

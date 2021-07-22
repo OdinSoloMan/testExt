@@ -44,5 +44,8 @@
             "letters-required": "letters required",
             "type": "type"
         }
+    },
+    "registration" : {
+        "a-link-name": "Sing up"
     }
 }
