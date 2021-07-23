@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BackEnd.Domain;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -15,7 +16,10 @@ namespace BackEnd.DataAccess
         public string RefreshToken { get; set; }
         public DateTime RefreshTokenExpiryTime { get; set; }
 
-        public List<Orders> orders { get; set; } = new List<Orders>();
+        public int RolesId { get; set; }
+        public Roles Roles { get; set; }
+
+        public List<Orders> Orders { get; set; } = new List<Orders>();
 
 
         public Users()
@@ -27,20 +31,22 @@ namespace BackEnd.DataAccess
             RefreshTokenExpiryTime = new DateTime();
         }
 
-        public Users(string _Username, string _Password, string _RefreshToken, DateTime _RefreshTokenExpiryTime)
+        public Users(string _Username, string _Password, string _RefreshToken, DateTime _RefreshTokenExpiryTime, int _RolesId)
         {
             Username = _Username;
             Password = _Password;
             RefreshToken = _RefreshToken;
             RefreshTokenExpiryTime = _RefreshTokenExpiryTime;
+            RolesId = _RolesId;
         }
 
-        public void Recording(string _Username, string _Password, string _RefreshToken, DateTime _RefreshTokenExpiryTime)
+        public void Recording(string _Username, string _Password, string _RefreshToken, DateTime _RefreshTokenExpiryTime, int _RolesId)
         {
             Username = _Username;
-            Password = _Password;
+            Password = Md5.Encrypt(_Password);
             RefreshToken = _RefreshToken;
             RefreshTokenExpiryTime = _RefreshTokenExpiryTime;
+            RolesId = _RolesId;
         }
     }
 }

@@ -45,7 +45,23 @@
             "type": "type"
         }
     },
-    "registration" : {
+    "registration": {
         "a-link-name": "Sing up"
+    },
+    "toastr": {
+        "title": {
+            "info": "Info",
+            "error": "Error",
+            "add-basket": "Added to cart",
+            "success": "Success"
+        },
+        "msg": {
+            "auth-true": "Authorization was successful",
+            "auth-false": "Authorization not successful",
+            "registr-true": "Registration was successful",
+            "product-add-orders-true": "Products added to orders",
+            "product-add-orders-false": "Something went wrong",
+            "logout": "You logout"
+        }
     }
 }

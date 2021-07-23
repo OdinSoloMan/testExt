@@ -2,6 +2,8 @@ import { Router } from '@angular/router';
 import { timeout } from 'rxjs/operators';
 import { ApiService } from 'src/app/shared/api.service';
 import { Component, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-menu',
@@ -15,6 +17,8 @@ export class MenuComponent implements OnInit {
   constructor(
     private api: ApiService,
     private router: Router,
+    private toastr: ToastrService,
+    private translate: TranslateService,
   ) { }
 
   ngOnInit() {
@@ -39,15 +43,19 @@ export class MenuComponent implements OnInit {
         .subscribe(
           async (responce) => {
             console.log("responce", responce);
-            localStorage.clear();
-            this.ngOnInit()
-            this.router.navigateByUrl("login")
           },
           async (error) => {
             console.log(error);
           },
           async () => {
             console.log("full");
+            localStorage.clear();
+            this.ngOnInit()
+            this.router.navigateByUrl("login")
+            this.toastr.info(this.translate.instant("toastr.msg.logout"), this.translate.instant("toastr.title.info"), {
+              timeOut: 1000,
+              closeButton: true
+            });
           }
         )
       console.log("logout()")

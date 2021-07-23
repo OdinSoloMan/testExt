@@ -1,8 +1,10 @@
+import { TranslateService } from '@ngx-translate/core';
 import { MenuComponent } from './../menu/menu.component';
 import { Component, OnInit } from '@angular/core';
 import { timeout } from 'rxjs/operators';
 import { ApiService } from '../shared/api.service';
 import { BasketService } from '../shared/basket.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-score',
@@ -17,6 +19,8 @@ export class ScoreComponent implements OnInit {
     private api: ApiService,
     private basket: BasketService,
     private menu: MenuComponent,
+    private toastr: ToastrService,
+    private translate: TranslateService,
   ) { }
 
   ngOnInit() {
@@ -73,5 +77,9 @@ export class ScoreComponent implements OnInit {
     }
     this.basket.setBasketList(data);
     this.menu.countPositionFn(this.basket.getBasketList().length)
+    this.toastr.warning(data.Name?.toString(), this.translate.instant("toastr.title.add-basket"), {
+      timeOut: 1000,
+      closeButton: true
+    });
   }
 }

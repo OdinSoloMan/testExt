@@ -19,9 +19,10 @@ namespace WebApplication.DataAccess
             OptionsBuilder.UseSqlServer($"Data Source=WS-PC-16\\SQLEXPRESS;Initial Catalog={nameof(AppDatabaseContext)};Integrated Security=True");
         }
 
-
         public DbSet<Users> Users { get; set; }
         public DbSet<Products> Products { get; set; }
         public DbSet<Orders> Orders { get; set; }
+        public DbSet<Roles> Roles { get; set; }
+
     }
 }

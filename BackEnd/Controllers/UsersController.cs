@@ -33,7 +33,7 @@ namespace BackEnd.Controllers
         {
             _diagnosticContext.Set("CatalogLoadTime", 1423);
             _log.LogInformation("Add users: {@users}", users);
-            users.Recording(users.Username, users.Password, null, new DateTime());
+            users.Recording(users.Username, users.Password, null, new DateTime(), 1);
             if(await _repo.Select(users.Username))
             {
                 return BadRequest(new { message = "Error username busy" });

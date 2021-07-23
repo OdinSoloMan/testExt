@@ -22,15 +22,17 @@ namespace BackEnd.Controllers
         private readonly ITokenService _tokenService;
         private readonly ILogger<AccountController> _log;
         private readonly IDiagnosticContext _diagnosticContext;
+        private readonly IRolesRepository _rolesRepository;
 
         //private readonly IBus _bus;
 
-        public AccountController(IUsersRepository repo, ITokenService tokenService, ILogger<AccountController> log, IDiagnosticContext diagnosticContext)
+        public AccountController(IUsersRepository repo, ITokenService tokenService, ILogger<AccountController> log, IDiagnosticContext diagnosticContext, IRolesRepository rolesRepository)
         {
             _repo = repo;
             _tokenService = tokenService;
             _log = log;
             _diagnosticContext = diagnosticContext;
+            _rolesRepository = rolesRepository;
             //Docker needs to be enabled first
             //_bus = bus;
         }
@@ -40,7 +42,7 @@ namespace BackEnd.Controllers
         {
             _diagnosticContext.Set("CatalogLoadTime", 1423);
             _log.LogInformation("Registration users: {@users}", users);
-            users.Recording(users.Username, users.Password, null, new DateTime());
+            users.Recording(users.Username, users.Password, null, new DateTime(), 1);
             if (await _repo.Select(users.Username))
             {
                 return BadRequest(new { message = "Error username busy" });
@@ -55,12 +57,13 @@ namespace BackEnd.Controllers
             var users = await _repo.Authorization(accountLogin.Username, accountLogin.Password);
             if(users != null)
             {
+                var role = await _rolesRepository.Read(users.RolesId);
+                var nameRole = role.Name;
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.NameIdentifier, users.Id_User.ToString()),
                     new Claim(ClaimTypes.Name, users.Username),
-                    //you can add roles so that later you can differentiate by rolls
-                    new Claim(ClaimTypes.Role, "users")
+                    new Claim(ClaimTypes.Role, nameRole)
                 };
 
                 var accessToken = _tokenService.GenerateAccessToken(claims);

@@ -90,8 +90,6 @@ namespace BackEnd.Controllers
             }
         }
 
-
-        //тестовый метод вызова пока не сделана авторизация пользователя
         [HttpGet("readinforders/{id_user}")]
         public async Task<ActionResult<string>> ReadInfoOrders(Guid id_user)
         {

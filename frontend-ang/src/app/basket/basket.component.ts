@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { timeout } from 'rxjs/operators';
 import { ApiService } from '../shared/api.service';
 import { BasketService } from '../shared/basket.service';
+import { TranslateService } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-basket',
@@ -15,7 +17,9 @@ export class BasketComponent implements OnInit {
   constructor(
     private api: ApiService,
     private basket: BasketService,
-    private menu: MenuComponent
+    private menu: MenuComponent,
+    private toastr: ToastrService,
+    private translate: TranslateService,
   ) { }
 
   ngOnInit() {
@@ -35,9 +39,17 @@ export class BasketComponent implements OnInit {
       .subscribe(
         async (responce) => {
           console.log("responce", responce);
-          this.Clear();
+          this.toastr.success(this.translate.instant("toastr.msg.product-add-orders-true"), this.translate.instant("toastr.title.success"), {
+            timeOut: 1000,
+            closeButton: true
+          });
+          this.Clear(false);
         },
         async (error) => {
+          this.toastr.error(this.translate.instant("toastr.msg.product-add-orders-false"), this.translate.instant("toastr.title.error"), {
+            timeOut: 1000,
+            closeButton: true
+          });
           console.log(error);
         },
         async () => {
@@ -46,9 +58,14 @@ export class BasketComponent implements OnInit {
       )
   }
 
-  Clear() {
+  Clear(isClear: boolean) {
     this.basket.removeBasketList();
     this.menu.countPositionFn(this.basket.getBasketList().length)
     this.ngOnInit();
+    if(isClear)
+    this.toastr.warning(this.translate.instant("btn.btn-clear"), this.translate.instant("title.title-basket"), {
+      timeOut: 1000,
+      closeButton: true
+    });
   }
 }

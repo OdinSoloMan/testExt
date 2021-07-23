@@ -1,4 +1,5 @@
 ﻿using BackEnd.DataAccess;
+using BackEnd.Domain;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -43,7 +44,7 @@ namespace BackEnd.Repository
 
         public async Task<Users> Authorization(string username, string password)
         {
-            return await db.Users.FirstOrDefaultAsync(x => x.Username == username && x.Password == password);
+            return await db.Users.FirstOrDefaultAsync(x => x.Username == username && x.Password == Md5.Encrypt(password));
         }
 
         public async Task<bool> Select(string username)

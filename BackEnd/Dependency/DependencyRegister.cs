@@ -8,16 +8,11 @@ namespace BackEnd.Dependency
     {
         protected override void Load(ContainerBuilder builder)
         {
-            //services.AddTransient<IUsersRepository, UsersRepository>();
-            //services.AddTransient<IProductsRepository, ProductsRepository>();
-            //services.AddTransient<IOrdersRepository, OrdersRepository>();
-            //services.AddTransient<ITokenService, TokenService>();
             builder.RegisterType<UsersRepository>().As<IUsersRepository>().InstancePerLifetimeScope();
             builder.RegisterType<ProductsRepository>().As<IProductsRepository>().InstancePerLifetimeScope();
             builder.RegisterType<OrdersRepository>().As<IOrdersRepository>().InstancePerLifetimeScope();
             builder.RegisterType<TokenService>().As<ITokenService>().InstancePerLifetimeScope();
-
-           
+            builder.RegisterType<RolesRepository>().As<IRolesRepository>().InstancePerLifetimeScope();
         }
     }
 }

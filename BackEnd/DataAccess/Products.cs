@@ -13,7 +13,7 @@ namespace BackEnd.DataAccess
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public List<Orders> orders { get; set; } = new List<Orders>();
+        public List<Orders> Orders { get; set; } = new List<Orders>();
 
         public Products()
         {
