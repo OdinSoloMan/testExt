@@ -1,6 +1,8 @@
 ﻿using BackEnd.DataAccess;
+using BackEnd.Domain;
 using BackEnd.Repository;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -34,7 +36,7 @@ namespace BackEnd.Controllers
             products.CreateProducts(products.Name, products.Description);
             if (await _repo.Select(products.Name))
             {
-                return BadRequest(new { message = "Error name busy" });
+                return StatusCode(StatusCodes.Status400BadRequest, new Response { Status = "Error", Message = "Error name busy!" });
             }
             await _repo.Create(products);
             return new OkObjectResult(products);
@@ -61,7 +63,7 @@ namespace BackEnd.Controllers
             }
             else
             {
-                return BadRequest(new { message = "Not product under such id" });
+                return StatusCode(StatusCodes.Status400BadRequest, new Response { Status = "Error", Message = "Not product under such id!" });
             }
         }
 
@@ -72,7 +74,7 @@ namespace BackEnd.Controllers
             _log.LogInformation("Update product request: {@products}", products);
             if (await _repo.Select(products.Name))
             {
-                return BadRequest(new { message = "Error name busy" });
+                return StatusCode(StatusCodes.Status400BadRequest, new Response { Status = "Error", Message = "Error name busy!" });
             }
             await _repo.Update(products);
             var res = await _repo.Read(products.Id_Product);
@@ -94,7 +96,7 @@ namespace BackEnd.Controllers
             }
             catch
             {
-                return BadRequest(new { message = "Not delete product"});
+                return StatusCode(StatusCodes.Status400BadRequest, new Response { Status = "Error", Message = "Not delete product!" });
             }
         }
     }

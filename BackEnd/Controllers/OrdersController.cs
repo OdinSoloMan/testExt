@@ -1,6 +1,8 @@
 ﻿using BackEnd.DataAccess;
+using BackEnd.Domain;
 using BackEnd.Repository;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -56,8 +58,8 @@ namespace BackEnd.Controllers
                 return new OkObjectResult(res);
             }
             else
-            {
-                return BadRequest(new { message = "Not order under such id" });
+            {                
+                return StatusCode(StatusCodes.Status400BadRequest, new Response { Status = "Error", Message = "Not order under such id!" });
             }
         }
 
@@ -86,12 +88,12 @@ namespace BackEnd.Controllers
             }
             catch
             {
-                return BadRequest(new { message = "Not delete orders" });
+                return StatusCode(StatusCodes.Status400BadRequest, new Response { Status = "Error", Message = "Not delete orders!" });
             }
         }
 
         [HttpGet("readinforders/{id_user}")]
-        public async Task<ActionResult<string>> ReadInfoOrders(Guid id_user)
+        public async Task<ActionResult<string>> ReadInfoOrders(string id_user)
         {
             _diagnosticContext.Set("CatalogLoadTime", 1423);
             return new OkObjectResult(await _repo.ReadInfoOrders(id_user));

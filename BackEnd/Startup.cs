@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Autofac;
 using BackEnd.Rabbit;
+using BackEnd.DataAccess;
+using Microsoft.AspNetCore.Identity;
 
 namespace BackEnd
 {
@@ -32,6 +34,11 @@ namespace BackEnd
             services.AddDbContext<AppDatabaseContext>
                 (c => c.UseSqlServer($"Data Source=WS-PC-16\\SQLEXPRESS;Initial Catalog={nameof(AppDatabaseContext)};Integrated Security=True"));
             services.AddControllers();
+
+            // For Identity
+            services.AddIdentity<Users, IdentityRole>()
+                .AddEntityFrameworkStores<AppDatabaseContext>()
+                .AddDefaultTokenProviders();
 
             services.AddOptions();
 

@@ -42,7 +42,7 @@ namespace BackEnd.Repository
             await db.SaveChangesAsync();
         }
 
-        public async Task<object> ReadInfoOrders(Guid id_user)
+        public async Task<object> ReadInfoOrders(string id_user)
         {
             return await db.Orders.Where(c => c.UsersId == id_user)
                 .Join(db.Products,

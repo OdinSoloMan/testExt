@@ -15,7 +15,7 @@ namespace BackEnd.Repository
 
         //тестовый метод для фронта пока нету аторизации
         //так же после нужно добавить при считывания название продукта а не его id
-        Task<object> ReadInfoOrders(Guid id_user);
+        Task<object> ReadInfoOrders(string id_user);
         Task CraateList(Orders[] orders);
     }
 }

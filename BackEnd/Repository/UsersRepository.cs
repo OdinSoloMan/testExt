@@ -12,6 +12,11 @@ namespace BackEnd.Repository
     {
         private readonly AppDatabaseContext db = new AppDatabaseContext();
 
+        public Task<Users> Authorization(string username, string password)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task Create(Users users)
         {
             await db.Users.AddAsync(users);
@@ -36,20 +41,25 @@ namespace BackEnd.Repository
             return await db.Users.ToListAsync();
         }
 
+        public Task<bool> Select(string username)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task Update(Users users)
         {
             db.Entry(users).State = EntityState.Modified;
             await db.SaveChangesAsync();
         }
 
-        public async Task<Users> Authorization(string username, string password)
-        {
-            return await db.Users.FirstOrDefaultAsync(x => x.Username == username && x.Password == Md5.Encrypt(password));
-        }
+        //public async Task<Users> Authorization(string username, string password)
+        //{
+        //    return await db.Users.FirstOrDefaultAsync(x => x.Username == username && x.Password == Md5.Encrypt(password));
+        //}
 
-        public async Task<bool> Select(string username)
-        {
-            return await db.Users.FirstOrDefaultAsync(c => c.Username == username) != null;
-        }
+        //public async Task<bool> Select(string username)
+        //{
+        //    return await db.Users.FirstOrDefaultAsync(c => c.Username == username) != null;
+        //}
     }
 }

@@ -8,8 +8,7 @@ namespace BackEnd.DataAccess
         [Key]
         public Guid Id_Order { get; set; }
         public int Count { get; set; }
-        public Guid UsersId { get; set; }
-        public Users Users { get; set; }
+        public string UsersId { get; set; }
         public Guid ProductsId { get; set; }
         public Products Products { get; set; }
 
@@ -17,18 +16,18 @@ namespace BackEnd.DataAccess
         {
             Id_Order = new Guid();
             Count = 0;
-            UsersId = new Guid();
+            UsersId = "";
             ProductsId = new Guid();
         }
 
-        public Orders(int _Count, Guid _IdUsers, Guid _IdProducts)
+        public Orders(int _Count, string _IdUsers, Guid _IdProducts)
         {
             Count = _Count;
             UsersId = _IdUsers;
             ProductsId = _IdProducts;
         }
 
-        public void CreateOrders(int _Count, Guid _IdUsers, Guid _IdProducts)
+        public void CreateOrders(int _Count, string _IdUsers, Guid _IdProducts)
         {
             Count = _Count;
             UsersId = _IdUsers;
