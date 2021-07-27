@@ -1,0 +1,7 @@
+{
+  "name": "test-ext-mobile",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
