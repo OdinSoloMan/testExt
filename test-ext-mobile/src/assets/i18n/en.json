@@ -1,0 +1,34 @@
+{
+    "title": {
+        "home": "Home",
+        "orders": "Orders",
+        "basket": "Basket",
+        "auth": "Authorization",
+        "menu": "Menu",
+        "username": "Username",
+        "psw": "Password"
+    },
+    "text": {
+        "enter": "Enter",
+        "valid": {
+            "number": {
+                "4": 4,
+                "45": 45
+            },
+            "error": {
+                "is-required": "is required",
+                "letters-required": "letters required",
+                "type": "type"
+            }
+        },
+        "load": "Logging in...",
+        "load-error": "Loading failed...",
+        "count": "Count :",
+        "name": "Name :",
+        "room": "№:"
+    },
+    "btn": {
+        "login": "Login",
+        "registration": "Registration"
+    }
+}

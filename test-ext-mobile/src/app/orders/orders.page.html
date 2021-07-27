@@ -1,14 +1,25 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Orders
+      {{'title.orders'|translate}}
     </ion-title>
     <ion-buttons slot="start">
       <ion-menu-button menu="main-menu"></ion-menu-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
+<!-- //  <ion-card *ngFor="let prodList of productsList"></ion-card> -->
 <ion-content>
-  Orders
+  <ion-list *ngFor="let ordList of ordersList">
+    <ion-item>
+      <ion-avatar slot="start">
+        <img src="https://semantic-ui.com/images/wireframe/image.png">
+      </ion-avatar>
+      <ion-label>
+        <h2>{{'text.name' | translate}} {{ordList.name}}</h2>
+        <h3>{{'text.count' | translate}} {{ordList.count}}</h3>
+        <p style="font-size: 13px;">{{'text.room' | translate}} {{ordList.id_Order}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>

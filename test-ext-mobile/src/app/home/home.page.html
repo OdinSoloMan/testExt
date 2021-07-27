@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Home
+      {{'title.home'|translate}}
     </ion-title>
     <ion-buttons slot="start">
       <ion-menu-button menu="main-menu"></ion-menu-button>
@@ -9,6 +9,15 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  Home
+<ion-content class="ion-padding">
+  <ion-card *ngFor="let prodList of productsList">
+    <ion-img class="img-style" src="https://semantic-ui.com/images/wireframe/image.png"></ion-img>
+    <ion-card-header>
+      <ion-card-subtitle>{{prodList.id_Product}}</ion-card-subtitle>
+      <ion-card-title>{{prodList.name}}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      {{prodList.description}}
+    </ion-card-content>
+  </ion-card>
 </ion-content>

@@ -46,7 +46,7 @@ namespace BackEnd.Controllers
 
             Users user = new Users()
             {
-                Email = model.Email,
+                //Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = model.Username
             };
