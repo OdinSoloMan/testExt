@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { timeout } from 'rxjs/operators';
 import { ApiService } from '../service/api.service';
+import NotImage from '../img/not-image.json';
 
 @Component({
   selector: 'app-orders',
@@ -9,6 +10,7 @@ import { ApiService } from '../service/api.service';
 })
 export class OrdersPage implements OnInit {
   ordersList: any = []
+  img: any = NotImage.img;
 
   constructor(
     private api : ApiService,

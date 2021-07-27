@@ -13,7 +13,7 @@
   <ion-list *ngFor="let ordList of ordersList">
     <ion-item>
       <ion-avatar slot="start">
-        <img src="https://semantic-ui.com/images/wireframe/image.png">
+        <img [src]="img">
       </ion-avatar>
       <ion-label>
         <h2>{{'text.name' | translate}} {{ordList.name}}</h2>
@@ -22,4 +22,7 @@
       </ion-label>
     </ion-item>
   </ion-list>
+  <div class="ion-text-center" *ngIf="ordersList.length === 0">
+    <h3>{{'text.null-orders' | translate}}</h3>
+  </div>
 </ion-content>

@@ -25,10 +25,12 @@
         "load-error": "Loading failed...",
         "count": "Count :",
         "name": "Name :",
-        "room": "№:"
+        "room": "№:",
+        "null-orders" : "You have no orders yet"
     },
     "btn": {
         "login": "Login",
-        "registration": "Registration"
+        "registration": "Registration",
+        "buy" : "Buy"
     }
 }
