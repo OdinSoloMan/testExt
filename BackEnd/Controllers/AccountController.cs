@@ -157,7 +157,21 @@ namespace BackEnd.Controllers
                 }
 
 
-                var newAccessToken = _tokenService.GenerateAccessToken(principal.Claims);
+                var userRoles = await _userManager.GetRolesAsync(user);
+                //var nameRole = role.Name;
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.NameIdentifier, user.Id),
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    //new Claim(ClaimTypes.Role, nameRole)
+                };
+
+                foreach (var userRole in userRoles)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, userRole));
+                }
+
+                var newAccessToken = _tokenService.GenerateAccessToken(claims);
                 var newRefreshToken = _tokenService.GenerateRefreshToken();
 
                 user.RefreshToken = newRefreshToken;

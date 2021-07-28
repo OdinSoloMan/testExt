@@ -6,7 +6,8 @@
         "auth": "Authorization",
         "menu": "Menu",
         "username": "Username",
-        "psw": "Password"
+        "psw": "Password",
+        "logout": "Logout"
     },
     "text": {
         "enter": "Enter",
@@ -26,7 +27,11 @@
         "count": "Count :",
         "name": "Name :",
         "room": "№:",
-        "null-orders" : "You have no orders yet"
+        "null-orders" : "You have no orders yet",
+        "null-basket" : "Your basket is empty",
+        "add-orders" : "Placing an order...",
+        "add-orders-error" : "Error placing order...",
+        "add-orders-true" : "Order placed successfully"
     },
     "btn": {
         "login": "Login",

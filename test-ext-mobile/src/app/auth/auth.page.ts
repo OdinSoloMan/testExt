@@ -5,6 +5,7 @@ import { AlertController, LoadingController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { timeout } from 'rxjs/operators';
+import { AppComponent } from '../app.component';
 
 @Component({
   selector: 'app-auth',
@@ -21,6 +22,7 @@ export class AuthPage implements OnInit {
     private loadingCtrl: LoadingController,
     private router: Router,
     private translate: TranslateService,
+    private menu: AppComponent,
   ) { }
 
   form = new FormGroup({
@@ -56,6 +58,7 @@ export class AuthPage implements OnInit {
             localStorage.setItem("refreshToken", result.refreshToken)
             loading.dismiss();
             this.router.navigateByUrl('/home')
+            this.menu.ngOnInit();
           }
         },
         async (error) => {

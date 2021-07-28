@@ -19,7 +19,7 @@ namespace BackEnd.Services
                 issuer: "http://localhost:5000",
                 audience: "http://localhost:5000",
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(5),
+                expires: DateTime.Now.AddDays(1),
                 signingCredentials: signinCredentials
             );
 

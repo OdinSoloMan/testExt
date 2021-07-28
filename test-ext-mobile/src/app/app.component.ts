@@ -9,6 +9,7 @@ import { LanguageService } from './service/language.service';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
+  isLogin: boolean = false
 
   constructor(
     private api: ApiService,
@@ -18,6 +19,17 @@ export class AppComponent {
   ngOnInit() {
     this.languageService.setInitialAppLanguage("en");
     this.refresh();
+    this.checkLoging();
+  }
+
+  checkLoging() {
+    if (localStorage.getItem("id_users") && localStorage.getItem("refreshToken") && localStorage.getItem("accessToken")) {
+      this.isLogin = true;
+      console.log("if", this.isLogin)
+    } else {
+      this.isLogin = false;
+      console.log("else", this.isLogin)
+    }
   }
 
   refresh() {
@@ -44,6 +56,32 @@ export class AppComponent {
     } else {
       console.log("Not auth")
       localStorage.clear()
+    }
+  }
+
+  logout() {
+    if (localStorage.getItem("id_users") && localStorage.getItem("refreshToken") && localStorage.getItem("accessToken")) {
+      this.api.logout(localStorage.getItem("id_users"))
+        .pipe(timeout(60000))
+        .subscribe(
+          async (responce) => {
+            console.log("responce", responce);
+          },
+          async (error) => {
+            console.log(error);
+          },
+          async () => {
+            console.log("full");
+            localStorage.clear();
+            this.ngOnInit();
+            // this.router.navigateByUrl("login")
+            // this.toastr.info(this.translate.instant("toastr.msg.logout"), this.translate.instant("toastr.title.info"), {
+            //   timeOut: 1000,
+            //   closeButton: true
+            // });
+          }
+        )
+      console.log("logout()")
     }
   }
 }
