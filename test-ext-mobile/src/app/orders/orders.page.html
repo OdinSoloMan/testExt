@@ -1,16 +1,33 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      {{'title.orders'|translate}}
-    </ion-title>
     <ion-buttons slot="start">
-      <ion-menu-button menu="main-menu"></ion-menu-button>
+      <ion-menu-button></ion-menu-button>
     </ion-buttons>
+    <ion-title>{{'title.orders'|translate}}</ion-title>
   </ion-toolbar>
 </ion-header>
+
 <!-- //  <ion-card *ngFor="let prodList of productsList"></ion-card> -->
-<ion-content>
-  <ion-list *ngFor="let ordList of ordersList">
+<ion-content class="ion-padding">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" size-sm *ngFor="let ordList of ordersList">
+        <div>
+          <ion-item>
+            <ion-avatar slot="start">
+              <img [src]="img">
+            </ion-avatar>
+            <ion-label>
+              <h2>{{'text.name' | translate}} {{ordList.name}}</h2>
+              <h3>{{'text.count' | translate}} {{ordList.count}}</h3>
+              <p style="font-size: 13px;">{{'text.room' | translate}} {{ordList.id_Order}}</p>
+            </ion-label>
+          </ion-item>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <!-- <ion-list *ngFor="let ordList of ordersList">
     <ion-item>
       <ion-avatar slot="start">
         <img [src]="img">
@@ -21,7 +38,7 @@
         <p style="font-size: 13px;">{{'text.room' | translate}} {{ordList.id_Order}}</p>
       </ion-label>
     </ion-item>
-  </ion-list>
+  </ion-list> -->
   <div class="ion-text-center" *ngIf="ordersList.length === 0">
     <h3>{{'text.null-orders' | translate}}</h3>
   </div>

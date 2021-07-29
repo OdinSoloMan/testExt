@@ -29,6 +29,7 @@
         "room": "№:",
         "null-orders" : "You have no orders yet",
         "null-basket" : "Your basket is empty",
+        "null-products" : "Your products is empty",
         "add-orders" : "Placing an order...",
         "add-orders-error" : "Error placing order...",
         "add-orders-true" : "Order placed successfully"

@@ -32,3 +32,8 @@
     margin-left: 1em;
     font-size: 14px;
 }
+
+.split-pane-visible > .split-pane-side {
+    min-width: 304px !important;
+    max-width: 304px !important;
+}

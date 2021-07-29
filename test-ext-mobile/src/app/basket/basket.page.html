@@ -1,19 +1,36 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      {{'title.basket'|translate}}
-    </ion-title>
     <ion-buttons slot="start">
-      <ion-menu-button menu="main-menu"></ion-menu-button>
+      <ion-menu-button></ion-menu-button>
     </ion-buttons>
+    <ion-title>{{'title.basket'|translate}}</ion-title>
     <ion-buttons slot="end">
-      <ion-icon name="nuclear-outline" (click)="Clear()"  size="large"></ion-icon>
+      <ion-icon name="nuclear-outline" (click)="Clear()" size="large"></ion-icon>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-list *ngFor="let basket of basketList">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" size-sm *ngFor="let basket of basketList">
+        <div>
+          <ion-item>
+            <ion-avatar slot="end">
+              <ion-icon name="remove-circle-outline" color="danger" (click)="deleteItemBasket(basket.ProductsId)"
+                size="large"></ion-icon>
+            </ion-avatar>
+            <ion-label>
+              <h2>{{'text.name' | translate}} {{basket.Name}}</h2>
+              <h3>{{'text.count' | translate}} {{basket.Count}}</h3>
+              <p style="font-size: 13px;">{{'text.room' | translate}} {{basket.ProductsId}}</p>
+            </ion-label>
+          </ion-item>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <!-- <ion-list *ngFor="let basket of basketList">
     <ion-label>
       <ion-grid fixed>
         <ion-row>
@@ -28,11 +45,8 @@
           </ion-col>
         </ion-row>
       </ion-grid>
-      <!-- <h2>{{'text.name' | translate}} {{basket.Name}}</h2>
-      <h3>{{'text.count' | translate}} {{basket.Count}}</h3>
-      <p style="font-size: 13px;">{{'text.room' | translate}} {{basket.ProductsId}}</p> -->
     </ion-label>
-  </ion-list>
+  </ion-list> -->
   <div class="ion-text-center" *ngIf="basketList.length === 0">
     <h3>{{'text.null-basket' | translate}}</h3>
   </div>

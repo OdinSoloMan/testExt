@@ -1,44 +1,43 @@
 <ion-app>
-  <ion-menu menuId="main-menu" content-id="main">
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>{{'title.menu'|translate}}</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content>
-      <ion-list>
-        <ion-menu-toggle>
-          <ion-item routerLink="/home">
-            <ion-icon name="grid-outline" slot="start"></ion-icon>
-            <ion-label>{{'title.home'|translate}}</ion-label>
-          </ion-item>
-        </ion-menu-toggle>
-        <ion-menu-toggle>
-          <ion-item routerLink="/orders">
-            <ion-icon name="newspaper-outline" slot="start"></ion-icon>
-            <ion-label>{{'title.orders'|translate}}</ion-label>
-          </ion-item>
-        </ion-menu-toggle>
-        <ion-menu-toggle>
-          <ion-item routerLink="/basket">
-            <ion-icon name="basket-outline" slot="start"></ion-icon>
-            <ion-label>{{'title.basket'|translate}}</ion-label>
-          </ion-item>
-        </ion-menu-toggle>
-        <ion-menu-toggle [hidden]="isLogin">
-          <ion-item routerLink="/auth">
-            <ion-icon name="person-circle-outline" slot="start"></ion-icon>
-            <ion-label>{{'title.auth'|translate}}</ion-label>
-          </ion-item>
-        </ion-menu-toggle>
-        <ion-menu-toggle [hidden]="!isLogin">
-          <ion-item (click)="logout()">
-            <ion-icon name="exit-outline" slot="start"></ion-icon>
-            <ion-label>{{'title.logout'|translate}}</ion-label>
-          </ion-item>
-        </ion-menu-toggle>
-      </ion-list>
-    </ion-content>
-  </ion-menu>
-  <ion-router-outlet id="main"></ion-router-outlet>
+  <ion-split-pane contentId="main-content">
+    <ion-menu contentId="main-content" type="overlay">
+      <ion-content>
+        <ion-list id="inbox-list">
+          <ion-list-header>{{'title.menu'|translate}}</ion-list-header>
+          <!-- <ion-note>test@gmail.com</ion-note> -->
+          <ion-menu-toggle auto-hide="false">
+            <ion-item routerLink="/home">
+              <ion-icon name="grid-outline" slot="start"></ion-icon>
+              <ion-label>{{'title.home'|translate}}</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle auto-hide="false">
+            <ion-item routerLink="/orders">
+              <ion-icon name="newspaper-outline" slot="start"></ion-icon>
+              <ion-label>{{'title.orders'|translate}}</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle auto-hide="false">
+            <ion-item routerLink="/basket">
+              <ion-icon name="basket-outline" slot="start"></ion-icon>
+              <ion-label>{{'title.basket'|translate}}</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle [hidden]="isLogin" auto-hide="false">
+            <ion-item routerLink="/auth">
+              <ion-icon name="person-circle-outline" slot="start"></ion-icon>
+              <ion-label>{{'title.auth'|translate}}</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle [hidden]="!isLogin" auto-hide="false">
+            <ion-item (click)="logout()">
+              <ion-icon name="exit-outline" slot="start"></ion-icon>
+              <ion-label>{{'title.logout'|translate}}</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+        </ion-list>
+      </ion-content>
+    </ion-menu>
+    <ion-router-outlet id="main-content"></ion-router-outlet>
+  </ion-split-pane>
 </ion-app>

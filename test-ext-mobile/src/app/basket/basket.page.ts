@@ -27,7 +27,27 @@ export class BasketPage implements OnInit {
   }
 
   getListBasketProducts() {
-    this.basketList = this.basket.getBasketList();
+  this.basketList = this.basket.getBasketList();
+  //   this.basketList = [
+  //     {
+  //         "ProductsId": "7f91fa3b-078c-4725-18b8-08d950244ae1",
+  //         "Name": "test",
+  //         "Description": "Description",
+  //         "Count": 2
+  //     },
+  //     {
+  //         "ProductsId": "784664b3-24f4-46c8-18b9-08d950244ae1",
+  //         "Name": "test1",
+  //         "Description": "Description1",
+  //         "Count": 1
+  //     },
+  //     {
+  //         "ProductsId": "41ae182a-a2d5-4ddb-18ba-08d950244ae1",
+  //         "Name": "test2",
+  //         "Description": "Description2",
+  //         "Count": 1
+  //     }
+  // ]
     console.log(this.basketList)
   }
 

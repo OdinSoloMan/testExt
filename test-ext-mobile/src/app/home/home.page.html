@@ -1,20 +1,50 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      {{'title.home'|translate}}
-    </ion-title>
     <ion-buttons slot="start">
-      <ion-menu-button menu="main-menu"></ion-menu-button>
+      <ion-menu-button></ion-menu-button>
     </ion-buttons>
+    <ion-title>{{'title.home'|translate}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <ion-card *ngFor="let prodList of productsList">
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" size-sm *ngFor="let prodList of productsList">
+        <div>
+          <ion-card style="width: 280px;">
+            <ion-img [src]="img" style="box-sizing: border-box; width: 100%; padding: 1px"></ion-img>
+            <ion-card-header>
+              <ion-card-subtitle>{{prodList.id_Product}}</ion-card-subtitle>
+              <ion-card-title [id]="'name-'+prodList.id_Product" attr.data-value="{{prodList.name}}">{{prodList.name}}
+              </ion-card-title>
+            </ion-card-header>
+            <ion-card-content [id]="'description-'+prodList.id_Product" attr.data-value="{{prodList.description}}"
+              style="height: 100px;">
+              {{prodList.description}}
+            </ion-card-content>
+            <ion-item>
+              <ion-icon name="remove-circle-outline" (click)="decrement(prodList.id_Product)"></ion-icon>
+              <ion-button [id]="prodList.id_Product" class="btn-count-prod" fill="clear" disabled color="warning">
+                1
+              </ion-button>
+              <ion-icon name="add-circle-outline" (click)="increment(prodList.id_Product)"></ion-icon>
+              <ion-button slot="end" (click)="modalInfo(prodList.id_Product)">
+                {{'btn.buy'|translate}}
+              </ion-button>
+            </ion-item>
+          </ion-card>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- <ion-card *ngFor="let prodList of productsList">
     <ion-img class="img-style" [src]="img"></ion-img>
     <ion-card-header>
       <ion-card-subtitle>{{prodList.id_Product}}</ion-card-subtitle>
-      <ion-card-title [id]="'name-'+prodList.id_Product" attr.data-value="{{prodList.name}}">{{prodList.name}}</ion-card-title>
+      <ion-card-title [id]="'name-'+prodList.id_Product" attr.data-value="{{prodList.name}}">{{prodList.name}}
+      </ion-card-title>
     </ion-card-header>
     <ion-card-content [id]="'description-'+prodList.id_Product" attr.data-value="{{prodList.description}}">
       {{prodList.description}}
@@ -29,21 +59,8 @@
         {{'btn.buy'|translate}}
       </ion-button>
     </ion-item>
-    <ion-grid fixed>
-      <ion-row>
-        <ion-col>
-          <div>1 of 4</div>
-        </ion-col>
-        <ion-col>
-          <div>2 of 4</div>
-        </ion-col>
-        <ion-col>
-          <div>3 of 4</div>
-        </ion-col>
-        <ion-col>
-          <div>4 of 4</div>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-card>
+  </ion-card> -->
+  <div class="ion-text-center" *ngIf="productsList.length === 0">
+    <h3>{{'text.null-products' | translate}}</h3>
+  </div>
 </ion-content>
