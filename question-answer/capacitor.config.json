@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "question-answer",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}
