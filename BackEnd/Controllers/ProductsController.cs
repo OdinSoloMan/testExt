@@ -4,14 +4,16 @@ using BackEnd.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
+using System.Data;
 using System.Threading.Tasks;
 
 namespace BackEnd.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("products")]
     [ApiController]
     public class ProductsController : ControllerBase
@@ -98,6 +100,97 @@ namespace BackEnd.Controllers
             {
                 return StatusCode(StatusCodes.Status400BadRequest, new Response { Status = "Error", Message = "Not delete product!" });
             }
+        }
+
+        [HttpPost("testAddAdoNet")]
+        public ActionResult<string> CreateTest([FromBody] Products products)
+        {
+            var res = "";
+            //products = new Products(products.Name, products.Description);
+            //products = new Products(products.Name, products.Description);
+            string connStr = $"Data Source=localhost;Initial Catalog=AppDatabaseContext;Integrated Security=True";
+            try
+            {
+                using (SqlConnection con = new SqlConnection(connStr))
+                {
+                    using (SqlCommand cmd = new SqlCommand("CreateProductssss", con)) 
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.AddWithValue("@Id_Product", Guid.NewGuid());
+                        cmd.Parameters.AddWithValue("@Name", products.Name);
+                        cmd.Parameters.AddWithValue("@Description", products.Description);
+                        //cmd.Parameters.AddWithValue("@Result", "");
+
+                        //var returnParameter = cmd.Parameters.Add("@Result", SqlDbType.VarChar);
+                        //returnParameter.Direction = ParameterDirection.ReturnValue;
+
+                        con.Open();
+                        cmd.ExecuteNonQuery();
+
+                        //var result = cmd.Parameters["@ReturnValue"].Value;
+                        con.Close();
+                    }
+                }
+                return new OkObjectResult(new { message = res });
+            }
+            catch
+            {
+                throw;
+            }
+
+            //using (SqlConnection connection = new SqlConnection(connStr))
+            //{
+            //    string sql = "CreateProductss";
+
+            //    using (SqlCommand command = new SqlCommand(sql, connection))
+            //    {
+            //        command.CommandType = CommandType.StoredProcedure;
+
+            //        SqlParameter parameter = new SqlParameter
+            //        {
+            //            ParameterName = "@Id_Product",
+            //            Value = new System.Data.SqlTypes.SqlGuid(new Guid()),
+            //            SqlDbType = SqlDbType.UniqueIdentifier,
+            //        };
+            //        command.Parameters.Add(parameter);
+
+            //        parameter = new SqlParameter
+            //        {
+            //            ParameterName = "@Name",
+            //            Value = products.Id_Product,
+            //            SqlDbType = SqlDbType.NVarChar,
+            //            Size = 450
+            //        };
+            //        command.Parameters.Add(parameter);
+
+            //        parameter = new SqlParameter
+            //        {
+            //            ParameterName = "@Description",
+            //            Value = products.Id_Product,
+            //            SqlDbType = SqlDbType.NVarChar
+            //        };
+            //        command.Parameters.Add(parameter);
+
+            //        parameter = new SqlParameter
+            //        {
+            //            ParameterName = "@Result",
+            //            SqlDbType = SqlDbType.VarChar,
+            //            Size = 50,
+            //            Direction = ParameterDirection.Output
+            //        };
+            //        command.Parameters.Add(parameter);
+
+            //        connection.Open();
+
+            //        // Execute the stored procedure
+            //        command.ExecuteNonQuery();
+
+            //        res = Convert.ToString(command.Parameters["@Result"].Value);
+            //        connection.Close();
+            //    }
+            //}
+            //return new OkObjectResult( new { message = res } );
         }
     }
 }
