@@ -21,7 +21,7 @@ namespace WebApplication.DataAccess
             //Data Source=localhost;Initial Catalog=ContextApp;Integrated Security=True
             //pc job
             //Data Source=WS-PC-16\\SQLEXPRESS;Initial Catalog={nameof(AppDatabaseContext)};Integrated Security=True
-            OptionsBuilder.UseSqlServer($"Data Source=localhost;Initial Catalog={nameof(AppDatabaseContext)};Integrated Security=True");
+            OptionsBuilder.UseSqlServer($"Data Source=WS-PC-16\\SQLEXPRESS;Initial Catalog={nameof(AppDatabaseContext)};Integrated Security=True");
         }
 
         //public DbSet<Users> Users { get; set; }

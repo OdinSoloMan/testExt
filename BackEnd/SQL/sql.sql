@@ -54,6 +54,7 @@ Begin
 	return 1
 end
 
+------------------------------------------------------------------------------------------------------------
 -----TEST-----------------------
 Create table tblEmployee(      
     EmployeeId int IDENTITY(1,1) NOT NULL,      
@@ -110,3 +111,164 @@ Begin
     from tblEmployee   
     order by EmployeeId      
 End
+
+------------
+--удаление 
+create procedure [dbo].[DeleteProducts]
+	@Id_Product UniqueIdentifier
+as
+begin try
+	begin transaction
+		delete from Products where Id_Product = @Id_Product
+
+	if @@TRANCOUNT > 0 
+		commit transaction
+	select @@TRANCOUNT As OpenTransactions
+end try
+begin catch
+	rollback transaction
+	select ERROR_NUMBER() AS ErrorNumber,
+		   ERROR_STATE() AS ErrorState,
+		   ERROR_SEVERITY() AS ErrorSeverity,
+		   ERROR_PROCEDURE() AS ErrorProcedure,
+		   ERROR_LINE() AS ErrorLine,
+		   ERROR_MESSAGE() AS ErrorMessage
+	return
+end catch
+
+EXEC [dbo].[DeleteProducts] @Id_Product = '722E9609-2CF7-4D9A-B4E6-0FBA35F7DB6C';
+
+
+-- таблица, соответствующая входным параметрам
+CREATE TYPE IdTypeProduct AS TABLE 
+( ID UniqueIdentifier, Name NVARCHAR(50), Description nvarchar(max));
+GO
+--
+CREATE PROCEDURE [dbo].[AddProductssss]
+	@ArrProduct IdTypeProduct readonly
+as
+Begin try
+	begin transaction 
+	   	insert into Products (Id_Product, Name, Description)
+			select ID, Name, Description from @ArrProduct
+	 select @@TRANCOUNT As OpenTransactions
+	 commit transaction
+end try 
+begin catch
+	rollback transaction
+		select @@TRANCOUNT As OpenTransactions
+	return
+end catch
+
+-- declare a variable of that table type
+DECLARE @Products IdTypeProduct
+
+-- insert values into that table variable
+INSERT INTO @Products(ID, Name, Description) 
+VALUES ('4411FA3B-078C-4725-18B8-08D950244AE1', '2344444444456', 'nvarchar(max)'), ('4421FA3B-078C-4725-18B8-08D950244AE1', '1234444444564', 'nvarchar(max)')
+
+-- execute your stored procedure with this table as input parameter
+EXECUTE [dbo].[AddProductssss] @Products
+
+
+--просто результат была ли обновленная запись
+CREATE PROCEDURE [dbo].[UpdateProductssss]
+	@Id_Product UniqueIdentifier,
+	@Name nvarchar(450),
+	@Description nvarchar(max)
+as
+Begin try
+	begin transaction 
+	   Update Products         
+	   set Name=@Name,        
+	   Description=@Description       
+	   where Id_Product=@Id_Product
+	   select @@TRANCOUNT As OpenTransactions
+	   commit transaction
+end try 
+begin catch
+	rollback transaction
+		select @@TRANCOUNT As OpenTransactions
+	return
+end catch
+EXEC [dbo].[UpdateProductssss] @Id_Product = '7F91FA3B-078C-4725-18B8-08D950244AE1', @Name = 'test1', @Description = 'nvarchar(max)';
+
+--более подробный вывод об ошибке
+CREATE PROCEDURE [dbo].[UpdateProductsss]
+	@Id_Product UniqueIdentifier,
+	@Name nvarchar(450),
+	@Description nvarchar(max)
+as
+Begin try
+	begin transaction 
+	   Update Products         
+	   set Name=@Name,        
+	   Description=@Description       
+	   where Id_Product=@Id_Product
+	   select * from Products where Id_Product = @Id_Product
+	   commit transaction
+end try 
+begin catch
+	rollback transaction
+	select ERROR_NUMBER() AS ErrorNumber,
+		   ERROR_STATE() AS ErrorState,
+		   ERROR_SEVERITY() AS ErrorSeverity,
+		   ERROR_PROCEDURE() AS ErrorProcedure,
+		   ERROR_LINE() AS ErrorLine,
+		   ERROR_MESSAGE() AS ErrorMessage
+	return
+end catch
+
+EXEC [dbo].[UpdateProductsss] @Id_Product = '7F91FA3B-078C-4725-18B8-08D950244AE1',	@Name = 'navaraaaachar(450)', @Description = 'nvarchar(max)';
+EXEC [dbo].[UpdateProductsss] @Id_Product = '7F91FA3B-078C-4725-18B8-08D950244AE1',@Name = 'Zzzzzzas1', @Description = 'Zzzzzображения aaaa порядка, а также постоянное информационно-техническое...'
+
+-- выводит результат если успешный
+CREATE PROCEDURE [dbo].[UpdateProductss]
+	@Id_Product UniqueIdentifier,
+	@Name nvarchar(450),
+	@Description nvarchar(max)
+as
+Begin try
+	begin transaction 
+	   Update Products         
+	   set Name=@Name,        
+	   Description=@Description       
+	   where Id_Product=@Id_Product
+	   select * from Products where Id_Product = @Id_Product
+	   commit transaction
+end try 
+begin catch
+	rollback transaction
+	select error_number() AS [Number_error],
+		   error_message() As [Description_error]
+		   return 
+end catch
+
+EXEC [dbo].[UpdateProductss] @Id_Product = '7F91FA3B-078C-4725-18B8-08D950244AE1',	@Name = 'navaraaaachar(450)', @Description = 'nvarchar(max)';
+EXEC [dbo].[UpdateProductss] @Id_Product = '64275902-2534-4F4F-18BC-08D950244AE1', @Name = 'test1', @Description = 'nvarchar(max)';
+
+-- выводит сообщение об ошибке
+CREATE PROCEDURE [dbo].[UpdateProducts]
+	@Id_Product UniqueIdentifier,
+	@Name nvarchar(450),
+	@Description nvarchar(max)
+as
+Begin try
+begin transaction 
+   Update Products         
+   set Name=@Name,        
+   Description=@Description       
+   where Id_Product=@Id_Product
+
+end try 
+    begin catch
+        rollback transaction
+         select error_number() AS [Nuber_error],
+                error_message() As [Description_error]
+        return 
+    end catch
+commit transaction
+go
+
+EXEC [dbo].[UpdateProducts] @Id_Product = '7F91FA3B-078C-4725-18B8-08D950244AE1', @Name = 'test1', @Description = 'nvarchar(max)';
+

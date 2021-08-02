@@ -36,7 +36,7 @@ namespace BackEnd
                 //Data Source=localhost;Initial Catalog=ContextApp;Integrated Security=True
                 //pc job
                 //Data Source=WS-PC-16\\SQLEXPRESS;Initial Catalog={nameof(AppDatabaseContext)};Integrated Security=True
-                (c => c.UseSqlServer($"Data Source=localhost;Initial Catalog={nameof(AppDatabaseContext)};Integrated Security=True"));
+                (c => c.UseSqlServer($"Data Source=WS-PC-16\\SQLEXPRESS;Initial Catalog={nameof(AppDatabaseContext)};Integrated Security=True"));
             services.AddControllers();
 
             // For Identity

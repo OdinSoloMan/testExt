@@ -8,6 +8,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 
@@ -106,9 +107,7 @@ namespace BackEnd.Controllers
         public ActionResult<string> CreateTest([FromBody] Products products)
         {
             var res = "";
-            //products = new Products(products.Name, products.Description);
-            //products = new Products(products.Name, products.Description);
-            string connStr = $"Data Source=localhost;Initial Catalog=AppDatabaseContext;Integrated Security=True";
+            string connStr = $"Data Source=WS-PC-16\\SQLEXPRESS;Initial Catalog=AppDatabaseContext;Integrated Security=True";
             try
             {
                 using (SqlConnection con = new SqlConnection(connStr))
@@ -120,15 +119,10 @@ namespace BackEnd.Controllers
                         cmd.Parameters.AddWithValue("@Id_Product", Guid.NewGuid());
                         cmd.Parameters.AddWithValue("@Name", products.Name);
                         cmd.Parameters.AddWithValue("@Description", products.Description);
-                        //cmd.Parameters.AddWithValue("@Result", "");
-
-                        //var returnParameter = cmd.Parameters.Add("@Result", SqlDbType.VarChar);
-                        //returnParameter.Direction = ParameterDirection.ReturnValue;
 
                         con.Open();
                         cmd.ExecuteNonQuery();
 
-                        //var result = cmd.Parameters["@ReturnValue"].Value;
                         con.Close();
                     }
                 }
@@ -138,59 +132,145 @@ namespace BackEnd.Controllers
             {
                 throw;
             }
+        }
 
-            //using (SqlConnection connection = new SqlConnection(connStr))
-            //{
-            //    string sql = "CreateProductss";
+        [HttpPut("testUpdateAdoNet")]
+        public ActionResult<string> UpdateTest([FromBody] Products products)
+        {
+            var res = new Dictionary<string, string>();
+            string connStr = $"Data Source=WS-PC-16\\SQLEXPRESS;Initial Catalog=AppDatabaseContext;Integrated Security=True";
+            try
+            {
+                using (SqlConnection con = new SqlConnection(connStr))
+                {
+                    using SqlCommand cmd = new SqlCommand("UpdateProductsss", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
 
-            //    using (SqlCommand command = new SqlCommand(sql, connection))
-            //    {
-            //        command.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Id_Product", products.Id_Product);
+                    cmd.Parameters.AddWithValue("@Name", products.Name);
+                    cmd.Parameters.AddWithValue("@Description", products.Description);
 
-            //        SqlParameter parameter = new SqlParameter
-            //        {
-            //            ParameterName = "@Id_Product",
-            //            Value = new System.Data.SqlTypes.SqlGuid(new Guid()),
-            //            SqlDbType = SqlDbType.UniqueIdentifier,
-            //        };
-            //        command.Parameters.Add(parameter);
+                    con.Open();
+                    cmd.ExecuteNonQuery();
 
-            //        parameter = new SqlParameter
-            //        {
-            //            ParameterName = "@Name",
-            //            Value = products.Id_Product,
-            //            SqlDbType = SqlDbType.NVarChar,
-            //            Size = 450
-            //        };
-            //        command.Parameters.Add(parameter);
+                    using SqlDataReader rdr = cmd.ExecuteReader();
+                    res = GetObjectResult(rdr);
 
-            //        parameter = new SqlParameter
-            //        {
-            //            ParameterName = "@Description",
-            //            Value = products.Id_Product,
-            //            SqlDbType = SqlDbType.NVarChar
-            //        };
-            //        command.Parameters.Add(parameter);
+                    con.Close();
+                }
+            }
+            catch
+            {
+                throw;
+            }
+            
+            return new OkObjectResult(res);
+        }
 
-            //        parameter = new SqlParameter
-            //        {
-            //            ParameterName = "@Result",
-            //            SqlDbType = SqlDbType.VarChar,
-            //            Size = 50,
-            //            Direction = ParameterDirection.Output
-            //        };
-            //        command.Parameters.Add(parameter);
+        //
+        [HttpPost("testAddListAdoNet")]
+        public ActionResult<string> AddListTest([FromBody] Products[] products)
+        {
+            var res = new Dictionary<string, string>();
+            string connStr = $"Data Source=WS-PC-16\\SQLEXPRESS;Initial Catalog=AppDatabaseContext;Integrated Security=True";
+            try
+            {
+                using (SqlConnection con = new SqlConnection(connStr))
+                {
+                    using (SqlCommand cmd = new SqlCommand("exec AddProductssss @Products", con))
+                    {
+                        using (var table = new DataTable())
+                        {
+                            table.Columns.Add("ID", typeof(Guid));
+                            table.Columns.Add("Name", typeof(string));
+                            table.Columns.Add("Description", typeof(string));
 
-            //        connection.Open();
+                            for (int i = 0; i < products.Length; i++)
+                            {
+                                table.Rows.Add(Guid.NewGuid(), products[i].Name, products[i].Description);
+                            }
 
-            //        // Execute the stored procedure
-            //        command.ExecuteNonQuery();
+                            var pList = new SqlParameter("@Products", SqlDbType.Structured);
+                            pList.TypeName = "dbo.IdTypeProduct";
+                            pList.Value = table;
 
-            //        res = Convert.ToString(command.Parameters["@Result"].Value);
-            //        connection.Close();
-            //    }
-            //}
-            //return new OkObjectResult( new { message = res } );
+                            foreach (DataRow row in table.Rows)
+                            {
+                                foreach (DataColumn column in table.Columns)
+                                {
+                                    var s = row[column].ToString();
+                                }
+                            }
+
+                            cmd.Parameters.Add(pList);
+
+                            con.Open();
+                            cmd.ExecuteNonQuery();
+
+                            using SqlDataReader rdr = cmd.ExecuteReader();
+                            res = GetObjectResult(rdr);
+
+                            con.Close();
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                throw;
+            }
+
+            return new OkObjectResult(res);
+        }
+
+        [HttpDelete("testDeleteAdoNet/{id}")]
+        public ActionResult<string> DeleteTest(Guid id)
+        {
+            var res = new Dictionary<string, string>();
+            string connStr = $"Data Source=WS-PC-16\\SQLEXPRESS;Initial Catalog=AppDatabaseContext;Integrated Security=True";
+            try
+            {
+                using (SqlConnection con = new SqlConnection(connStr))
+                {
+                    using (SqlCommand cmd = new SqlCommand("DeleteProducts", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.AddWithValue("@Id_Product", id);
+
+                        con.Open();
+                        cmd.ExecuteNonQuery();
+
+                        using SqlDataReader rdr = cmd.ExecuteReader();
+                        res = GetObjectResult(rdr);
+
+                        con.Close();
+                    }
+                }
+            }
+            catch
+            {
+                throw;
+            }
+            return new OkObjectResult(new { message = res });
+        }
+
+        Dictionary<string, string> GetObjectResult(SqlDataReader rdr)
+        {
+            var res = new Dictionary<string, string>();
+
+            DataTable dt = new DataTable();
+            dt.Load(rdr);
+
+            foreach (DataRow row in dt.Rows)
+            {
+                foreach (DataColumn column in dt.Columns)
+                {
+                    res.Add(column.ColumnName, row[column].ToString());
+                }
+            }
+
+            return res;
         }
     }
 }

@@ -10,7 +10,7 @@ namespace BackEnd.AdoNet
 {
     public class EmployeeDataAccessLayer
     {
-        string connectionString = $"Data Source=localhost;Initial Catalog=AppDatabaseContext;Integrated Security=True";
+        string connectionString = $"Data Source=WS-PC-16\\SQLEXPRESS;Initial Catalog=AppDatabaseContext;Integrated Security=True";
 
         //To View all employees details
         public IEnumerable<Employee> GetAllEmployees()
