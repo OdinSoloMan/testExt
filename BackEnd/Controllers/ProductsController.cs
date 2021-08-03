@@ -1,6 +1,7 @@
 ﻿using BackEnd.DataAccess;
 using BackEnd.Domain;
 using BackEnd.Repository;
+using BackEnd.Service.AdoNet;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,16 +15,21 @@ using System.Threading.Tasks;
 
 namespace BackEnd.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("products")]
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly IProductsRepository _repo;
+        //Entity
+        //private readonly IProductsRepository _repo;
+
+        //Ado.Net
+        private readonly IProductsService _repo;
+
         private readonly ILogger<ProductsController> _log;
         private readonly IDiagnosticContext _diagnosticContext;
 
-        public ProductsController(IProductsRepository repo, ILogger<ProductsController> log, IDiagnosticContext diagnosticContext)
+        public ProductsController(IProductsService repo, ILogger<ProductsController> log, IDiagnosticContext diagnosticContext)
         {
             _repo = repo;
             _log = log;
@@ -101,176 +107,6 @@ namespace BackEnd.Controllers
             {
                 return StatusCode(StatusCodes.Status400BadRequest, new Response { Status = "Error", Message = "Not delete product!" });
             }
-        }
-
-        [HttpPost("testAddAdoNet")]
-        public ActionResult<string> CreateTest([FromBody] Products products)
-        {
-            var res = "";
-            string connStr = $"Data Source=WS-PC-16\\SQLEXPRESS;Initial Catalog=AppDatabaseContext;Integrated Security=True";
-            try
-            {
-                using (SqlConnection con = new SqlConnection(connStr))
-                {
-                    using (SqlCommand cmd = new SqlCommand("CreateProductssss", con)) 
-                    {
-                        cmd.CommandType = CommandType.StoredProcedure;
-
-                        cmd.Parameters.AddWithValue("@Id_Product", Guid.NewGuid());
-                        cmd.Parameters.AddWithValue("@Name", products.Name);
-                        cmd.Parameters.AddWithValue("@Description", products.Description);
-
-                        con.Open();
-                        cmd.ExecuteNonQuery();
-
-                        con.Close();
-                    }
-                }
-                return new OkObjectResult(new { message = res });
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
-        [HttpPut("testUpdateAdoNet")]
-        public ActionResult<string> UpdateTest([FromBody] Products products)
-        {
-            var res = new Dictionary<string, string>();
-            string connStr = $"Data Source=WS-PC-16\\SQLEXPRESS;Initial Catalog=AppDatabaseContext;Integrated Security=True";
-            try
-            {
-                using (SqlConnection con = new SqlConnection(connStr))
-                {
-                    using SqlCommand cmd = new SqlCommand("UpdateProductsss", con);
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-                    cmd.Parameters.AddWithValue("@Id_Product", products.Id_Product);
-                    cmd.Parameters.AddWithValue("@Name", products.Name);
-                    cmd.Parameters.AddWithValue("@Description", products.Description);
-
-                    con.Open();
-                    cmd.ExecuteNonQuery();
-
-                    using SqlDataReader rdr = cmd.ExecuteReader();
-                    res = GetObjectResult(rdr);
-
-                    con.Close();
-                }
-            }
-            catch
-            {
-                throw;
-            }
-            
-            return new OkObjectResult(res);
-        }
-
-        //
-        [HttpPost("testAddListAdoNet")]
-        public ActionResult<string> AddListTest([FromBody] Products[] products)
-        {
-            var res = new Dictionary<string, string>();
-            string connStr = $"Data Source=WS-PC-16\\SQLEXPRESS;Initial Catalog=AppDatabaseContext;Integrated Security=True";
-            try
-            {
-                using (SqlConnection con = new SqlConnection(connStr))
-                {
-                    using (SqlCommand cmd = new SqlCommand("exec AddProductssss @Products", con))
-                    {
-                        using (var table = new DataTable())
-                        {
-                            table.Columns.Add("ID", typeof(Guid));
-                            table.Columns.Add("Name", typeof(string));
-                            table.Columns.Add("Description", typeof(string));
-
-                            for (int i = 0; i < products.Length; i++)
-                            {
-                                table.Rows.Add(Guid.NewGuid(), products[i].Name, products[i].Description);
-                            }
-
-                            var pList = new SqlParameter("@Products", SqlDbType.Structured);
-                            pList.TypeName = "dbo.IdTypeProduct";
-                            pList.Value = table;
-
-                            foreach (DataRow row in table.Rows)
-                            {
-                                foreach (DataColumn column in table.Columns)
-                                {
-                                    var s = row[column].ToString();
-                                }
-                            }
-
-                            cmd.Parameters.Add(pList);
-
-                            con.Open();
-                            cmd.ExecuteNonQuery();
-
-                            using SqlDataReader rdr = cmd.ExecuteReader();
-                            res = GetObjectResult(rdr);
-
-                            con.Close();
-                        }
-                    }
-                }
-            }
-            catch
-            {
-                throw;
-            }
-
-            return new OkObjectResult(res);
-        }
-
-        [HttpDelete("testDeleteAdoNet/{id}")]
-        public ActionResult<string> DeleteTest(Guid id)
-        {
-            var res = new Dictionary<string, string>();
-            string connStr = $"Data Source=WS-PC-16\\SQLEXPRESS;Initial Catalog=AppDatabaseContext;Integrated Security=True";
-            try
-            {
-                using (SqlConnection con = new SqlConnection(connStr))
-                {
-                    using (SqlCommand cmd = new SqlCommand("DeleteProducts", con))
-                    {
-                        cmd.CommandType = CommandType.StoredProcedure;
-
-                        cmd.Parameters.AddWithValue("@Id_Product", id);
-
-                        con.Open();
-                        cmd.ExecuteNonQuery();
-
-                        using SqlDataReader rdr = cmd.ExecuteReader();
-                        res = GetObjectResult(rdr);
-
-                        con.Close();
-                    }
-                }
-            }
-            catch
-            {
-                throw;
-            }
-            return new OkObjectResult(new { message = res });
-        }
-
-        Dictionary<string, string> GetObjectResult(SqlDataReader rdr)
-        {
-            var res = new Dictionary<string, string>();
-
-            DataTable dt = new DataTable();
-            dt.Load(rdr);
-
-            foreach (DataRow row in dt.Rows)
-            {
-                foreach (DataColumn column in dt.Columns)
-                {
-                    res.Add(column.ColumnName, row[column].ToString());
-                }
-            }
-
-            return res;
         }
     }
 }

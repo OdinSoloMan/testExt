@@ -1,6 +1,7 @@
 ﻿using BackEnd.DataAccess;
 using BackEnd.Domain;
 using BackEnd.Repository;
+using BackEnd.Service.AdoNet;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,11 +17,16 @@ namespace BackEnd.Controllers
     [ApiController]
     public class OrdersController : ControllerBase
     {
-        private readonly IOrdersRepository _repo;
+        //Entity
+        //private readonly IOrdersRepository _repo;
+
+        //Ado.Net
+        private readonly IOrdersService _repo;
+
         private readonly ILogger<OrdersController> _log;
         private readonly IDiagnosticContext _diagnosticContext;
 
-        public OrdersController(IOrdersRepository repo, ILogger<OrdersController> log, IDiagnosticContext diagnosticContext)
+        public OrdersController(IOrdersService repo, ILogger<OrdersController> log, IDiagnosticContext diagnosticContext)
         {
             _repo = repo;
             _log = log;
