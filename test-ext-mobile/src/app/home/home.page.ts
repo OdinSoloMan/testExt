@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { timeout } from 'rxjs/operators';
 import { ApiService } from '../service/api.service';
 import NotImage from '../img/not-image.json';
@@ -12,6 +12,9 @@ import { BasketService } from '../service/basket.service';
 export class HomePage {
   productsList: any = []
   img: any = NotImage.img;
+  p: number;
+  itemsPerPage = 5;
+  totalItems: any;
 
   constructor(
     private api: ApiService,
@@ -23,12 +26,30 @@ export class HomePage {
   }
 
   async getProducts() {
-    this.api.getProductsList()
+    this.api.getPageProducts(0, this.itemsPerPage)
       .pipe(timeout(6000))
       .subscribe(
         async (response) => {
-          console.log(response)
-          this.productsList = response;
+          console.log(typeof (response), response)
+          this.productsList = response.data;
+          this.totalItems = response.totalPassengers;
+          console.log(typeof (this.productsList))
+        },
+        async (error) => {
+          console.log(error)
+        }
+      )
+  }
+
+  getPage(page) {
+    this.api.getPageProducts(page, this.itemsPerPage)
+      .pipe(timeout(6000))
+      .subscribe(
+        async (response) => {
+          console.log(typeof (response), response)
+          this.productsList = response.data;
+          this.totalItems = response.totalPassengers;
+          console.log(typeof (this.productsList))
         },
         async (error) => {
           console.log(error)

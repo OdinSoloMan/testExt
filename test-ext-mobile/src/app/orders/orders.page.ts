@@ -11,6 +11,9 @@ import NotImage from '../img/not-image.json';
 export class OrdersPage implements OnInit {
   ordersList: any = []
   img: any = NotImage.img;
+  p: number;
+  itemsPerPage = 4;
+  totalItems: any;
 
   constructor(
     private api : ApiService,
@@ -22,16 +25,32 @@ export class OrdersPage implements OnInit {
 
   getOrders(){
     console.log("getOrders")
-    this.api.getListOrders()
+    this.api.getReadInfoOredrsUserPerPage(0, this.itemsPerPage)
     .pipe(timeout(60000))
     .subscribe(
       async (response) => {
         console.log(response)
-        this.ordersList = response
+        this.ordersList = response.data;
+        this.totalItems = response.totalPassengers;
       },
       async (error) => {
         console.log(error)
       }
     )
+  }
+
+  getPage(page) {
+    this.api.getReadInfoOredrsUserPerPage(page, this.itemsPerPage)
+      .pipe(timeout(6000))
+      .subscribe(
+        async (response) => {
+          console.log(response)
+          this.ordersList = response.data;
+          this.totalItems = response.totalPassengers;
+        },
+        async (error) => {
+          console.log(error)
+        }
+      )
   }
 }

@@ -1,4 +1,5 @@
 ﻿using BackEnd.DataAccess;
+using BackEnd.Models;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -10,37 +11,37 @@ namespace BackEnd.Service.AdoNet
 {
     public class OrdersService : IOrdersService
     {
-        string connectionString = $"Data Source=WS-PC-16\\SQLEXPRESS;Initial Catalog=AppDatabaseContext;Integrated Security=True";
+        readonly string connectionString = $"Data Source=WS-PC-16\\SQLEXPRESS;Initial Catalog=AppDatabaseContext;Integrated Security=True";
 
         public Task CraateList(Orders[] orders)
         {
             try
             {
-                using (SqlConnection con = new SqlConnection(connectionString))
+                using SqlConnection con = new SqlConnection(connectionString);
+                using SqlCommand cmd = new SqlCommand("exec AddOrdersList @Orders", con);
+                using var table = new DataTable();
+                table.Columns.Add("ID", typeof(Guid));
+                table.Columns.Add("Count", typeof(int));
+                table.Columns.Add("UsersId", typeof(string));
+                table.Columns.Add("ProductsId", typeof(Guid));
+
+                for (int i = 0; i < orders.Length; i++)
                 {
-                    using SqlCommand cmd = new SqlCommand("exec AddOrdersList @Orders", con);
-                    using var table = new DataTable();
-                    table.Columns.Add("ID", typeof(Guid));
-                    table.Columns.Add("Count", typeof(int));
-                    table.Columns.Add("UsersId", typeof(string));
-                    table.Columns.Add("ProductsId", typeof(Guid));
-
-                    for (int i = 0; i < orders.Length; i++)
-                    {
-                        table.Rows.Add(Guid.NewGuid(), orders[i].Count, orders[i].UsersId, orders[i].ProductsId);
-                    }
-
-                    var pList = new SqlParameter("@Orders", SqlDbType.Structured);
-                    pList.TypeName = "dbo.IdTypeOrder";
-                    pList.Value = table;
-
-                    cmd.Parameters.Add(pList);
-
-                    con.Open();
-                    cmd.ExecuteNonQuery();
-
-                    con.Close();
+                    table.Rows.Add(Guid.NewGuid(), orders[i].Count, orders[i].UsersId, orders[i].ProductsId);
                 }
+
+                var pList = new SqlParameter("@Orders", SqlDbType.Structured)
+                {
+                    TypeName = "dbo.IdTypeOrder",
+                    Value = table
+                };
+
+                cmd.Parameters.Add(pList);
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+
+                con.Close();
             }
             catch
             {
@@ -198,6 +199,77 @@ namespace BackEnd.Service.AdoNet
             {
                 throw;
             }
+        }
+
+        public Task<Page> ReadInfoOredrsUserPerPage(string id_user, int rows, int next)
+        {
+            int count = 0;
+            try
+            {
+                using SqlConnection con = new SqlConnection(connectionString);
+                using SqlCommand cmd = new SqlCommand("CountOrdersUser", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@UsersId", id_user);
+
+                con.Open();
+
+                SqlDataReader rdr = cmd.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    count = Convert.ToInt32(rdr["_Count"]);
+                }
+                con.Close();
+            }
+            catch
+            {
+                throw;
+            }
+
+            if (rows == 1)
+            {
+                rows = 0;
+            }
+
+            int _totalPages = (int)Math.Round((float)count / (float)next);
+            if (rows != 0)
+                rows = (rows - 1) * next;
+
+
+            List<object> infoObj = new List<object>();
+            try
+            {
+                using SqlConnection con = new SqlConnection(connectionString);
+                using SqlCommand cmd = new SqlCommand("ReadInfoOredrsUserPerPage", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@UsersId", id_user);
+                cmd.Parameters.AddWithValue("@Rows", rows);
+                cmd.Parameters.AddWithValue("@Next", next);
+
+                con.Open();
+                SqlDataReader rdr = cmd.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    infoObj.Add(new
+                    {
+                        Id_Order = Guid.Parse(rdr["Id_Order"].ToString()),
+                        Count = Convert.ToInt32(rdr["Count"]),
+                        Name = rdr["Name"].ToString()
+                    });
+                }
+                con.Close();
+            }
+            catch
+            {
+                throw;
+            }
+
+            var data = infoObj.ConvertAll<object>(item => (object)item).ToArray();
+            var res = new Page() { Data = data, TotalPages = _totalPages, TotalPassengers = count };
+            return Task.FromResult(res);
         }
 
         public Task Update(Orders orders)

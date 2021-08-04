@@ -12,21 +12,21 @@ using System.Threading.Tasks;
 
 namespace BackEnd.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("orders")]
     [ApiController]
     public class OrdersController : ControllerBase
     {
         //Entity
-        //private readonly IOrdersRepository _repo;
+        private readonly IOrdersRepository _repo;
 
         //Ado.Net
-        private readonly IOrdersService _repo;
+        //private readonly IOrdersService _repo;
 
         private readonly ILogger<OrdersController> _log;
         private readonly IDiagnosticContext _diagnosticContext;
 
-        public OrdersController(IOrdersService repo, ILogger<OrdersController> log, IDiagnosticContext diagnosticContext)
+        public OrdersController(IOrdersRepository repo, ILogger<OrdersController> log, IDiagnosticContext diagnosticContext)
         {
             _repo = repo;
             _log = log;
@@ -112,6 +112,20 @@ namespace BackEnd.Controllers
             _log.LogInformation("Add orders : {@orders}", orders);
             await _repo.CraateList(orders);
             return new OkObjectResult(orders);
+        }
+
+        [HttpGet("readinfooredrsuserperpage")]
+        public async Task<ActionResult<string>> ReadInfoOredrsUserPerPage(string id_user, int page, int size)
+        {
+            try
+            {
+                var res = await _repo.ReadInfoOredrsUserPerPage(id_user, page, size);
+                return new OkObjectResult(res);
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new Response { Status = "Error", Message = "Not info!" });
+            }
         }
     }
 }

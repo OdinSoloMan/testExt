@@ -1,4 +1,5 @@
 ﻿using BackEnd.DataAccess;
+using BackEnd.Models;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace BackEnd.Service.AdoNet
 {
     public class ProductsService : IProductsService
     {
-        string connectionString = $"Data Source=WS-PC-16\\SQLEXPRESS;Initial Catalog=AppDatabaseContext;Integrated Security=True";
+        readonly string connectionString = $"Data Source=WS-PC-16\\SQLEXPRESS;Initial Catalog=AppDatabaseContext;Integrated Security=True";
         public Task Create(Products products)
         {
             try
@@ -159,6 +160,77 @@ namespace BackEnd.Service.AdoNet
             {
                 throw;
             }
+        }
+
+        public Task<Page> SelectProductsPerPage(int rows, int next)
+        {
+            int count = 0;
+            try
+            {
+                using SqlConnection con = new SqlConnection(connectionString);
+                using SqlCommand cmd = new SqlCommand("CountProducts", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                con.Open();
+                
+                SqlDataReader rdr = cmd.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    count = Convert.ToInt32(rdr["_Count"]);
+                }
+                con.Close();
+            }
+            catch
+            {
+                throw;
+            }
+
+            if(rows == 1)
+            {
+                rows = 0;
+            }
+
+            int _totalPages = (int)Math.Round((float)count / (float)next);
+            if ( rows != 0)
+                rows = (rows - 1) * next;
+
+
+            List<Products> products = new List<Products>();
+            try
+            {
+                using SqlConnection con = new SqlConnection(connectionString);
+                using SqlCommand cmd = new SqlCommand("ProductsPerPage", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@Rows", rows);
+                cmd.Parameters.AddWithValue("@Next", next);
+
+                con.Open();
+
+                SqlDataReader rdr = cmd.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                        Products product = new Products
+                        {
+                            Id_Product = Guid.Parse(rdr["Id_Product"].ToString()),
+                            Name = rdr["Name"].ToString(),
+                            Description = rdr["Description"].ToString()
+                        };
+                        products.Add(product);
+                    
+                }
+                con.Close();
+            }
+            catch
+            {
+                throw;
+            }
+            
+            var data = products.ConvertAll<object>(item => (object)item).ToArray();
+            var res = new Page() { Data = data, TotalPages = _totalPages, TotalPassengers = count };
+            return Task.FromResult(res);
         }
 
         public Task Update(Products products)

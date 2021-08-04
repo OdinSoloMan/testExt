@@ -383,3 +383,110 @@ Begin
     from tblEmployee   
     order by EmployeeId      
 End
+
+---- Additional ----
+---- Products
+-- Count Products
+create procedure [dbo].[CountProducts]
+as
+begin try
+	begin transaction
+		select count(*) as _Count  from Products
+
+	if @@TRANCOUNT > 0
+		commit transaction
+end try
+begin catch
+	rollback transaction
+	select ERROR_NUMBER() AS ErrorNumber,
+		   ERROR_STATE() AS ErrorState,
+		   ERROR_SEVERITY() AS ErrorSeverity,
+		   ERROR_PROCEDURE() AS ErrorProcedure,
+		   ERROR_LINE() AS ErrorLine,
+		   ERROR_MESSAGE() AS ErrorMessage
+	return
+end catch
+
+exec dbo.CountProducts;
+
+-- Products per page
+create procedure [dbo].[ProductsPerPage]
+	 @Rows int,
+	 @Next int
+as
+begin try
+	begin transaction
+		select * from Products 
+		order by Id_Product 
+		OFFSET @Rows ROWS FETCH NEXT @Next ROWS ONLY;
+
+	if @@TRANCOUNT > 0
+		commit transaction
+end try
+begin catch
+	rollback transaction
+	select ERROR_NUMBER() AS ErrorNumber,
+		   ERROR_STATE() AS ErrorState,
+		   ERROR_SEVERITY() AS ErrorSeverity,
+		   ERROR_PROCEDURE() AS ErrorProcedure,
+		   ERROR_LINE() AS ErrorLine,
+		   ERROR_MESSAGE() AS ErrorMessage
+	return
+end catch
+
+---- Orders
+-- Count Orders User
+create procedure [dbo].[CountOrdersUser]
+	@UsersId nvarchar(450)
+as
+begin try
+	begin transaction
+		select Count(Orders.Id_Order) As _Count from Orders 
+		inner Join Products on (Orders.ProductsId = Products.Id_Product) 
+		where Orders.UsersId = @UsersId
+
+	if @@TRANCOUNT > 0
+		commit transaction
+end try 
+begin catch
+	rollback transaction
+	select ERROR_NUMBER() AS ErrorNumber,
+		   ERROR_STATE() AS ErrorState,
+		   ERROR_SEVERITY() AS ErrorSeverity,
+		   ERROR_PROCEDURE() AS ErrorProcedure,
+		   ERROR_LINE() AS ErrorLine,
+		   ERROR_MESSAGE() AS ErrorMessage
+	return
+end catch
+
+exec dbo.[CountOrdersUser] '0f16d45c-f5db-4846-8ad7-1f8b2e8e5e56'
+
+-- Read info oredrs user per page
+create procedure [dbo].[ReadInfoOredrsUserPerPage]
+	@UsersId nvarchar(450),
+	@Rows int,
+	@Next int
+as
+begin try
+	begin transaction
+		select Orders.Id_Order, Orders.Count, Products.Name from Orders 
+		inner Join Products on (Orders.ProductsId = Products.Id_Product) 
+		where Orders.UsersId = @UsersId
+		order by Orders.Id_Order 
+		OFFSET @Rows ROWS FETCH NEXT @Next ROWS ONLY;
+
+	if @@TRANCOUNT > 0
+		commit transaction
+end try 
+begin catch
+	rollback transaction
+	select ERROR_NUMBER() AS ErrorNumber,
+		   ERROR_STATE() AS ErrorState,
+		   ERROR_SEVERITY() AS ErrorSeverity,
+		   ERROR_PROCEDURE() AS ErrorProcedure,
+		   ERROR_LINE() AS ErrorLine,
+		   ERROR_MESSAGE() AS ErrorMessage
+	return
+end catch
+
+exec dbo.[ReadInfoOredrsUserPerPage] '0f16d45c-f5db-4846-8ad7-1f8b2e8e5e56', 0, 5

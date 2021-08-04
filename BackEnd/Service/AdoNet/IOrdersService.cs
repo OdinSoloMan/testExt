@@ -1,4 +1,5 @@
 ﻿using BackEnd.DataAccess;
+using BackEnd.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -14,5 +15,7 @@ namespace BackEnd.Service.AdoNet
         Task Delete(Guid GuidOrdersId);
         Task<object> ReadInfoOrders(string id_user);
         Task CraateList(Orders[] orders);
+        //Read info oredrs user per page
+        Task<Page> ReadInfoOredrsUserPerPage(string id_user, int rows, int next);
     }
 }

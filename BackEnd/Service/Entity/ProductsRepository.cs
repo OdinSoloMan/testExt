@@ -1,7 +1,9 @@
 ﻿using BackEnd.DataAccess;
+using BackEnd.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using WebApplication.DataAccess;
 
@@ -44,6 +46,20 @@ namespace BackEnd.Repository
         public async Task<bool> Select(string name)
         {
             return await db.Products.FirstOrDefaultAsync(c => c.Name == name) != null;
+        }
+
+        public Task<Page> SelectProductsPerPage(int rows, int next)
+        {
+            var count = db.Products.Count();
+
+            int _totalPages = (int)Math.Round((float)count / (float)next);
+            if (rows != 0)
+                rows = (rows - 1) * next;
+            
+            var data = db.Products.Skip(rows).Take(next).ToList();
+            var res = new Page() { Data = data, TotalPages = _totalPages, TotalPassengers = count };
+            
+            return Task.FromResult(res);
         }
     }
 }

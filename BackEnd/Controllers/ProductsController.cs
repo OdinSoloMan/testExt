@@ -15,21 +15,21 @@ using System.Threading.Tasks;
 
 namespace BackEnd.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("products")]
     [ApiController]
     public class ProductsController : ControllerBase
     {
         //Entity
-        //private readonly IProductsRepository _repo;
+        private readonly IProductsRepository _repo;
 
         //Ado.Net
-        private readonly IProductsService _repo;
+        //private readonly IProductsService _repo;
 
         private readonly ILogger<ProductsController> _log;
         private readonly IDiagnosticContext _diagnosticContext;
 
-        public ProductsController(IProductsService repo, ILogger<ProductsController> log, IDiagnosticContext diagnosticContext)
+        public ProductsController(IProductsRepository repo, ILogger<ProductsController> log, IDiagnosticContext diagnosticContext)
         {
             _repo = repo;
             _log = log;
@@ -106,6 +106,20 @@ namespace BackEnd.Controllers
             catch
             {
                 return StatusCode(StatusCodes.Status400BadRequest, new Response { Status = "Error", Message = "Not delete product!" });
+            }
+        }
+
+        [HttpGet("productspage")]
+        public async Task<ActionResult<string>> ProductsPerPage(int page, int size)
+        {
+            try
+            {
+                var res = await _repo.SelectProductsPerPage(page, size);
+                return new OkObjectResult(res);
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new Response { Status = "Error", Message = "Not info!" });
             }
         }
     }

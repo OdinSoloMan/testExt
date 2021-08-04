@@ -1,4 +1,5 @@
 ﻿using BackEnd.DataAccess;
+using BackEnd.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,5 +14,7 @@ namespace BackEnd.Service.AdoNet
         Task Update(Products products);
         Task Delete(Guid GuidProductsId);
         Task<bool> Select(string name);
+        //ProductsPerPage
+        Task<Page> SelectProductsPerPage(int rows, int next);
     }
 }

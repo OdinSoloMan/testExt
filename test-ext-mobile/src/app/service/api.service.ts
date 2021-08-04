@@ -21,7 +21,7 @@ export class ApiService {
   getProductsList(): Observable<any> {
     return this.http.get<any>(this.APIUrl + '/products/readallproducts', { headers: this.headers() })
   }
-  
+
   addListOrders(val: any) {
     return this.http.post(this.APIUrl + '/orders/addorderslist', val, { headers: this.headers() })
   }
@@ -44,5 +44,13 @@ export class ApiService {
 
   registration(val: any) {
     return this.http.post(this.APIUrl + '/registration', val)
+  }
+
+  getPageProducts(page: any, size: any): Observable<any> {
+    return this.http.get<any>(this.APIUrl + '/products/productspage?page=' + page + '&size=' + size, { headers: this.headers() })
+  }
+
+  getReadInfoOredrsUserPerPage(page: any, size: any): Observable<any> {
+    return this.http.get<any>(this.APIUrl + '/orders/readinfooredrsuserperpage?id_user=' + localStorage.getItem("id_users") + '&page=' + page + '&size=' + size, { headers: this.headers() })
   }
 }

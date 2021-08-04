@@ -1,4 +1,5 @@
 ﻿using BackEnd.DataAccess;
+using BackEnd.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -60,6 +61,34 @@ namespace BackEnd.Repository
         {
             await db.Orders.AddRangeAsync(orders);
             db.SaveChanges();
+        }
+
+        public Task<Page> ReadInfoOredrsUserPerPage(string id_user, int rows, int next)
+        {
+            if (rows == 1)
+            {
+                rows = 0;
+            }
+
+            var count = db.Orders.Where(c => c.UsersId == id_user).Count();
+
+            int _totalPages = (int)Math.Round((float)count / (float)next);
+            if (rows != 0)
+                rows = (rows - 1) * next;
+
+            var data = db.Orders.Where(c => c.UsersId == id_user).
+                Skip(rows).Take(next)
+                .Join(db.Products,
+                    u => u.ProductsId,
+                    c => c.Id_Product,
+                    (u, c) => new
+                    {
+                        u.Id_Order,
+                        c.Name,
+                        u.Count
+                    }).ToList();
+            var res = new Page() { Data = data, TotalPages = _totalPages, TotalPassengers = count };
+            return Task.FromResult(res);
         }
     }
 }

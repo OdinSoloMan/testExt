@@ -1,4 +1,5 @@
 ﻿using BackEnd.DataAccess;
+using BackEnd.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -15,5 +16,7 @@ namespace BackEnd.Repository
 
         //checking that if such an entry
         Task<bool> Select(string name);
+        //ProductsPerPage
+        Task<Page> SelectProductsPerPage(int rows, int next);
     }
 }
