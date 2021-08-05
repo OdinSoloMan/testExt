@@ -1,7 +1,10 @@
 {
   "name": "test-ext-mobile",
   "integrations": {
-    "capacitor": {}
+    "capacitor": {
+      "enabled": false
+    },
+    "cordova": {}
   },
   "type": "angular"
 }
