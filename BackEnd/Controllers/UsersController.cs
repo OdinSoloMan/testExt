@@ -1,18 +1,17 @@
 ﻿using BackEnd.DataAccess;
-using BackEnd.Repository;
+using BackEnd.Domain;
+using BackEnd.Models;
+using BackEnd.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using Microsoft.Extensions.Logging;
 using Serilog;
-using BackEnd.Models;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using BackEnd.Domain;
-using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
+using System;
 using System.Collections.Generic;
-using BackEnd.Services;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace BackEnd.Controllers
 {

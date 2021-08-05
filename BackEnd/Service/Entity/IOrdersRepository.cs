@@ -13,7 +13,6 @@ namespace BackEnd.Repository
         Task<Orders> Read(Guid GuidOrdersId);
         Task Update(Orders orders);
         Task Delete(Guid GuidOrdersId);
-
         //тестовый метод для фронта пока нету аторизации
         //так же после нужно добавить при считывания название продукта а не его id
         Task<object> ReadInfoOrders(string id_user);

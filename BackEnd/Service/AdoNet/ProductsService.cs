@@ -20,13 +20,11 @@ namespace BackEnd.Service.AdoNet
                 using SqlCommand cmd = new SqlCommand("AddProducts", con);
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@Id_Product", Guid.NewGuid());
-                cmd.Parameters.AddWithValue("@Name", products.Name);
-                cmd.Parameters.AddWithValue("@Description", products.Description);
+                products.Id_Product = Guid.NewGuid();
+                ParametersTableProducts(products, cmd);
 
                 con.Open();
                 cmd.ExecuteNonQuery();
-
                 con.Close();
             }
             catch
@@ -47,13 +45,14 @@ namespace BackEnd.Service.AdoNet
                 cmd.Parameters.AddWithValue("@Id_Product", GuidProductsId);
 
                 con.Open();
+
                 SqlDataReader rdr = cmd.ExecuteReader();
 
-                var res = "";
                 while (rdr.Read())
                 {
-                    res = rdr["OpenTransactions"].ToString();
+                    _ = rdr["OpenTransactions"].ToString();
                 }
+
                 con.Close();
                 return Task.CompletedTask;
             }
@@ -75,6 +74,7 @@ namespace BackEnd.Service.AdoNet
                 cmd.Parameters.AddWithValue("@Id_Product", GuidProductsId);
 
                 con.Open();
+
                 SqlDataReader rdr = cmd.ExecuteReader();
 
                 while (rdr.Read())
@@ -86,6 +86,7 @@ namespace BackEnd.Service.AdoNet
                         Description = rdr["Description"].ToString()
                     };
                 }
+
                 con.Close();
                 return Task.FromResult(res);
             }
@@ -105,6 +106,7 @@ namespace BackEnd.Service.AdoNet
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 con.Open();
+
                 SqlDataReader rdr = cmd.ExecuteReader();
 
                 while (rdr.Read())
@@ -117,6 +119,7 @@ namespace BackEnd.Service.AdoNet
                     };
                     res.Add(products);
                 }
+
                 con.Close();
                 IEnumerable<Products> c = res.ToList();
                 return Task.FromResult(c);
@@ -139,6 +142,7 @@ namespace BackEnd.Service.AdoNet
                 cmd.Parameters.AddWithValue("@Name", name);
 
                 con.Open();
+
                 SqlDataReader rdr = cmd.ExecuteReader();
 
                 while (rdr.Read())
@@ -150,10 +154,11 @@ namespace BackEnd.Service.AdoNet
                         Description = rdr["Description"].ToString()
                     };
                 }
+
                 con.Close();
                 if (res.Name == "")
                     return Task.FromResult(false);
-                else 
+                else
                     return Task.FromResult(true);
             }
             catch
@@ -165,42 +170,14 @@ namespace BackEnd.Service.AdoNet
         public Task<Page> SelectProductsPerPage(int rows, int next)
         {
             int count = 0;
-            try
-            {
-                using SqlConnection con = new SqlConnection(connectionString);
-                using SqlCommand cmd = new SqlCommand("CountProducts", con);
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                con.Open();
-                
-                SqlDataReader rdr = cmd.ExecuteReader();
-
-                while (rdr.Read())
-                {
-                    count = Convert.ToInt32(rdr["_Count"]);
-                }
-                con.Close();
-            }
-            catch
-            {
-                throw;
-            }
-
-            if(rows == 1)
-            {
-                rows = 0;
-            }
-
             int _totalPages = (int)Math.Round((float)count / (float)next);
-            if ( rows != 0)
-                rows = (rows - 1) * next;
-
+            rows = (rows == 1) ? 0 : (rows != 0) ? ((rows - 1) * next) : 0;
 
             List<Products> products = new List<Products>();
             try
             {
                 using SqlConnection con = new SqlConnection(connectionString);
-                using SqlCommand cmd = new SqlCommand("ProductsPerPage", con);
+                using SqlCommand cmd = new SqlCommand("ProductsPerPageInfo", con);
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 cmd.Parameters.AddWithValue("@Rows", rows);
@@ -212,22 +189,30 @@ namespace BackEnd.Service.AdoNet
 
                 while (rdr.Read())
                 {
-                        Products product = new Products
-                        {
-                            Id_Product = Guid.Parse(rdr["Id_Product"].ToString()),
-                            Name = rdr["Name"].ToString(),
-                            Description = rdr["Description"].ToString()
-                        };
-                        products.Add(product);
-                    
+                    count = Convert.ToInt32(rdr["_Count"]);
                 }
+
+                rdr.NextResult();
+
+                while (rdr.Read())
+                {
+                    Products product = new Products
+                    {
+                        Id_Product = Guid.Parse(rdr["Id_Product"].ToString()),
+                        Name = rdr["Name"].ToString(),
+                        Description = rdr["Description"].ToString()
+                    };
+                    products.Add(product);
+
+                }
+
                 con.Close();
             }
             catch
             {
                 throw;
             }
-            
+
             var data = products.ConvertAll<object>(item => (object)item).ToArray();
             var res = new Page() { Data = data, TotalPages = _totalPages, TotalPassengers = count };
             return Task.FromResult(res);
@@ -241,13 +226,10 @@ namespace BackEnd.Service.AdoNet
                 using SqlCommand cmd = new SqlCommand("UpdateProducts", con);
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@Id_Product", products.Id_Product);
-                cmd.Parameters.AddWithValue("@Name", products.Name);
-                cmd.Parameters.AddWithValue("@Description", products.Description);
+                ParametersTableProducts(products, cmd);
 
                 con.Open();
                 cmd.ExecuteNonQuery();
-
                 con.Close();
             }
             catch
@@ -257,22 +239,11 @@ namespace BackEnd.Service.AdoNet
             return Task.CompletedTask;
         }
 
-        Dictionary<string, string> GetObjectResult(SqlDataReader rdr)
+        private static void ParametersTableProducts(Products products, SqlCommand cmd)
         {
-            var res = new Dictionary<string, string>();
-
-            DataTable dt = new DataTable();
-            dt.Load(rdr);
-
-            foreach (DataRow row in dt.Rows)
-            {
-                foreach (DataColumn column in dt.Columns)
-                {
-                    res.Add(column.ColumnName, row[column].ToString());
-                }
-            }
-
-            return res;
+            cmd.Parameters.AddWithValue("@Id_Product", products.Id_Product);
+            cmd.Parameters.AddWithValue("@Name", products.Name);
+            cmd.Parameters.AddWithValue("@Description", products.Description);
         }
     }
 }

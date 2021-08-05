@@ -13,7 +13,6 @@ namespace BackEnd.Repository
         Task<Products> Read(Guid GuidProductsId);
         Task Update(Products products);
         Task Delete(Guid GuidProductsId);
-
         //checking that if such an entry
         Task<bool> Select(string name);
         //ProductsPerPage

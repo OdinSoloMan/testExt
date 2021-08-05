@@ -30,17 +30,14 @@ namespace BackEnd.Service.AdoNet
                     table.Rows.Add(Guid.NewGuid(), orders[i].Count, orders[i].UsersId, orders[i].ProductsId);
                 }
 
-                var pList = new SqlParameter("@Orders", SqlDbType.Structured)
+                cmd.Parameters.Add(new SqlParameter("@Orders", SqlDbType.Structured)
                 {
                     TypeName = "dbo.IdTypeOrder",
                     Value = table
-                };
-
-                cmd.Parameters.Add(pList);
+                });
 
                 con.Open();
                 cmd.ExecuteNonQuery();
-
                 con.Close();
             }
             catch
@@ -58,14 +55,11 @@ namespace BackEnd.Service.AdoNet
                 using SqlCommand cmd = new SqlCommand("AddOrders", con);
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@Id_Order", Guid.NewGuid());
-                cmd.Parameters.AddWithValue("@Count", orders.Count);
-                cmd.Parameters.AddWithValue("@UsersId", orders.UsersId);
-                cmd.Parameters.AddWithValue("@ProductsId", orders.ProductsId);
+                orders.Id_Order = Guid.NewGuid();
+                ParametersTableOrders(orders, cmd);
 
                 con.Open();
                 cmd.ExecuteNonQuery();
-                
                 con.Close();
             }
             catch
@@ -86,13 +80,14 @@ namespace BackEnd.Service.AdoNet
                 cmd.Parameters.AddWithValue("@Id_Order", GuidOrdersId);
 
                 con.Open();
+
                 SqlDataReader rdr = cmd.ExecuteReader();
 
-                var res = "";
                 while (rdr.Read())
                 {
-                    res = rdr["OpenTransactions"].ToString();
+                    _ = rdr["OpenTransactions"].ToString();
                 }
+
                 con.Close();
                 return Task.CompletedTask;
             }
@@ -114,6 +109,7 @@ namespace BackEnd.Service.AdoNet
                 cmd.Parameters.AddWithValue("@Id_Order", GuidOrdersId);
 
                 con.Open();
+
                 SqlDataReader rdr = cmd.ExecuteReader();
 
                 while (rdr.Read())
@@ -126,6 +122,7 @@ namespace BackEnd.Service.AdoNet
                         ProductsId = Guid.Parse(rdr["ProductsId"].ToString())
                     };
                 }
+
                 con.Close();
                 return Task.FromResult(res);
             }
@@ -145,6 +142,7 @@ namespace BackEnd.Service.AdoNet
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 con.Open();
+
                 SqlDataReader rdr = cmd.ExecuteReader();
 
                 while (rdr.Read())
@@ -158,6 +156,7 @@ namespace BackEnd.Service.AdoNet
                     };
                     res.Add(orders);
                 }
+
                 con.Close();
                 IEnumerable<Orders> c = res.ToList();
                 return Task.FromResult(c);
@@ -170,7 +169,7 @@ namespace BackEnd.Service.AdoNet
 
         public Task<object> ReadInfoOrders(string id_user)
         {
-            List<object> res = new List<object> ();
+            List<object> res = new List<object>();
             try
             {
                 using SqlConnection con = new SqlConnection(connectionString);
@@ -180,6 +179,7 @@ namespace BackEnd.Service.AdoNet
                 cmd.Parameters.AddWithValue("@UsersId", id_user);
 
                 con.Open();
+
                 SqlDataReader rdr = cmd.ExecuteReader();
 
                 while (rdr.Read())
@@ -191,6 +191,7 @@ namespace BackEnd.Service.AdoNet
                         Name = rdr["Name"].ToString()
                     });
                 }
+
                 con.Close();
                 object c = res.ToList();
                 return Task.FromResult(c);
@@ -204,13 +205,19 @@ namespace BackEnd.Service.AdoNet
         public Task<Page> ReadInfoOredrsUserPerPage(string id_user, int rows, int next)
         {
             int count = 0;
+            int _totalPages = (int)Math.Round((float)count / (float)next);
+            rows = (rows == 1) ? 0 : (rows != 0) ? ((rows - 1) * next) : 0;
+
+            List<object> infoObj = new List<object>();
             try
             {
                 using SqlConnection con = new SqlConnection(connectionString);
-                using SqlCommand cmd = new SqlCommand("CountOrdersUser", con);
+                using SqlCommand cmd = new SqlCommand("InfoOredrsUserPerPage", con);
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 cmd.Parameters.AddWithValue("@UsersId", id_user);
+                cmd.Parameters.AddWithValue("@Rows", rows);
+                cmd.Parameters.AddWithValue("@Next", next);
 
                 con.Open();
 
@@ -220,36 +227,8 @@ namespace BackEnd.Service.AdoNet
                 {
                     count = Convert.ToInt32(rdr["_Count"]);
                 }
-                con.Close();
-            }
-            catch
-            {
-                throw;
-            }
 
-            if (rows == 1)
-            {
-                rows = 0;
-            }
-
-            int _totalPages = (int)Math.Round((float)count / (float)next);
-            if (rows != 0)
-                rows = (rows - 1) * next;
-
-
-            List<object> infoObj = new List<object>();
-            try
-            {
-                using SqlConnection con = new SqlConnection(connectionString);
-                using SqlCommand cmd = new SqlCommand("ReadInfoOredrsUserPerPage", con);
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                cmd.Parameters.AddWithValue("@UsersId", id_user);
-                cmd.Parameters.AddWithValue("@Rows", rows);
-                cmd.Parameters.AddWithValue("@Next", next);
-
-                con.Open();
-                SqlDataReader rdr = cmd.ExecuteReader();
+                rdr.NextResult();
 
                 while (rdr.Read())
                 {
@@ -260,6 +239,7 @@ namespace BackEnd.Service.AdoNet
                         Name = rdr["Name"].ToString()
                     });
                 }
+
                 con.Close();
             }
             catch
@@ -280,14 +260,10 @@ namespace BackEnd.Service.AdoNet
                 using SqlCommand cmd = new SqlCommand("UpdateOrders", con);
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@Id_Order",orders.Id_Order);
-                cmd.Parameters.AddWithValue("@Count", orders.Count);
-                cmd.Parameters.AddWithValue("@UsersId", orders.UsersId);
-                cmd.Parameters.AddWithValue("@ProductsId", orders.ProductsId);
+                ParametersTableOrders(orders, cmd);
 
                 con.Open();
                 cmd.ExecuteNonQuery();
-
                 con.Close();
             }
             catch
@@ -295,6 +271,14 @@ namespace BackEnd.Service.AdoNet
                 throw;
             }
             return Task.CompletedTask;
+        }
+
+        private static void ParametersTableOrders(Orders orders, SqlCommand cmd)
+        {
+            cmd.Parameters.AddWithValue("@Id_Order", orders.Id_Order);
+            cmd.Parameters.AddWithValue("@Count", orders.Count);
+            cmd.Parameters.AddWithValue("@UsersId", orders.UsersId);
+            cmd.Parameters.AddWithValue("@ProductsId", orders.ProductsId);
         }
     }
 }

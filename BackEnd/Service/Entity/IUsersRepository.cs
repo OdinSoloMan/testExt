@@ -7,7 +7,7 @@ namespace BackEnd.Repository
 {
     public interface IUsersRepository
     {
-        Task <IEnumerable<Users>> ReadAll();
+        Task<IEnumerable<Users>> ReadAll();
         Task Create(Users users);
         Task<Users> Read(Guid GuidUsersId);
         Task Update(Users users);

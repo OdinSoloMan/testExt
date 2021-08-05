@@ -1,20 +1,19 @@
+using Autofac;
+using BackEnd.DataAccess;
+using BackEnd.Filter;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using WebApplication.DataAccess;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Events;
-using BackEnd.Filter;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
-using Autofac;
-using BackEnd.Rabbit;
-using BackEnd.DataAccess;
-using Microsoft.AspNetCore.Identity;
+using WebApplication.DataAccess;
 
 namespace BackEnd
 {
@@ -79,7 +78,7 @@ namespace BackEnd
             });
 
             services.AddControllersWithViews();
-            
+
             //Docker needs to be enabled first
             //services.AddSingleton(sp => RabbitHutch.CreateBus("localhost"));
         }

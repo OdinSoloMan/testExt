@@ -1,16 +1,11 @@
 ﻿using BackEnd.DataAccess;
 using BackEnd.Domain;
-using BackEnd.Repository;
 using BackEnd.Service.AdoNet;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Threading.Tasks;
 
 namespace BackEnd.Controllers
@@ -21,15 +16,15 @@ namespace BackEnd.Controllers
     public class ProductsController : ControllerBase
     {
         //Entity
-        private readonly IProductsRepository _repo;
+        //private readonly IProductsRepository _repo;
 
         //Ado.Net
-        //private readonly IProductsService _repo;
+        private readonly IProductsService _repo;
 
         private readonly ILogger<ProductsController> _log;
         private readonly IDiagnosticContext _diagnosticContext;
 
-        public ProductsController(IProductsRepository repo, ILogger<ProductsController> log, IDiagnosticContext diagnosticContext)
+        public ProductsController(IProductsService repo, ILogger<ProductsController> log, IDiagnosticContext diagnosticContext)
         {
             _repo = repo;
             _log = log;
@@ -65,7 +60,7 @@ namespace BackEnd.Controllers
         {
             _diagnosticContext.Set("CatalogLoadTime", 1423);
             var res = await _repo.Read(id);
-            if(res != null)
+            if (res != null)
             {
                 _log.LogInformation("Read product: {res}", res);
                 return new OkObjectResult(res);

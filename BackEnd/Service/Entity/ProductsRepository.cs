@@ -53,12 +53,11 @@ namespace BackEnd.Repository
             var count = db.Products.Count();
 
             int _totalPages = (int)Math.Round((float)count / (float)next);
-            if (rows != 0)
-                rows = (rows - 1) * next;
-            
+            rows = (rows == 1) ? 0 : (rows != 0) ? ((rows - 1) * next) : 0;
+
             var data = db.Products.Skip(rows).Take(next).ToList();
             var res = new Page() { Data = data, TotalPages = _totalPages, TotalPassengers = count };
-            
+
             return Task.FromResult(res);
         }
     }

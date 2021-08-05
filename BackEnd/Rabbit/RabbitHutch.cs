@@ -18,12 +18,7 @@ namespace BackEnd.Rabbit
             _channel = _connection.CreateModel();
             return new RabbitBus(_channel);
         }
-        public static IBus CreateBus(
-        string hostName,
-        ushort hostPort,
-        string virtualHost,
-        string username,
-        string password)
+        public static IBus CreateBus(string hostName, ushort hostPort, string virtualHost, string username, string password)
         {
             _factory = new ConnectionFactory
             {

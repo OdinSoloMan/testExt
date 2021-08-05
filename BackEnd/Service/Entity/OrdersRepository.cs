@@ -65,16 +65,10 @@ namespace BackEnd.Repository
 
         public Task<Page> ReadInfoOredrsUserPerPage(string id_user, int rows, int next)
         {
-            if (rows == 1)
-            {
-                rows = 0;
-            }
-
             var count = db.Orders.Where(c => c.UsersId == id_user).Count();
 
             int _totalPages = (int)Math.Round((float)count / (float)next);
-            if (rows != 0)
-                rows = (rows - 1) * next;
+            rows = (rows == 1) ? 0 : (rows != 0) ? ((rows - 1) * next) : 0;
 
             var data = db.Orders.Where(c => c.UsersId == id_user).
                 Skip(rows).Take(next)

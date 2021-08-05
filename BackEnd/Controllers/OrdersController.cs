@@ -1,8 +1,6 @@
 ﻿using BackEnd.DataAccess;
 using BackEnd.Domain;
 using BackEnd.Repository;
-using BackEnd.Service.AdoNet;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -64,7 +62,7 @@ namespace BackEnd.Controllers
                 return new OkObjectResult(res);
             }
             else
-            {                
+            {
                 return StatusCode(StatusCodes.Status400BadRequest, new Response { Status = "Error", Message = "Not order under such id!" });
             }
         }

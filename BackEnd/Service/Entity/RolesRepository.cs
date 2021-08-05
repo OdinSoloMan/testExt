@@ -1,8 +1,6 @@
 ﻿using BackEnd.DataAccess;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using WebApplication.DataAccess;
 
 namespace BackEnd.Repository
 {
