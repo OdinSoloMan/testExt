@@ -48,17 +48,25 @@ namespace BackEnd.Repository
             return await db.Products.FirstOrDefaultAsync(c => c.Name == name) != null;
         }
 
-        public Task<Page> SelectProductsPerPage(int rows, int next)
+        public Task<Page> SelectProductsPerPage(int rows, int next, string filter)
         {
+            if (filter == null)
+            { filter = ""; }
             var count = db.Products.Count();
 
             int _totalPages = (int)Math.Round((float)count / (float)next);
             rows = (rows == 1) ? 0 : (rows != 0) ? ((rows - 1) * next) : 0;
 
-            var data = db.Products.Skip(rows).Take(next).ToList();
+            var data = db.Products.Where(e => e.Name.StartsWith(filter)).Skip(rows).Take(next).ToList();
             var res = new Page() { Data = data, TotalPages = _totalPages, TotalPassengers = count };
 
             return Task.FromResult(res);
+        }
+
+        public Task<IEnumerable<Products>> FilterProductsName(string name)
+        {
+            var s = db.Products.Where(e => e.Name.StartsWith(name)).Take(10).ToList().AsEnumerable();
+            return Task.FromResult(s);
         }
     }
 }

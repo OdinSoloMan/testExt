@@ -1,5 +1,6 @@
 ﻿using BackEnd.DataAccess;
 using BackEnd.Domain;
+using BackEnd.Repository;
 using BackEnd.Service.AdoNet;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -105,11 +106,25 @@ namespace BackEnd.Controllers
         }
 
         [HttpGet("productspage")]
-        public async Task<ActionResult<string>> ProductsPerPage(int page, int size)
+        public async Task<ActionResult<string>> ProductsPerPage(int page, int size, string filter)
         {
             try
             {
-                var res = await _repo.SelectProductsPerPage(page, size);
+                var res = await _repo.SelectProductsPerPage(page, size, filter);
+                return new OkObjectResult(res);
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new Response { Status = "Error", Message = "Not info!" });
+            }
+        }
+
+        [HttpGet("filter")]
+        public async Task<ActionResult<string>> ProductFilterName(string name)
+        {
+            try
+            {
+                var res = await _repo.FilterProductsName(name);
                 return new OkObjectResult(res);
             }
             catch

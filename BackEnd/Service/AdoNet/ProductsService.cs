@@ -167,8 +167,10 @@ namespace BackEnd.Service.AdoNet
             }
         }
 
-        public Task<Page> SelectProductsPerPage(int rows, int next)
+        public Task<Page> SelectProductsPerPage(int rows, int next, string filter)
         {
+            if(filter == null)
+            { filter = ""; }
             int count = 0;
             int _totalPages = (int)Math.Round((float)count / (float)next);
             rows = (rows == 1) ? 0 : (rows != 0) ? ((rows - 1) * next) : 0;
@@ -177,11 +179,12 @@ namespace BackEnd.Service.AdoNet
             try
             {
                 using SqlConnection con = new SqlConnection(connectionString);
-                using SqlCommand cmd = new SqlCommand("ProductsPerPageInfo", con);
+                using SqlCommand cmd = new SqlCommand("ProductsPerPageInfoAndFilter", con);
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 cmd.Parameters.AddWithValue("@Rows", rows);
                 cmd.Parameters.AddWithValue("@Next", next);
+                cmd.Parameters.AddWithValue("@Filter", filter);
 
                 con.Open();
 
@@ -244,6 +247,42 @@ namespace BackEnd.Service.AdoNet
             cmd.Parameters.AddWithValue("@Id_Product", products.Id_Product);
             cmd.Parameters.AddWithValue("@Name", products.Name);
             cmd.Parameters.AddWithValue("@Description", products.Description);
+        }
+
+        public Task<IEnumerable<Products>> FilterProductsName(string name)
+        {
+            List<Products> res = new List<Products>();
+            try
+            {
+                using SqlConnection con = new SqlConnection(connectionString);
+                using SqlCommand cmd = new SqlCommand("FiltersProductList", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@Name", name);
+
+                con.Open();
+
+                SqlDataReader rdr = cmd.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    Products products = new Products
+                    {
+                        Id_Product = Guid.Parse(rdr["Id_Product"].ToString()),
+                        Name = rdr["Name"].ToString(),
+                        Description = rdr["Description"].ToString()
+                    };
+                    res.Add(products);
+                }
+
+                con.Close();
+                IEnumerable<Products> c = res.ToList();
+                return Task.FromResult(c);
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }

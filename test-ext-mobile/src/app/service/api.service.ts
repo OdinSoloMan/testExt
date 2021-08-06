@@ -46,11 +46,19 @@ export class ApiService {
     return this.http.post(this.APIUrl + '/registration', val)
   }
 
-  getPageProducts(page: any, size: any): Observable<any> {
-    return this.http.get<any>(this.APIUrl + '/products/productspage?page=' + page + '&size=' + size, { headers: this.headers() })
+  getPageProducts(page: any, size: any, filter: any): Observable<any> {
+    return this.http.get<any>(this.APIUrl + '/products/productspage?page=' + page + '&size=' + size + '&filter=' + filter, { headers: this.headers() })
   }
 
   getReadInfoOredrsUserPerPage(page: any, size: any): Observable<any> {
     return this.http.get<any>(this.APIUrl + '/orders/readinfooredrsuserperpage?id_user=' + localStorage.getItem("id_users") + '&page=' + page + '&size=' + size, { headers: this.headers() })
+  }
+
+  getProductFilterName(name: any): Observable<any> {
+    return this.http.get<any>(this.APIUrl + '/products/filter?name=' + name, { headers: this.headers() })
+  }
+
+  getProductReadById(id: any): Observable<any> {
+    return this.http.get<any>(this.APIUrl + '/products/read/' + id, { headers: this.headers() })
   }
 }

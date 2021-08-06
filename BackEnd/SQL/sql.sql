@@ -540,5 +540,67 @@ begin catch
 	return
 end catch
 
+go
+
 -- Example
 -- exec dbo.[InfoOredrsUserPerPage] '0f16d45c-f5db-4846-8ad7-1f8b2e8e5e56', 0, 5
+
+---- Filter ----
+-- filter input
+create procedure [dbo].[FiltersProductList]
+	@Name nvarchar(450)
+as
+begin try
+	begin transaction
+		select top 10 * from dbo.Products where dbo.Products.Name LIKE @Name+'%'
+
+	if @@TRANCOUNT > 0
+		commit transaction
+end try 
+begin catch
+	rollback transaction
+	select ERROR_NUMBER() AS ErrorNumber,
+		   ERROR_STATE() AS ErrorState,
+		   ERROR_SEVERITY() AS ErrorSeverity,
+		   ERROR_PROCEDURE() AS ErrorProcedure,
+		   ERROR_LINE() AS ErrorLine,
+		   ERROR_MESSAGE() AS ErrorMessage
+	return
+end catch
+
+-- Example
+-- exec dbo.FiltersProductList ''
+
+go
+
+-- Filter enter
+create procedure [dbo].[ProductsPerPageInfoAndFilter]
+	 @Rows int,
+	 @Next int,
+	 @Filter nvarchar(450)
+as
+begin try
+	begin transaction
+		select count(*) as _Count  from Products  where dbo.Products.Name LIKE @Filter+'%'
+
+		select * from Products
+		where dbo.Products.Name LIKE @Filter+'%'
+		order by Id_Product 
+		OFFSET @Rows ROWS FETCH NEXT @Next ROWS ONLY;
+
+	if @@TRANCOUNT > 0
+		commit transaction
+end try
+begin catch
+	rollback transaction
+	select ERROR_NUMBER() AS ErrorNumber,
+		   ERROR_STATE() AS ErrorState,
+		   ERROR_SEVERITY() AS ErrorSeverity,
+		   ERROR_PROCEDURE() AS ErrorProcedure,
+		   ERROR_LINE() AS ErrorLine,
+		   ERROR_MESSAGE() AS ErrorMessage
+	return
+end catch
+
+-- Example
+-- exec dbo.[ProductsPerPageInfoAndFilter] 0, 5, 'test'

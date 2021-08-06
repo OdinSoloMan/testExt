@@ -27,7 +27,7 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-  <pagination-controls (pageChange)="getPage(p = $event)"></pagination-controls>
+  <pagination-controls (pageChange)="getPage(p = $event)" *ngIf="ordersList.length !== 0"></pagination-controls>
   <div class="ion-text-center" *ngIf="ordersList.length === 0">
     <h3>{{'text.null-orders' | translate}}</h3>
   </div>

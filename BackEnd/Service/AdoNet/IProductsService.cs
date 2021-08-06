@@ -15,6 +15,8 @@ namespace BackEnd.Service.AdoNet
         Task Delete(Guid GuidProductsId);
         Task<bool> Select(string name);
         //ProductsPerPage
-        Task<Page> SelectProductsPerPage(int rows, int next);
+        Task<Page> SelectProductsPerPage(int rows, int next, string filter);
+        //Filter product Name
+        Task<IEnumerable<Products>> FilterProductsName(string name);
     }
 }
