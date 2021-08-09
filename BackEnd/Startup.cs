@@ -15,6 +15,7 @@ using Serilog;
 using Serilog.Events;
 using System.Text;
 using WebApplication.DataAccess;
+using RabbitMQServices.Rabbit;
 
 namespace BackEnd
 {
@@ -82,6 +83,8 @@ namespace BackEnd
 
             //Docker needs to be enabled first
             //services.AddSingleton(sp => RabbitHutch.CreateBus("localhost"));
+
+            services.AddSingleton(sp => RabbitHutch.CreateBus("localhost"));
         }
 
         public void ConfigureContainer(ContainerBuilder builder)

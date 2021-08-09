@@ -1,7 +1,0 @@
-{
-  "name": "question-answer",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular"
-}
