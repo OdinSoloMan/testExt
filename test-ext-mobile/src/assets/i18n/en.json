@@ -11,6 +11,7 @@
     },
     "text": {
         "enter": "Enter",
+        "filter": "Filter",
         "valid": {
             "number": {
                 "4": 4,

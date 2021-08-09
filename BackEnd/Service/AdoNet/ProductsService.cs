@@ -11,7 +11,7 @@ namespace BackEnd.Service.AdoNet
 {
     public class ProductsService : IProductsService
     {
-        readonly string connectionString = $"Data Source=WS-PC-16\\SQLEXPRESS;Initial Catalog=AppDatabaseContext;Integrated Security=True";
+        readonly string connectionString = new ConnectionString().ConnStr();
         public Task Create(Products products)
         {
             try

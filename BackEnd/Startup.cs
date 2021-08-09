@@ -1,6 +1,7 @@
 using Autofac;
 using BackEnd.DataAccess;
 using BackEnd.Filter;
+using BackEnd.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -35,7 +36,7 @@ namespace BackEnd
                 //Data Source=localhost;Initial Catalog=ContextApp;Integrated Security=True
                 //pc job
                 //Data Source=WS-PC-16\\SQLEXPRESS;Initial Catalog={nameof(AppDatabaseContext)};Integrated Security=True
-                (c => c.UseSqlServer($"Data Source=WS-PC-16\\SQLEXPRESS;Initial Catalog={nameof(AppDatabaseContext)};Integrated Security=True"));
+                (c => c.UseSqlServer(new ConnectionString().ConnStr()));
             services.AddControllers();
 
             // For Identity

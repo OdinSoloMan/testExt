@@ -8,7 +8,7 @@
       (keyup.enter)="onEnter(filter.value)">
     </ion-input> -->
     <div slot="end">
-      <input #filter type="text" name="team" id="favorite_team" list="team_list" placeholder="Filter"
+      <input #filter type="text" name="team" id="favorite_team" list="team_list" placeholder="{{'text.filter' | translate}}"
         (keyup)="onKey(filter.value)" (keyup.enter)="onEnter(filter.value)" (change)="saveCode($event)">
       <button (click)="ClearFilter()" autocomplete="off">X</button>
       <datalist id="team_list">
