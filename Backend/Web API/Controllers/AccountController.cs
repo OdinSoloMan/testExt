@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using RabbitMQServices.Client;
 using RabbitMQServices.Rabbit;
 using Serilog;
 using System;
@@ -131,8 +132,6 @@ namespace BackEnd.Controllers
                     RefreshToken = refreshToken
                 };
 
-                R r = new R() { MyProperty = 0 };
-
                 //Docker needs to be enabled first
                 //await _bus.ReceiveAsync(Queue.Processing, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(responce)));
 
@@ -141,11 +140,6 @@ namespace BackEnd.Controllers
                 return new OkObjectResult(responce);
             }
             return Unauthorized();
-        }
-
-        class R
-        {
-            public int MyProperty { get; set; }
         }
 
         [HttpPost("refresh")]
@@ -212,6 +206,37 @@ namespace BackEnd.Controllers
                 return NoContent();
             }
             return BadRequest();
+        }
+
+        [HttpPost("Tasdaas/{crop}")]
+        public async Task<ActionResult<string>> Testaaa(string crop)
+        {
+            Console.Title = "RabbitMQ RPC Client";
+            string name = crop;
+
+            using var rpcClient = new RpcClient();
+            Console.WriteLine("Press ENTER or Ctrl+C to exit.");
+
+            string message = null;
+
+            using (var colour = new ScopedConsoleColour(ConsoleColor.Blue))
+            {
+                message = name;
+            }
+
+            if (string.IsNullOrWhiteSpace(message))
+            {
+                return BadRequest();
+            }
+            else
+            {
+                var response = await rpcClient.SendAsync(message);
+
+                Console.Write("Response was: ");
+                using var colour = new ScopedConsoleColour(ConsoleColor.Green);
+                Console.WriteLine(response);
+                return new OkObjectResult(response);
+            }
         }
     }
 }

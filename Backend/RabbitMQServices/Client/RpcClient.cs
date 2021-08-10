@@ -2,20 +2,18 @@
 using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RpcClientApp
+namespace RabbitMQServices.Client
 {
     public class RpcClient : IDisposable
     {
         private bool disposed = false;
-        private IConnection connection;
-        private IModel channel;
-        private EventingBasicConsumer consumer;
-        private ConcurrentDictionary<string,
-            TaskCompletionSource<string>> pendingMessages;
+        private readonly IConnection connection;
+        private readonly IModel channel;
+        private readonly EventingBasicConsumer consumer;
+        private readonly ConcurrentDictionary<string, TaskCompletionSource<string>> pendingMessages;
 
         private const string requestQueueName = "requestqueue";
         private const string responseQueueName = "responsequeue";
@@ -25,18 +23,17 @@ namespace RpcClientApp
         {
             var factory = new ConnectionFactory() { HostName = "localhost" };
 
-            this.connection = factory.CreateConnection();
-            this.channel = connection.CreateModel();
+            connection = factory.CreateConnection();
+            channel = connection.CreateModel();
 
-            this.channel.QueueDeclare(requestQueueName, true, false, false, null);
-            this.channel.QueueDeclare(responseQueueName, true, false, false, null);
+            channel.QueueDeclare(requestQueueName, true, false, false, null);
+            channel.QueueDeclare(responseQueueName, true, false, false, null);
 
-            this.consumer = new EventingBasicConsumer(this.channel);
-            this.consumer.Received += Consumer_Received;
-            this.channel.BasicConsume(responseQueueName, true, consumer);
+            consumer = new EventingBasicConsumer(this.channel);
+            consumer.Received += Consumer_Received;
+            channel.BasicConsume(responseQueueName, true, consumer);
 
-            this.pendingMessages = new ConcurrentDictionary<string,
-                TaskCompletionSource<string>>();
+            pendingMessages = new ConcurrentDictionary<string, TaskCompletionSource<string>>();
         }
 
         public Task<string> SendAsync(string message)
@@ -44,9 +41,9 @@ namespace RpcClientApp
             var tcs = new TaskCompletionSource<string>();
             var correlationId = Guid.NewGuid().ToString();
 
-            this.pendingMessages[correlationId] = tcs;
+            pendingMessages[correlationId] = tcs;
 
-            this.Publish(message, correlationId);
+            Publish(message, correlationId);
 
             return tcs.Task;
         }
@@ -58,10 +55,10 @@ namespace RpcClientApp
             props.ReplyTo = responseQueueName;
 
             byte[] messageBytes = Encoding.UTF8.GetBytes(message);
-            this.channel.BasicPublish(exchangeName, requestQueueName, props, messageBytes);
+            channel.BasicPublish(exchangeName, requestQueueName, props, messageBytes);
 
-            using (var colour = new ScopedConsoleColour(ConsoleColor.Yellow))
-                Console.WriteLine($"Sent: {message} with CorrelationId {correlationId}");
+            using var colour = new ScopedConsoleColour(ConsoleColor.Yellow);
+            Console.WriteLine($"Sent: {message} with CorrelationId {correlationId}");
         }
 
         private void Consumer_Received(object sender, BasicDeliverEventArgs e)
@@ -69,10 +66,12 @@ namespace RpcClientApp
             var correlationId = e.BasicProperties.CorrelationId;
             var message = Encoding.UTF8.GetString(e.Body.ToArray());
 
-            using (var colour = new ScopedConsoleColour(ConsoleColor.Yellow))
+            using (ScopedConsoleColour colour = new ScopedConsoleColour(ConsoleColor.Yellow))
+            {
                 Console.WriteLine($"Received: {message} with CorrelationId {correlationId}");
+            }
 
-            this.pendingMessages.TryRemove(correlationId, out var tcs);
+            pendingMessages.TryRemove(correlationId, out var tcs);
             if (tcs != null)
                 tcs.SetResult(message);
         }
@@ -87,11 +86,11 @@ namespace RpcClientApp
         {
             if (!disposed && disposing)
             {
-                this.channel?.Dispose();
-                this.connection?.Dispose();
+                channel?.Dispose();
+                connection?.Dispose();
             }
 
-            this.disposed = true;
+            disposed = true;
         }
     }
 }

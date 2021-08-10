@@ -1,23 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace RpcClientApp
+namespace RabbitMQServices.Client
 {
     public class ScopedConsoleColour : IDisposable
     {
-        private ConsoleColor oldColour;
+        private readonly ConsoleColor oldColour;
 
         public ScopedConsoleColour(ConsoleColor newColour)
         {
-            this.oldColour = Console.ForegroundColor;
+            oldColour = Console.ForegroundColor;
 
             Console.ForegroundColor = newColour;
         }
 
         public void Dispose()
         {
-            Console.ForegroundColor = this.oldColour;
+            Console.ForegroundColor = oldColour;
         }
     }
 }
