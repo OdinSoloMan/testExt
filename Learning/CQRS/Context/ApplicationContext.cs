@@ -14,5 +14,16 @@ namespace CQRS.Context
         {
             return await base.SaveChangesAsync();
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Product>()
+                .Property(p => p.BuyingPrice)
+                .HasColumnType("decimal(18,4)");
+            modelBuilder.Entity<Product>()
+                .Property(p => p.Rate)
+                .HasColumnType("decimal(18,4)");
+        }
     }
 }

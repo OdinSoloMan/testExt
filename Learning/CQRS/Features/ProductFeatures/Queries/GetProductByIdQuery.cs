@@ -1,8 +1,6 @@
-﻿using CQRS.Context;
-using CQRS.Models;
+﻿using CQRS.Models;
+using CQRS.Repository;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,21 +9,20 @@ namespace CQRS.Features.ProductFeatures.Queries
     public class GetProductByIdQuery : IRequest<Product>
     {
         public int Id { get; set; }
+
         public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, Product>
         {
-            private readonly IApplicationContext _context;
+            private readonly IProductRepository _repository;
 
-            public GetProductByIdQueryHandler(IApplicationContext context)
+            public GetProductByIdQueryHandler(IProductRepository repository)
             {
-                _context = context;
+                _repository = repository;
             }
 
             public async Task<Product> Handle(GetProductByIdQuery query,
                                               CancellationToken cancellationToken)
             {
-                var product = await _context.Products.Where(a => a.Id == query.Id).FirstOrDefaultAsync();
-                if (product == null) return null;
-                return product;
+                return await _repository.GetById(query.Id);
             }
         }
     }

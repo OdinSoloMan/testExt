@@ -1,5 +1,5 @@
-﻿using CQRS.Context;
-using CQRS.Models;
+﻿using CQRS.Models;
+using CQRS.Repository;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,11 +16,11 @@ namespace CQRS.Features.ProductFeatures.Commands
 
         public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, int>
         {
-            public readonly IApplicationContext _context;
+            private readonly IProductRepository _repository;
 
-            public CreateProductCommandHandler(IApplicationContext context)
+            public CreateProductCommandHandler(IProductRepository repository)
             {
-                _context = context;
+                _repository = repository;
             }
 
             public async Task<int> Handle(CreateProductCommand command,
@@ -34,9 +34,7 @@ namespace CQRS.Features.ProductFeatures.Commands
                     BuyingPrice = command.BuyingPrice,
                     Rate = command.Rate
                 };
-                _context.Products.Add(product);
-                await _context.SaveChangesAsync();
-                return product.Id;
+                return await _repository.Create(product);
             }
         }
     }

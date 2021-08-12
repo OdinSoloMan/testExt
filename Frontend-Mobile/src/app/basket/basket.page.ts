@@ -26,28 +26,57 @@ export class BasketPage implements OnInit {
     //this.getListBasketProducts();
   }
 
+  async switchCount(val: any) {
+    let alert = await this.alertCtrl.create({
+      header: this.translate.instant('text.header-alert-new-count-product'),
+      inputs: [
+        {
+          name: 'Count',
+          placeholder: this.translate.instant('text.enter-new-count')
+        },
+      ],
+      buttons: [
+        {
+          text: this.translate.instant('btn.cancel'),
+          role: 'cancel',
+          handler: data => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: this.translate.instant('btn.ok'),
+          handler: data => {
+            console.log("data.Count", data.Count);
+            console.log("this.basket.switch", this.basket.switchCount(val, data.Count))
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
   getListBasketProducts() {
-  this.basketList = this.basket.getBasketList();
-  //   this.basketList = [
-  //     {
-  //         "ProductsId": "7f91fa3b-078c-4725-18b8-08d950244ae1",
-  //         "Name": "test",
-  //         "Description": "Description",
-  //         "Count": 2
-  //     },
-  //     {
-  //         "ProductsId": "784664b3-24f4-46c8-18b9-08d950244ae1",
-  //         "Name": "test1",
-  //         "Description": "Description1",
-  //         "Count": 1
-  //     },
-  //     {
-  //         "ProductsId": "41ae182a-a2d5-4ddb-18ba-08d950244ae1",
-  //         "Name": "test2",
-  //         "Description": "Description2",
-  //         "Count": 1
-  //     }
-  // ]
+    this.basketList = this.basket.getBasketList();
+    // this.basketList = [
+    //   {
+    //     "ProductsId": "7f91fa3b-078c-4725-18b8-08d950244ae1",
+    //     "Name": "test",
+    //     "Description": "Description",
+    //     "Count": 2
+    //   },
+    //   {
+    //     "ProductsId": "784664b3-24f4-46c8-18b9-08d950244ae1",
+    //     "Name": "test1",
+    //     "Description": "Description1",
+    //     "Count": 1
+    //   },
+    //   {
+    //     "ProductsId": "41ae182a-a2d5-4ddb-18ba-08d950244ae1",
+    //     "Name": "test2",
+    //     "Description": "Description2",
+    //     "Count": 1
+    //   }
+    // ]
     console.log(this.basketList)
   }
 
@@ -88,7 +117,7 @@ export class BasketPage implements OnInit {
           const toast = await this.toastCtrl.create({ message: this.translate.instant("text.add-orders-true"), duration: 2000, color: 'dark' })
           await toast.present();
         },
-        async(error) => {
+        async (error) => {
           console.log(error)
           const alert = await this.alertCtrl.create({ message: this.translate.instant("text.add-orders-error"), buttons: ['OK'] });
           await alert.present();

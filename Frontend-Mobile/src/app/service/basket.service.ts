@@ -27,7 +27,7 @@ export class BasketService {
     this.basketList = [];
   }
 
-  deleteItemBasket(val: any) : typeof val {
+  deleteItemBasket(val: any): typeof val {
     for (let i = 0; i < this.basketList.length; i++) {
       if (this.basketList[i].ProductsId == val) {
         this.basketList.splice(i, 1)
@@ -35,5 +35,20 @@ export class BasketService {
       }
     }
     return null;
+  }
+
+  switchCount(id: any, count: any): boolean {
+    var index = this.basketList.map((item: { ProductsId: any; }) => item.ProductsId).indexOf(id);
+    console.log(index);
+    if (typeof (Number(count)) == "number") {
+      console.log("count")
+      if (count > 0) {
+        this.basketList[index].Count = count;
+        return true;
+      }
+      else {
+        return false;
+      }
+    }
   }
 }

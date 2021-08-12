@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { timeout } from 'rxjs/operators';
 import { ApiService } from '../service/api.service';
 import NotImage from '../img/not-image.json';

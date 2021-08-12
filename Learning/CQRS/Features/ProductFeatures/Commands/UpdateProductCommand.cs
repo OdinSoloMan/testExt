@@ -1,7 +1,6 @@
-﻿using CQRS.Context;
+﻿using CQRS.Models;
+using CQRS.Repository;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,31 +17,26 @@ namespace CQRS.Features.ProductFeatures.Commands
 
         public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand, int>
         {
-            private readonly IApplicationContext _context;
+            private readonly IProductRepository _repository;
 
-            public UpdateProductCommandHandler(IApplicationContext context)
+            public UpdateProductCommandHandler(IProductRepository repository)
             {
-                _context = context;
+                _repository = repository;
             }
 
             public async Task<int> Handle(UpdateProductCommand command,
                                           CancellationToken cancellationToken)
             {
-                var product = await _context.Products.Where(a => a.Id == command.Id).FirstOrDefaultAsync();
-                if (product == null)
+                Product product = new Product
                 {
-                    return default;
-                }
-                else
-                {
-                    product.Name = command.Name;
-                    product.Barcode = command.Barcode;
-                    product.Description = command.Description;
-                    product.BuyingPrice = command.BuyingPrice;
-                    product.Rate = command.Rate;
-                    await _context.SaveChangesAsync();
-                    return product.Id;
-                }
+                    Id = command.Id,
+                    Name = command.Name,
+                    Barcode = command.Barcode,
+                    Description = command.Description,
+                    BuyingPrice = command.BuyingPrice,
+                    Rate = command.Rate
+                };
+                return await _repository.Update(product);
             }
         }
     }

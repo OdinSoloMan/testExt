@@ -1,7 +1,5 @@
-﻿using CQRS.Context;
+﻿using CQRS.Repository;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,21 +11,17 @@ namespace CQRS.Features.ProductFeatures.Commands
 
         public class DeleteProductByIdCommandHandler : IRequestHandler<DeleteProductByIdCommand, int>
         {
-            private readonly IApplicationContext _context;
+            private readonly IProductRepository _repository;
 
-            public DeleteProductByIdCommandHandler(IApplicationContext context)
+            public DeleteProductByIdCommandHandler(IProductRepository repository)
             {
-                _context = context;
+                _repository = repository;
             }
 
             public async Task<int> Handle(DeleteProductByIdCommand command,
                                           CancellationToken cancellationToken)
             {
-                var product = await _context.Products.Where(a => a.Id == command.Id).FirstOrDefaultAsync();
-                if (product == null) return default;
-                _context.Products.Remove(product);
-                await _context.SaveChangesAsync();
-                return product.Id;
+                return await _repository.Delete(command.Id);
             }
         }
     }

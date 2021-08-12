@@ -28,9 +28,9 @@ namespace BackEnd.Controllers
         private readonly IDiagnosticContext _diagnosticContext;
         //private readonly IRolesRepository _rolesRepository;
 
-        private readonly IBus _bus;
+        //private readonly IBus _bus;
 
-        public AccountController(UserManager<Users> userManager, RoleManager<IdentityRole> roleManager, ITokenService tokenService, ILogger<AccountController> log, IDiagnosticContext diagnosticContext, IBus bus)
+        public AccountController(UserManager<Users> userManager, RoleManager<IdentityRole> roleManager, ITokenService tokenService, ILogger<AccountController> log, IDiagnosticContext diagnosticContext)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -39,7 +39,7 @@ namespace BackEnd.Controllers
             _diagnosticContext = diagnosticContext;
             //_rolesRepository = rolesRepository;
             //Docker needs to be enabled first
-            _bus = bus;
+            //_bus = bus;
         }
 
         [HttpPost("registration")]
@@ -98,7 +98,7 @@ namespace BackEnd.Controllers
         public async Task<ActionResult<string>> Login([FromBody] LoginModel model)
         {
 
-            await _bus.SendAsync(Queue.Processing, model);
+            //await _bus.SendAsync(Queue.Processing, model);
 
             var user = await _userManager.FindByNameAsync(model.Username);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
