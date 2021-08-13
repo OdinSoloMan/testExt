@@ -53,7 +53,6 @@ namespace CQRS
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<,>));
 
-            // services.AddTransient<IProductsRepository, ProductsRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();
 
             services.AddHealthChecks()
