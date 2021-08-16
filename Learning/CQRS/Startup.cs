@@ -61,7 +61,7 @@ namespace CQRS
                     new SqlConnectionHealthCheck(Configuration.GetConnectionString("DefaultConnection")),
                     HealthStatus.Unhealthy,
                     new string[] { "developmentdb" });
-            
+
             services.AddCors();
         }
 
@@ -78,7 +78,9 @@ namespace CQRS
 
             app.UseRouting();
 
-            app.UseCors(builder => builder.AllowAnyOrigin());
+            app.UseCors(
+                options => options.SetIsOriginAllowed(x => _ = true).AllowAnyMethod().AllowAnyHeader().AllowCredentials()
+            );
 
             app.UseAuthorization();
             #region Swagger

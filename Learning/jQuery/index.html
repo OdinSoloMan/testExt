@@ -1,0 +1,294 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery</title>
+    <link rel="stylesheet" href="1.css">
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+    <!-- Remember to include jQuery :) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+
+    <!-- jQuery Modal -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+</head>
+
+<body>
+    <div>
+        <h3>Selector attribute</h3>
+    </div>
+    <div>
+        <h4>Attribute Contains Prefix Selector [name|=”value”]</h4>
+    </div>
+    <div>
+        <a href="" hreflang="en">Test en</a>
+        <a href="" hreflang="AA-en">Test AA-en</a>
+        <a href="" hreflang="engilsh">Test-engilsh</a>
+        <a href="" hreflang="en-AA">Test-en-AA</a>
+    </div>
+    <div>
+        <h4>Attribute Contains Selector [name*=”value”]</h4>
+    </div>
+    <div>
+        <input type="text" name="solo">
+        <input type="text" name="soloAt">
+        <input type="text" name="Atsolo">
+        <input type="text" name="soAtlo">
+    </div>
+    <div>
+        <h4>Attribute Contains Word Selector [name~=”value”]</h4>
+    </div>
+    <div>
+        <input type="text" gg="soloAt">
+        <input type="text" gg="solo-At">
+        <input type="text" gg="solo At">
+        <input type="text" gg="soling">
+    </div>
+    <div>
+        <h4>Attribute Ends With Selector [name$=”value”]</h4>
+    </div>
+    <div>
+        <input type="text" gg1="solo">
+        <input type="text" gg1="soling">
+        <input type="text" gg1="solo-at">
+        <input type="text" gg1="atsolo">
+    </div>
+    <div>
+        <h4>Attribute Equals Selector [name=”value”]</h4>
+    </div>
+    <div>
+        <div>
+            <label>
+                <input type="radio" name="newsletter" gg2="Solo">
+                <span>?name</span>
+            </label>
+        </div>
+        <div>
+            <label>
+                <input type="radio" name="newsletter" gg2="Solo 1">
+                <span>?value</span>
+            </label>
+        </div>
+        <div>
+            <label>
+                <input type="radio" name="newsletter" gg2="1-Solo">
+                <span>?value</span>
+            </label>
+        </div>
+    </div>
+    <div>
+        <h4>Attribute Not Equal Selector [name!=”value”]</h4>
+    </div>
+    <div>
+        <div>
+            <label>
+                <input type="radio" name="newsletter" gg3="Solo">
+                <span>?name</span>
+            </label>
+        </div>
+        <div>
+            <label>
+                <input type="radio" name="newsletter" gg3="Solo 1">
+                <span>?value</span>
+            </label>
+        </div>
+        <div>
+            <label>
+                <input type="radio" name="newsletter" gg3="1-Solo">
+                <span>?value</span>
+            </label>
+        </div>
+    </div>
+    <div>
+        <h4>Class Selector (“.class”)</h4>
+    </div>
+    <div>
+        <div class="testClass">testClass</div>
+        <div class="MyTestClass">MyTestClass</div>
+        <div class="testClass">testClass</div>
+    </div>
+    <div>
+        <h4>ID Selector (“#id”)</h4>
+    </div>
+    <div>
+        <div id="Soolo">Soolo</div>
+        <div id="ASoolo">ASoolo</div>
+    </div>
+    <br>
+    <div>
+        <div id='tId.solo[0]'>tId.solo[0]</div>
+        <div id='tId.solo[1]'>tId.solo[1]</div>
+        <div id='tId.solo[2]'>tId.solo[2]</div>
+    </div>
+    <div>
+        <h3>
+            Working with properties and attributes by classes (Работа со свойствами атрибутов классов)
+        </h3>
+    </div>
+    <div>
+        <h4>.addClass ()</h4>
+    </div>
+    <div>
+        <div id="addSolo">addSolo add class</div>
+    </div>
+    <div>
+        <h4>.attr()</h4>
+    </div>
+    <div>
+        <img id="imgSoloAA" alt="Something went wrong">
+    </div>
+    <div>
+        <h4>.hasClass()</h4>
+    </div>
+    <div>
+        <div class="hasClass">class="hasClass OdinSolo"</div>
+        <div class="OdinSolo">class="OdinSolo"</div>
+
+        <div id="result3">At least one paragraph has selected class: </div>
+    </div>
+    <div>
+        <h4>.html()</h4>
+    </div>
+    <div>
+        <div id="htmlAddOdzz">NULL 6-> </div>
+    </div>
+    <div>
+        <h4>.prop ()</h4>
+    </div>
+    <div>
+        <input id="check1" type="checkbox" checked="checked">
+        <label for="check1">Check me</label>
+        <p></p>
+    </div>
+    <div>
+        <h4>.removeAttr ()</h4>
+    </div>
+    <div>
+        <div id="removeAttrSolo" gg4="test">Remove attr gg4</div>
+    </div>
+    <div>
+        <h4>.removeClass()</h4>
+    </div>
+    <div>
+        <div id="removeClassSolo" class="backGround addSolo">Remove class 'addSolo'</div>
+    </div>
+    <div>
+        <h4>.removeProp ()</h4>
+    </div>
+    <div>
+        <div id="removePropSolo"></div>
+    </div>
+    <div>
+        <h4>.toggleClass()</h4>
+    </div>
+    <div>
+        <div id="toggleClassSolo" class="backGround addSolo">Test</div>
+    </div>
+
+    <div>
+        <h4>.val()</h4>
+    </div>
+    <div>
+        <input id="valISolo" type="text" value="Test">
+        <p id="valPSolo"></p>
+    </div>
+    <div>
+        <h3>Structure each and ajax</h3>
+    </div>
+    <div>
+        <h4>each</h4>
+    </div>
+    <div id="eachSolo">
+        <div>Test1</div>
+        <div>Test2</div>
+        <div>Test3</div>
+    </div>
+    <div>
+        <h4>ajax</h4>
+    </div>
+    <button id="ajaxSolo">Get</button>
+    <div id="getInfo"></div>
+    <br>
+    <div id="testFormPost">
+        name: <input type="text" id="post-name">
+        barcode: <input type="text" id="post-barcode">
+        description: <input type="text" id="post-description">
+        buyingPrice: <input type="text" id="post-buyingPrice">
+        rate: <input type="text" id="post-rate">
+    </div>
+    <button id="ajaxSoloPost">Post</button>
+    <div id="postInfo"></div>
+    <div>
+        <h3>Click and Change</h3>
+    </div>
+    <div>
+        <h4>Click</h4>
+    </div>
+    <div>
+        <div id="clickSolohhh">
+            Click on me
+        </div>
+    </div>
+    <div>
+        <h4>Change</h4>
+    </div>
+    <select id="tesasda" name="sweets" multiple="multiple">
+        <option>Chocolate</option>
+        <option selected="selected">Odin</option>
+        <option>Odin->Solo</option>
+        <option selected="selected">Solo</option>
+    </select>
+    <div id="infoChange"></div>
+
+    <div>
+        <h3>Modal</h3>
+    </div>
+    <div>
+        <h4>Modal</h4>
+    </div>
+    <div>
+        <form id="login-form" class="modal">
+            <table width="100%" cellspacing="0" id="maket">
+                <tr>
+                    <td>name</td>
+                    <td><input type="text" id="modal-post-name"></td>
+                </tr>
+                <tr>
+                    <td>barcode</td>
+                    <td><input type="text" id="modal-post-barcode"></td>
+                </tr>
+                <tr>
+                    <td>description</td>
+                    <td><input type="text" id="modal-post-description"></td>
+                </tr>
+                <tr>
+                    <td>buyingPrice</td>
+                    <td><input type="text" id="modal-post-buyingPrice"></td>
+                </tr>
+                <tr>
+                    <td>rate</td>
+                    <td><input type="text" id="modal-post-rate"></td>
+                </tr>
+            </table>
+            <a id="ajaxSoloPostaaaa" rel="modal:close" style="background-color: #007bff;">Post</a>
+            <a rel="modal:close" style="background-color: yellowgreen;">Close window</a>
+
+        </form>
+
+        <a href="#login-form" rel="modal:open">Add products</a>
+    </div>
+    <!-- All Selector (“*”) -->
+    <!-- <div>All Selector (“*”)</div>
+    <div id="test">
+        <div>DIV</div>
+        <span>SPAN</span>
+        <p>P <button>Button</button></p>
+    </div> -->
+    <script src="1.js">
+
+    </script>
+</body>
+
+</html>

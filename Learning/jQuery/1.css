@@ -1,0 +1,28 @@
+/*All Selector (“*”)*/
+/* h3 {
+    margin: 0;
+}
+div,
+span,
+p {
+    width: 80px;
+    height: 40px;
+    float: left;
+    padding: 10px;
+    margin: 10px;
+    background-color: #eeeeee;
+}
+#test {
+    width: auto;
+    height: auto;
+    background-color: transparent;
+} */
+
+.addSolo {
+    color: red;
+    border: 1px solid rgb(21, 255, 0);
+}
+
+.backGround {
+    background-color: rgb(253, 176, 253);
+}
