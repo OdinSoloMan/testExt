@@ -3,6 +3,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { GridComponent } from './grid/grid.component';
 import { HomeComponent } from './home/home.component';
 import { MainComponent } from './main/main.component';
+import { NgxchartComponent } from './ngxchart/ngxchart.component';
+import { NgxdatatableComponent } from './ngxdatatable/ngxdatatable.component';
+import { NgxlitemodalComponent } from './ngxlitemodal/ngxlitemodal.component';
+import { TestComponent } from './test/test.component';
 import { WeatherComponent } from './weather/weather.component';
 
 const routes: Routes = [
@@ -16,6 +20,14 @@ const routes: Routes = [
       { path: 'home', component: HomeComponent },
       { path: 'grid', component: GridComponent },
       { path: 'weather', component: WeatherComponent },
+      { path: 'test', component: TestComponent },
+      {
+        path: 'ngx', children: [
+          { path: 'chart', component: NgxchartComponent },
+          { path: 'datatable', component: NgxdatatableComponent },
+          { path: 'litemodal', component: NgxlitemodalComponent },
+        ]
+      },
     ]
   }
 ];

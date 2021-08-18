@@ -1,8 +1,9 @@
 <jqxChart #myChart
     [width]="getWidth()" [height]="500"
-    [title]="'Weather in Geneva, Switzerland'"
-    [description]="'Climatological Information about Geneva'"
+    [source]="dataAdapter" 
+    [title]="'Weather in London'"
+    [description]="'Climatological Information about London'"
     [showLegend]="true" [enableAnimations]="true" [padding]="padding"
-    [titlePadding]="titlePadding" [source]="dataAdapter" [xAxis]="xAxis"
+    [titlePadding]="titlePadding" [xAxis]="xAxis"
     [valueAxis]="valueAxis" [seriesGroups]="seriesGroups" [colorScheme]="'scheme05'">
 </jqxChart>

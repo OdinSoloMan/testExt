@@ -17,6 +17,10 @@ export class ApiService {
   }
 
   getDataWeather() : Observable<any> {
-    return this.http.get('https://api.openweathermap.org/data/2.5/find?q=London&units=metric,us&mode=json&appid=b28b41fb608f23c9d2cf47062efb7f5f');
+    return this.http.get('https://api.openweathermap.org/data/2.5/forecast?q=London,us&units=metric&mode=json&appid=b28b41fb608f23c9d2cf47062efb7f5f');
+  }
+
+  getPageProducts(page: any, size: any, filter: any): Observable<any> {
+    return this.http.get<any>(this.API_URL + 'products/productspage?page=' + page + '&size=' + size + '&filter=' + filter)
   }
 }

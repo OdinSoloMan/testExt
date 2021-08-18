@@ -15,6 +15,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { jqxPanelModule } from 'jqwidgets-ng/jqxpanel';
 import { WeatherComponent } from './weather/weather.component';
 import { jqxChartModule } from 'jqwidgets-ng/jqxchart';
+import { TestComponent } from './test/test.component';
+import { NgxchartComponent } from './ngxchart/ngxchart.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgxdatatableComponent } from './ngxdatatable/ngxdatatable.component';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { NgxlitemodalComponent } from './ngxlitemodal/ngxlitemodal.component';
+import { NgxModalModule } from '@ngx-lite/modal';
 
 @NgModule({
   declarations: [
@@ -24,6 +32,10 @@ import { jqxChartModule } from 'jqwidgets-ng/jqxchart';
     HeaderComponent,
     GridComponent,
     WeatherComponent,
+    TestComponent,
+    NgxchartComponent,
+    NgxdatatableComponent,
+    NgxlitemodalComponent,
   ],
   imports: [
     BrowserModule,
@@ -35,6 +47,10 @@ import { jqxChartModule } from 'jqwidgets-ng/jqxchart';
     jqxButtonModule,
     jqxPanelModule,
     jqxChartModule,
+    NgxChartsModule,
+    BrowserAnimationsModule,
+    NgxDatatableModule,
+    NgxModalModule
   ],
   providers: [],
   bootstrap: [AppComponent],

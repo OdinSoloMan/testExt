@@ -6,14 +6,40 @@
             </a>
         </li>
         <li>
-            <a routerLink="/grid" routerLinkActive="active">
+            <a [routerLink]="['/grid']" routerLinkActive="active">
                 Grid
             </a>
         </li>
         <li>
-            <a routerLink="/weather" routerLinkActive="active">
+            <a [routerLink]="['/weather']" routerLinkActive="active">
                 Weather
             </a>
+        </li>
+        <li>
+            <a [routerLink]="['/test']" routerLinkActive="active">
+                Test
+            </a>
+        </li>
+
+        <li>
+            Ngx
+            <ul>
+                <li>
+                    <a [routerLink]="['/ngx/chart']" routerLinkActive="active">
+                        Chart
+                    </a>
+                </li>
+                <li>
+                    <a [routerLink]="['/ngx/datatable']" routerLinkActive="active">
+                        Datatable
+                    </a>
+                </li>
+                <li>
+                    <a [routerLink]="['/ngx/litemodal']" routerLinkActive="active">
+                        Lite modal
+                    </a>
+                </li>
+            </ul>
         </li>
     </ul>
 </jqxMenu>
