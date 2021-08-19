@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { GridComponent } from './grid/grid.component';
 import { HomeComponent } from './home/home.component';
+import { InlineEditDemoComponent } from './inline-edit-demo/inline-edit-demo.component';
 import { MainComponent } from './main/main.component';
 import { NgxchartComponent } from './ngxchart/ngxchart.component';
 import { NgxdatatableComponent } from './ngxdatatable/ngxdatatable.component';
@@ -21,6 +22,7 @@ const routes: Routes = [
       { path: 'grid', component: GridComponent },
       { path: 'weather', component: WeatherComponent },
       { path: 'test', component: TestComponent },
+      { path: 'inline-edit-demo', component: InlineEditDemoComponent },
       {
         path: 'ngx', children: [
           { path: 'chart', component: NgxchartComponent },

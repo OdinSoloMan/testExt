@@ -77,10 +77,10 @@ namespace BackEnd.Controllers
         {
             _diagnosticContext.Set("CatalogLoadTime", 1423);
             _log.LogInformation("Update product request: {@products}", products);
-            if (await _repo.Select(products.Name))
-            {
-                return StatusCode(StatusCodes.Status400BadRequest, new Response { Status = "Error", Message = "Error name busy!" });
-            }
+            //if (await _repo.Select(products.Name))
+            //{
+            //    return StatusCode(StatusCodes.Status400BadRequest, new Response { Status = "Error", Message = "Error name busy!" });
+            //}
             await _repo.Update(products);
             var res = await _repo.Read(products.Id_Product);
             _log.LogInformation("Update product: {@res}", res);

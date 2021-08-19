@@ -22,7 +22,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxdatatableComponent } from './ngxdatatable/ngxdatatable.component';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgxlitemodalComponent } from './ngxlitemodal/ngxlitemodal.component';
-import { NgxModalModule } from '@ngx-lite/modal';
+import { InlineEditDemoComponent } from './inline-edit-demo/inline-edit-demo.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -36,6 +38,7 @@ import { NgxModalModule } from '@ngx-lite/modal';
     NgxchartComponent,
     NgxdatatableComponent,
     NgxlitemodalComponent,
+    InlineEditDemoComponent,
   ],
   imports: [
     BrowserModule,
@@ -50,7 +53,9 @@ import { NgxModalModule } from '@ngx-lite/modal';
     NgxChartsModule,
     BrowserAnimationsModule,
     NgxDatatableModule,
-    NgxModalModule
+    ModalModule.forRoot(),
+    FormsModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
