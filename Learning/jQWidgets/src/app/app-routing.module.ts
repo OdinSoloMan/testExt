@@ -7,6 +7,7 @@ import { MainComponent } from './main/main.component';
 import { NgxchartComponent } from './ngxchart/ngxchart.component';
 import { NgxdatatableComponent } from './ngxdatatable/ngxdatatable.component';
 import { NgxlitemodalComponent } from './ngxlitemodal/ngxlitemodal.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { TestComponent } from './test/test.component';
 import { WeatherComponent } from './weather/weather.component';
 
@@ -31,7 +32,8 @@ const routes: Routes = [
         ]
       },
     ]
-  }
+  },
+  { path: '**', component: PageNotFoundComponent }
 ];
 
 @NgModule({

@@ -25,6 +25,8 @@ import { NgxlitemodalComponent } from './ngxlitemodal/ngxlitemodal.component';
 import { InlineEditDemoComponent } from './inline-edit-demo/inline-edit-demo.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FooterComponent } from './main/footer/footer.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +41,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     NgxdatatableComponent,
     NgxlitemodalComponent,
     InlineEditDemoComponent,
+    FooterComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule,
