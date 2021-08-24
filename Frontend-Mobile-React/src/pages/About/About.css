@@ -1,0 +1,6 @@
+.messageError {
+    color: red;
+    max-height: 14px;
+    min-height: 14px;
+    font-size: 14px;
+}

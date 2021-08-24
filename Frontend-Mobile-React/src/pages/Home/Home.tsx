@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { MouseEventHandler, useEffect, useState } from 'react';
 import {
     IonCard,
     IonCardHeader,
@@ -26,21 +26,23 @@ import './Home.css';
 import Api from '../../Service/Api';
 import ReactPaginate from 'react-paginate';
 import Pagination from "react-js-pagination";
+import { BasketS } from '../../Service/BasketS';
 
 const Home: React.FC = () => {
     const [items, setItems] = React.useState([]);
     const [counts, setCounts] = useState(0);
     const [totalItem, setTotalItem] = useState(0);
+    const [filter, setFilter] = useState('');
+    const [listFilter, setListFilter] = useState([] as any[]);
 
     const itemsPerPage = 5;
-    const filter = '';
 
 
     useEffect(() => {
-        Test();
+        getProducts();
     }, [])
 
-    function Test() {
+    function getProducts() {
         var api = new Api();
         api.getPageProducts(0, itemsPerPage, filter)
             .then(function (response: any) {
@@ -71,7 +73,102 @@ const Home: React.FC = () => {
                 setItems(response.data.data);
                 setCounts(pageNumber);
                 setTotalItem(response.data.totalPassengers)
-                console.log("counts",counts);
+                console.log("counts", counts);
+            })
+            .catch(function (error: any) {
+                // handle error
+                console.log(error);
+            })
+            .then(function () {
+                console.log("GG")
+            });
+    }
+
+    function decrement(val: any) {
+        console.log("decrement", val);
+        var numberProduct = Number(document.getElementById(val)?.innerHTML);
+        if (numberProduct > 1)
+            (document.getElementById(val)!.innerHTML = String(numberProduct - 1))
+    }
+
+    function increment(val: any) {
+        console.log("increment", val);
+        var numberProduct = Number(document.getElementById(val)?.innerHTML);
+        if (numberProduct < 99)
+            document.getElementById(val)!.innerHTML = String(numberProduct + 1);
+    }
+
+    function addBasket(val: any) {
+        var data = {
+            ProductsId: val,
+            Name: document.getElementById('name-' + val)?.getAttribute('data-value'),
+            Description: document.getElementById('description-' + val)?.getAttribute('data-value'),
+            Count: Number(document.getElementById(val)?.innerHTML)
+        }
+        console.log(data);
+        BasketS.setBasketList(data);
+    }
+
+    function onKey(params: any) {
+        let val = params.target.value;
+        console.log(val)
+        if (params.key !== 'Enter') {
+            if (val.length % 3 === 0 && val.length != 0) {
+                // console.log(params.target.value)
+                // console.log(params.key)
+                getFilterList(val)
+            }
+        }
+    }
+
+    const handleKeyPress = (event: any) => {
+        let val = event.target.value;
+        if (event.key === 'Enter') {
+            //console.log(event.target.value)
+            getProductReadByName(val);
+        }
+    }
+
+    function getProductReadByName(val: any) {
+        var api = new Api();
+        api.getPageProducts(0, itemsPerPage, val)
+            .then(function (response: any) {
+                // handle success
+                setItems(response.data.data);
+                setCounts(response.data.totalPages + 1);
+                setTotalItem(response.data.totalPassengers)
+                console.log(response);
+            })
+            .catch(function (error: any) {
+                // handle error
+                console.log(error);
+            })
+            .then(function () {
+                console.log("GG")
+            });
+    }
+
+    function ClearFilter() {
+        setFilter('');
+        (document.getElementById("favorite_team") as HTMLTextAreaElement).value = "";
+        handlePageChange(0);
+    }
+
+    function saveCode(val: any) {
+        let name = val.target.value;
+        let list = listFilter.filter(x => x.name === name)[0];
+        if (list?.id_Product) {
+            console.log("SAVECODE", list?.id_Product);
+            getProductReadByName(list?.name)
+        }
+    }
+
+    function getFilterList(val: any) {
+        var api = new Api();
+        api.getProductFilterName(val)
+            .then(function (response: any) {
+                console.log("response", response);
+                setListFilter(response.data)
             })
             .catch(function (error: any) {
                 // handle error
@@ -90,7 +187,18 @@ const Home: React.FC = () => {
                         Home
                     </IonTitle>
                 </IonToolbar>
-            </IonHeader>
+                <div>
+                    <input type="text" name="team" id="favorite_team" list="team_list" placeholder="Enter filter" onKeyUp={onKey.bind(this)} onKeyPress={handleKeyPress} onChange={saveCode.bind(this)} />
+                    <button onClick={() => ClearFilter()}>X</button>
+                    <datalist id="team_list">
+                        {
+                            listFilter.map((el: { id_Product: string, name: string }) => (
+                                <option value={el.name} key={el.id_Product}>{el.name}</option>
+                            ))
+                        }
+                    </datalist>
+                </div>
+            </IonHeader >
 
             <IonContent>
                 <IonGrid>
@@ -106,18 +214,18 @@ const Home: React.FC = () => {
                                                 <IonCardSubtitle>
                                                     {el.id_Product}
                                                 </IonCardSubtitle>
-                                                <IonCardTitle>
+                                                <IonCardTitle id={'name-' + el.id_Product} data-value={el.name}>
                                                     {el.name}
                                                 </IonCardTitle>
                                             </IonCardHeader>
-                                            <IonCardContent style={{ height: '100px' }}>
+                                            <IonCardContent id={'description-' + el.id_Product} data-value={el.description} style={{ height: '100px' }}>
                                                 {el.description}
                                             </IonCardContent>
                                             <IonItem>
-                                                <IonIcon icon={removeCircleOutline}></IonIcon>
-                                                <IonButton fill="clear" disabled color="primary">1</IonButton>
-                                                <IonIcon icon={addCircleOutline}></IonIcon>
-                                                <IonButton slot="end">Buy</IonButton>
+                                                <IonIcon icon={removeCircleOutline} onClick={() => decrement(el.id_Product)}></IonIcon>
+                                                <IonButton id={el.id_Product} fill="clear" disabled color="dark">1</IonButton>
+                                                <IonIcon icon={addCircleOutline} onClick={() => increment(el.id_Product)}></IonIcon>
+                                                <IonButton slot="end" onClick={() => addBasket(el.id_Product)}>Buy</IonButton>
                                             </IonItem>
                                         </IonCard>
                                     </div>
@@ -126,7 +234,8 @@ const Home: React.FC = () => {
                         }
                     </IonRow>
                 </IonGrid>
-                <div>
+                {
+                    items.length != 0 &&
                     <Pagination
                         activePage={counts}
                         itemsCountPerPage={itemsPerPage}
@@ -134,7 +243,13 @@ const Home: React.FC = () => {
                         pageRangeDisplayed={5}
                         onChange={handlePageChange.bind(this)}
                     />
-                </div>
+                }
+                {
+                    items.length == 0 &&
+                    <div className="ion-text-center">
+                        <h3>Products is null</h3>
+                    </div>
+                }
             </IonContent>
         </>
     );

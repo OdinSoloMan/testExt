@@ -29,7 +29,7 @@ import Home from './pages/Home/Home';
 import About from './pages/About/About';
 import SideMenu from './components/SideMenu';
 import Orders from './pages/Orders/Orders';
-import Basket from './pages/Basket/Backet';
+import Basket from './pages/Basket/Basket';
 import Auth from './pages/Auth/Auth';
 
 
