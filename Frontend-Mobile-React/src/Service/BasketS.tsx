@@ -17,17 +17,18 @@ export class BasketS {
     }
 
     static removeBasketList() {
-        this.basketList = [];
+        this.basketList = []
+        return this.basketList;
     }
 
-    static deleteItemBasket(val: any): typeof val {
+    static deleteItemBasket(val: any) {
         for (let i = 0; i < this.basketList.length; i++) {
             if (this.basketList[i].ProductsId == val) {
                 this.basketList.splice(i, 1)
-                return i;
+                return this.basketList;
             }
         }
-        return null;
+        return [];
     }
 
     static switchCount(id: any, count: any) {
@@ -37,7 +38,7 @@ export class BasketS {
             console.log("count")
             if (count > 0) {
                 this.basketList[index].Count = count;
-                return true;
+                return this.basketList;
             }
             else {
                 return false;

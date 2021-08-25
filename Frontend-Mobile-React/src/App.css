@@ -31,3 +31,8 @@
     transform: rotate(360deg);
   }
 } */
+
+.split-pane-visible > .split-pana-side {
+  min-width: 304px !important;
+  max-width: 304px !important;
+}

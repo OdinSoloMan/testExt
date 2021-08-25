@@ -1,4 +1,5 @@
-const axios = require('axios');
+import axios from 'axios';
+
 const API_URL = 'https://localhost:5001';
 
 export default class Api {
@@ -7,8 +8,9 @@ export default class Api {
       Authorization: 'Bearer ' + localStorage.getItem('accessToken')
     }
   }
+
   getPageProducts(page: any, size: any, filter: any) {
-    return axios.get(API_URL + '/products/productspage?page=' + page + '&size=' + size + '&filter=' + filter)
+    return axios.get(API_URL + '/products/productspage?page=' + page + '&size=' + size + '&filter=' + filter, { headers: this.headers() })
   }
 
   addListOrders(val: any) {
