@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "kanbanfire-fe74f": {
+      "hosting": {
+        "test-my-blog": [
+          "kanbanfire-fe74f"
+        ]
+      }
+    }
+  }
+}
