@@ -10,7 +10,11 @@ const routes: Routes = [
     path: '',
     redirectTo: 'home',
     pathMatch: 'full'
+  },  {
+    path: 'black-list',
+    loadChildren: () => import('./black-list/black-list.module').then( m => m.BlackListPageModule)
   },
+
 ];
 
 @NgModule({
