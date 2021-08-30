@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
-import { home, trashBin } from 'ionicons/icons';
+import {
+  home,
+  trashBin,
+  personCircleOutline
+} from 'ionicons/icons';
+import { LanguageService } from './service/language.service';
 
 interface Page {
   path: string,
@@ -14,8 +19,16 @@ interface Page {
 })
 export class AppComponent {
   pages: Page[] = [
-    { path: '/home', title: 'Home', icon: home },
-    { path: '/black-list', title: 'Black list', icon: trashBin },
+    { path: '/home', title: 'title.home', icon: home },
+    { path: '/black-list', title: 'title.black-list', icon: trashBin },
+    { path: '/login', title: 'title.auth', icon: personCircleOutline },
   ]
-  constructor() { }
+
+  constructor(
+    private lngService: LanguageService,
+  ) { }
+
+  ngOnInit() {
+    this.lngService.setInitialAppLanguage("en");
+  }
 }

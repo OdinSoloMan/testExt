@@ -3,7 +3,7 @@
     <ion-menu contentId="main-content" type="overlay">
       <ion-header>
         <ion-toolbar color="danger">
-          <ion-title>Menu</ion-title>
+          <ion-title>{{'title.menu'| translate}}</ion-title>
         </ion-toolbar>
       </ion-header>
 
@@ -12,7 +12,7 @@
           <ion-menu-toggle auto-hide="false">
             <ion-item [routerLink]="page.path">
               <ion-icon [icon]="page.icon" slot="start"></ion-icon>
-              <ion-label>{{page.title}}</ion-label>
+              <ion-label>{{page.title| translate}}</ion-label>
             </ion-item>
           </ion-menu-toggle>
         </ion-list>

@@ -1,0 +1,42 @@
+user
+	google auth
+		list
+			caterg
+				tile
+				opthi
+				value
+			black list
+				delete
+
+user => (google auth)
+
+bd
+	task => {
+		id-task (string)
+		title (string)
+		description (string)
+		timeReminders (datatime)
+		status (int) (foreign key)
+		id-user (int) (foreign key)
+	}
+
+	status => {
+		id-status (string)
+		name string [baklog, in progress, done, blackList]
+	}
+
+	user => {
+		id-user (string)
+		role (string) [user, admin]
+	}
+
+stack => [{
+	Ionic,
+	Angular => {
+		nativescript-local-notifications
+	},
+	FireBase => {
+		auth,
+		data,
+	},
+}]

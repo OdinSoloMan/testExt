@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { BlackListPageRoutingModule } from './black-list-routing.module';
+import { LoginPageRoutingModule } from './login-routing.module';
 
-import { BlackListPage } from './black-list.page';
+import { LoginPage } from './login.page';
 import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
@@ -14,9 +14,9 @@ import { TranslateModule } from '@ngx-translate/core';
     CommonModule,
     FormsModule,
     IonicModule,
-    BlackListPageRoutingModule,
-    TranslateModule,
+    LoginPageRoutingModule,
+    TranslateModule
   ],
-  declarations: [BlackListPage]
+  declarations: [LoginPage]
 })
-export class BlackListPageModule {}
+export class LoginPageModule {}

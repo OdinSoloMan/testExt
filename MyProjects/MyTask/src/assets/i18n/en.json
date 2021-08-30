@@ -1,0 +1,24 @@
+{
+    "title": {
+        "menu": "Menu",
+        "home": "Home",
+        "black-list": "Black list",
+        "auth": "Auth",
+        "registration": "Registration"
+    },
+    "label": {
+        "email": "Email",
+        "password": "Password"
+    },
+    "btn": {
+        "login": "Login",
+        "login-with-google": "Login with Google",
+        "sign-up": "Sign up"
+    },
+    "txt": {
+        "or": "or"
+    },
+    "alert": {
+        "email-is-not-verified": "Email is not verified"
+    }
+}
