@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { AuthenticationService } from '../service/authentication.service';
+import { ValidationService } from '../service/validation.service';
 
 @Component({
   selector: 'app-forgot-password',
@@ -7,10 +9,17 @@ import { AuthenticationService } from '../service/authentication.service';
   styleUrls: ['./forgot-password.page.scss'],
 })
 export class ForgotPasswordPage implements OnInit {
+  forgotPswForm: FormGroup;
 
   constructor(
     private authService: AuthenticationService,
-  ) { }
+		public formBuilder: FormBuilder,
+  ) { 
+    let self = this;
+    self.forgotPswForm = formBuilder.group({
+      email: ['', [ValidationService.emailValidator]]
+    });
+  }
 
   ngOnInit() {
   }
