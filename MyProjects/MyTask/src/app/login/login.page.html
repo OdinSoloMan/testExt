@@ -1,5 +1,8 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
     <ion-title>{{"title.auth" | translate}}</ion-title>
     <!-- <ion-buttons slot="end">
       <ion-icon name="logo-google" (click)="authService.GoogleAuth()">Google auth</ion-icon>
@@ -8,49 +11,100 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <form>
-    <ion-item lines="full">
-      <ion-label position="floating">{{"label.email" | translate}}</ion-label>
-      <ion-input type="text" #email required></ion-input>
-    </ion-item>
+  <form [formGroup]="forgotAuthForm" autocomplete="off">
+    <div *ngIf="!isUserAuth; else elseBlock">
+      <ion-item lines="full">
+        <ion-label position="floating">{{"label.email" | translate}}</ion-label>
+        <ion-input
+          formControlName="email"
+          type="text"
+          #email
+          required
+          [placeholder]="'placeholder.enter-email' | translate"
+        ></ion-input>
+      </ion-item>
+      <control-messages
+        [control]="forgotAuthForm.controls.email"
+      ></control-messages>
 
-    <ion-item lines="full">
-      <ion-label position="floating">{{'label.password'| translate}}</ion-label>
-      <ion-input type="password" #password required></ion-input>
-    </ion-item>
+      <ion-item lines="full">
+        <ion-label position="floating"
+          >{{'label.password'| translate}}</ion-label
+        >
+        <ion-input
+          formControlName="psw"
+          type="password"
+          #password
+          required
+          [placeholder]="'placeholder.enter-psw' | translate"
+        ></ion-input>
+      </ion-item>
+      <control-messages
+        [control]="forgotAuthForm.controls.psw"
+      ></control-messages>
 
-    <small>
-      <ion-label color="primary" (click)="resetPassword()" style="text-decoration: underline">{{'label.fogot-account-password' | translate}}</ion-label>
-    </small>
+      <small>
+        <ion-label
+          color="primary"
+          (click)="resetPassword()"
+          style="text-decoration: underline"
+        >
+          {{'label.fogot-account-password' | translate}}</ion-label
+        >
+      </small>
 
-    <ion-row>
-      <ion-col>
-        <ion-button type="submit" (click)="logIn(email, password)" expand="block">{{'btn.login'|translate}}</ion-button>
-      </ion-col>
-    </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-button
+            type="submit"
+            (click)="logIn(email, password)"
+            expand="block"
+            [disabled]="!forgotAuthForm.valid"
+          >
+            {{'btn.login'|translate}}</ion-button
+          >
+        </ion-col>
+      </ion-row>
 
-    <span class="divider line one-line">{{'txt.or' | translate}}</span>
+      <span class="divider line one-line">{{'txt.or' | translate}}</span>
 
-    <ion-row>
-      <ion-col>
-        <ion-button type="submit" color="danger" (click)="authService.GoogleAuth()" expand="block">
-          {{'btn.login-with-google'| translate}}
-        </ion-button>
-      </ion-col>
-    </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-button
+            type="submit"
+            color="danger"
+            (click)="authService.GoogleAuth();"
+            expand="block"
+          >
+            {{'btn.login-with-google'| translate}}
+          </ion-button>
+        </ion-col>
+      </ion-row>
 
-    <span class="divider line one-line">{{'txt.or'| translate}}</span>
+      <span class="divider line one-line">{{'txt.or'| translate}}</span>
 
-    <ion-row>
-      <ion-col>
-        <ion-button type="submit" color="tertiary" (click)="singUp()" expand="block">
-          {{'btn.sign-up' | translate}}
-        </ion-button>
-      </ion-col>
-    </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-button
+            type="submit"
+            color="tertiary"
+            (click)="singUp()"
+            expand="block"
+          >
+            {{'btn.sign-up' | translate}}
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </div>
 
-    <ion-button (click)="authService.SignOut()" expand="block" fill="clear" shape="round">
-      SSS Sign out
-    </ion-button>
+    <ng-template #elseBlock>
+      <ion-button
+        (click)="authService.SignOut(); isUserAuth = !isUserAuth;"
+        expand="block"
+        shape="round"
+      >
+        SSS Sign out
+      </ion-button>
+    </ng-template>
   </form>
 </ion-content>

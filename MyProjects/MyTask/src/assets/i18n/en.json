@@ -1,44 +1,54 @@
 {
-    "title": {
-        "menu": "Menu",
-        "home": "Home",
-        "black-list": "Black list",
-        "auth": "Auth",
-        "registration": "Registration",
-        "reset-password": "Reset password",
-        "verify-email": "Verify email"
-    },
-    "label": {
-        "email": "Email",
-        "password": "Password",
-        "fogot-account-password": "Forgot your account password?"
-    },
-    "btn": {
-        "login": "Login",
-        "login-with-google": "Login with Google",
-        "sign-up": "Sign up",
-        "back": "Back",
-        "send": "Send",
-        "resend-verification-email": "Resend Verification Email"
-    },
-    "txt": {
-        "or": "or",
-        "verification-email-sent": "Verification Email Sent",
-        "check-email": "Please check your email and click on the link to verfiy your email address"
-    },
-    "alert": {
-        "email-is-not-verified": "Email is not verified"
-    },
-    "message": {
-        "reset-psw": "Please provide the username or email address that you used when you signed up for your Evernote account."
-    },
-    "placeholder": {
-        "enter-email": "Enter email"
-    },
-    "validators": {
-        "required": "This field is required",
-        "invalidEmailAddress": "Invalid email address",
-        "minlength": "Minimum number of characters",
-        "maxlength": "Maximum number of characters"
-    }
+  "title": {
+    "menu": "Menu",
+    "home": "Home",
+    "black-list": "Black list",
+    "auth": "Auth",
+    "registration": "Registration",
+    "reset-password": "Reset password",
+    "verify-email": "Verify email"
+  },
+  "label": {
+    "email": "Email",
+    "password": "Password",
+    "fogot-account-password": "Forgot your account password?"
+  },
+  "btn": {
+    "login": "Login",
+    "login-with-google": "Login with Google",
+    "sign-up": "Sign up",
+    "back": "Back",
+    "send": "Send",
+    "resend-verification-email": "Resend Verification Email",
+    "add": "Add",
+    "cancel": "Cancel",
+    "update": "Update",
+    "sign-out": "Sign out"
+  },
+  "txt": {
+    "or": "or",
+    "verification-email-sent": "Verification Email Sent",
+    "check-email": "Please check your email and click on the link to verfiy your email address",
+    "add-new-board": "Add new board",
+    "ent-new-board-plc": "Enter title board",
+    "add-new-task": "Add new task for board",
+    "ent-new-task-descr": "Enter description task",
+    "ent-new-task-label": "Enter label task"
+  },
+  "alert": {
+    "email-is-not-verified": "Email is not verified"
+  },
+  "message": {
+    "reset-psw": "Please provide the username or email address that you used when you signed up for your Evernote account."
+  },
+  "placeholder": {
+    "enter-email": "Enter email",
+    "enter-psw": "Enter password"
+  },
+  "validators": {
+    "required": "This field is required",
+    "invalidEmailAddress": "Invalid email address",
+    "minlength": "Minimum number of characters",
+    "maxlength": "Maximum number of characters"
+  }
 }

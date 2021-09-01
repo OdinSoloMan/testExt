@@ -2,26 +2,54 @@
   <ion-toolbar>
     <ion-title>{{'title.registration' | translate}}</ion-title>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/login" [text]="('btn.back') | translate"></ion-back-button>
+      <ion-back-button
+        defaultHref="/login"
+        [text]="('btn.back') | translate"
+      ></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <form>
+  <form [formGroup]="forgotRegistrForm" autocomplete="off">
     <ion-item lines="full">
       <ion-label position="floating">{{'label.email' | translate}}</ion-label>
-      <ion-input type="text" #email required></ion-input>
+      <ion-input
+        formControlName="email"
+        type="text"
+        #email
+        required
+        [placeholder]="'placeholder.enter-email' | translate"
+      ></ion-input>
     </ion-item>
+    <control-messages
+      [control]="forgotRegistrForm.controls.email"
+    ></control-messages>
 
     <ion-item lines="full">
-      <ion-label position="floating">{{'label.password' | translate}}</ion-label>
-      <ion-input type="password" #password required></ion-input>
+      <ion-label position="floating"
+        >{{'label.password' | translate}}</ion-label
+      >
+      <ion-input
+        formControlName="psw"
+        type="password"
+        #password
+        required
+        [placeholder]="'placeholder.enter-psw' | translate"
+      ></ion-input>
     </ion-item>
+    <control-messages
+      [control]="forgotRegistrForm.controls.psw"
+    ></control-messages>
 
     <ion-row>
       <ion-col>
-        <ion-button type="submit" (click)="signUp(email, password)" expand="block">{{'btn.sign-up' | translate}}
+        <ion-button
+          type="submit"
+          (click)="signUp(email, password)"
+          expand="block"
+          [disabled]="!forgotRegistrForm.valid"
+          >{{'btn.sign-up' | translate}}
         </ion-button>
       </ion-col>
     </ion-row>

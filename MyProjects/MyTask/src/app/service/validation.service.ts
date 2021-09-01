@@ -8,8 +8,8 @@ export class ValidationService {
     let config: any = {
       'required': 'This field is required',
       'invalidEmailAddress': 'Invalid email address',
-      'minlength': 'Minimum number of characters - ${validatorValue.requiredLength}',
-      'maxlength': 'Maximum number of characters - ${validatorValue.requiredLength}',
+      'minlength': `Minimum number of characters - ${validatorValue.requiredLength}`,
+      'maxlength': `Maximum number of characters - ${validatorValue.requiredLength}`,
     };
 
     return config[validatorName];

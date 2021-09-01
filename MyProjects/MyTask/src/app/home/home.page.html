@@ -3,12 +3,62 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>
-      {{'title.home' | translate}}
-    </ion-title>
+    <ion-title> {{'title.home' | translate}} </ion-title>
+    <ion-buttons slot="end">
+      <ion-icon
+        name="add"
+        color="danger"
+        size="large"
+        (click)="openAlertForAddBoards()"
+      ></ion-icon>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  Home
+  <div *ngFor="let board of boards">
+    <ion-card>
+      <ion-card-header>
+        <ion-button
+          (click)="deleteBord(board.id)"
+          expand="block"
+          fill="clear"
+          shape="round"
+        >
+          Delete
+        </ion-button>
+        <ion-card-subtitle>Id {{board.id}}</ion-card-subtitle>
+        <ion-card-title>Title {{board.title}}</ion-card-title>
+      </ion-card-header>
+      <ion-item *ngFor="let task of board.tasks; let i = index">
+        <ion-icon
+          name="pin"
+          slot="start"
+          (click)="openAlertForUpdateTask(task, i, board.id)"
+        ></ion-icon>
+        <ion-label [ngClass]="task.label">{{task.description}}</ion-label>
+        <ion-button fill="outline" slot="end">Drop</ion-button>
+      </ion-item>
+    </ion-card>
+    <ion-button
+      (click)="openAlertForAddTask(board.tasks, board.id)"
+      expand="block"
+      fill="clear"
+      shape="round"
+    >
+      Add
+    </ion-button>
+  </div>
+  <div class="ion-text-center" *ngIf="this.boards === undefined">
+    <h3>Need auth</h3>
+  </div>
+  <!-- <ion-button (click)="check()" expand="block" fill="clear" shape="round">
+    Click me
+  </ion-button> -->
+  <!-- <ion-button (click)="updateTest()" expand="block" fill="clear" shape="round">
+    Test
+  </ion-button> -->
+  <!-- <ion-button (click)="openDialog()" expand="block" fill="clear" shape="round">
+    openDialog
+  </ion-button> -->
 </ion-content>
