@@ -99,11 +99,11 @@
 
     <ng-template #elseBlock>
       <ion-button
-        (click)="authService.SignOut(); isUserAuth = !isUserAuth;"
+        (click)="authService.SignOut(); logOut()"
         expand="block"
         shape="round"
       >
-        SSS Sign out
+        {{'btn.sign-out' | translate}}
       </ion-button>
     </ng-template>
   </form>

@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
-import { AlertController } from '@ionic/angular';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { AlertController, ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
+import { BoardPage } from '../modal/board/board.page';
+import { TaskPage } from '../modal/task/task.page';
 import { Board, BoardService, Task } from '../service/board.service';
 
 @Component({
@@ -9,140 +11,96 @@ import { Board, BoardService, Task } from '../service/board.service';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage {
+export class HomePage implements OnInit, OnDestroy {
   boards: Board[];
   sub: Subscription;
+  dataReturned: any;
 
   constructor(
     private boardService: BoardService,
     private alertCtrl: AlertController,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private modalController: ModalController
   ) {}
 
   ngOnInit() {
-    this.sub = this.boardService
-      .getUserBoards()
-      .subscribe((boards) => (this.boards = boards));
+    this.sub = this.boardService.getUserBoards().subscribe(
+      (boards) => {
+        this.boards = boards;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 
-  addBoards(val: any) {
-    this.boardService.createBoard({
-      title: val,
-      priority: this.boards.length,
+  async workWithBoards(): Promise<void> {
+    const modal = await this.modalController.create({
+      component: BoardPage,
+      cssClass: 'modal-class',
+      backdropDismiss: true,
+      componentProps: {
+        paramTitleModal: this.translate.instant('txt.add-new-board'),
+        titleBoard: '',
+      },
     });
-  }
 
-  async openAlertForAddBoards() {
-    let alert = await this.alertCtrl.create({
-      header: this.translate.instant('txt.add-new-board'),
-      inputs: [
-        {
-          name: 'title',
-          placeholder: this.translate.instant('txt.ent-new-board-plc'),
-        },
-      ],
-      buttons: [
-        {
-          text: this.translate.instant('btn.cancel'),
-          role: 'cancel',
-          handler: (data) => {
-            console.log('Cancel clicked');
-          },
-        },
-        {
-          text: this.translate.instant('btn.add'),
-          handler: (data) => {
-            this.addBoards(data.title);
-          },
-        },
-      ],
+    modal.onDidDismiss().then((dataReturned) => {
+      if (dataReturned !== null) {
+        this.dataReturned = dataReturned.data;
+        console.log(dataReturned);
+        if (dataReturned.data !== '' && dataReturned.role !== 'backdrop')
+          this.boardService.createBoard({
+            title: this.dataReturned,
+            priority: this.boards.length,
+          });
+      }
     });
-    await alert.present();
+
+    return await modal.present();
   }
 
-  async openAlertForAddTask(task?: any, idx?: string) {
-    let alert = await this.alertCtrl.create({
-      header: this.translate.instant('txt.add-new-task'),
-      inputs: [
-        {
-          name: 'description',
-          placeholder: this.translate.instant('txt.ent-new-task-descr'),
-        },
-        {
-          name: 'label',
-          placeholder: this.translate.instant('txt.ent-new-task-label'),
-        },
-      ],
-      buttons: [
-        {
-          text: this.translate.instant('btn.cancel'),
-          role: 'cancel',
-          handler: (data) => {
-            console.log('Cancel clicked');
-          },
-        },
-        {
-          text: this.translate.instant('btn.add'),
-          handler: (data) => {
-            this.addTaskToBorder(task, idx, {
-              description: data.description,
-              label: data.label,
-            });
-          },
-        },
-      ],
+  async workWithTask(board: any, task?: Task, idx?: number) {
+    const newTask = { label: 'purple' };
+    const modal = await this.modalController.create({
+      component: TaskPage,
+      cssClass: 'modal-class',
+      backdropDismiss: true,
+      componentProps: {
+        paramTask: task
+          ? { task: { ...task }, isNew: false, boardId: board.id, idx }
+          : { task: newTask, isNew: true },
+      },
     });
-    await alert.present();
-  }
 
-  addTaskToBorder(task?: any, idx?: string, newTask?: Task) {
-    console.log(task);
-    this.boardService.updateTasks(idx, [...task, newTask]);
-  }
-
-  async openAlertForUpdateTask(task?: any, idx?: any, _id?: any) {
-    let alert = await this.alertCtrl.create({
-      header: 'Add new task for board',
-      inputs: [
-        {
-          name: 'description',
-          placeholder: 'Enter description task',
-        },
-        {
-          name: 'label',
-          placeholder: 'Enter label task',
-        },
-      ],
-      buttons: [
-        {
-          text: this.translate.instant('btn.cancel'),
-          role: 'cancel',
-          handler: (data) => {
-            console.log('Cancel clicked');
-          },
-        },
-        {
-          text: this.translate.instant('btn.update'),
-          handler: (data) => {
-            this.updateTask(task, idx, _id, {
-              description: data.description,
-              label: data.label,
-            });
-          },
-        },
-      ],
+    modal.onDidDismiss().then((dataReturned) => {
+      if (dataReturned !== null) {
+        console.log('data', dataReturned);
+        if (dataReturned.data !== '' && dataReturned.role !== 'backdrop')
+          if (dataReturned.data.isNew) {
+            // add
+            console.log('add');
+            this.boardService.updateTasks(board.id, [
+              ...board.tasks,
+              dataReturned.data,
+            ]);
+          } else {
+            // update
+            const update = board.tasks;
+            update.splice(dataReturned.data.idx, 1, dataReturned.data.task);
+            this.boardService.updateTasks(board.id, board.tasks);
+          }
+      }
     });
-    await alert.present();
-  }
 
-  updateTask(task?: any, idx?: any, _id?: any, _val?: any) {
-    var index = this.boards.map((item) => item.id).indexOf(_id);
-    var board = this.boards[index];
-    board.tasks[idx] = _val;
-    this.boardService.updateTasks(board.id, board.tasks);
+    return await modal.present();
   }
 
   deleteBord(val: any) {
     this.boardService.deleteBoard(val);
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 }

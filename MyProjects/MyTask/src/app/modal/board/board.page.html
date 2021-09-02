@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{paramTitleModal}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="onClose()"> {{'btn.close' | translate}} </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="forgotBoardForm" autocomplete="off">
+    <ion-item>
+      <ion-label position="stacked">Title</ion-label>
+      <ion-input
+        formControlName="title"
+        type="text"
+        #title
+        required
+        placeholder="Enter title"
+      ></ion-input>
+    </ion-item>
+    <control-messages
+      [control]="forgotBoardForm.controls.title"
+    ></control-messages>
+    <ion-button
+      (click)="addBoard()"
+      expand="block"
+      fill="clear"
+      shape="round"
+      [disabled]="!forgotBoardForm.valid"
+    >
+      Click me
+    </ion-button>
+  </form>
+</ion-content>

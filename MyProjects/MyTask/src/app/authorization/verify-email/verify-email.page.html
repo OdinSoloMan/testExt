@@ -8,10 +8,12 @@
   <ion-grid>
     <ion-row>
       <h2>{{'txt.verification-email-sent' | translate}}</h2>
-      <p>
-        {{'txt.check-email' | translate}}
-      </p>
-      <ion-button type="submit" (click)="authService.SendVerificationMail()" expand="block">
+      <p>{{'txt.check-email' | translate}}</p>
+      <ion-button
+        type="submit"
+        (click)="authService.SendVerificationMail()"
+        expand="block"
+      >
         {{'btn.resend-verification-email' | translate}}
       </ion-button>
     </ion-row>

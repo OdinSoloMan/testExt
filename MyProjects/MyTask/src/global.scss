@@ -26,8 +26,22 @@
 @import "~@ionic/angular/css/flex-utils.css";
 
 .split-pane-visible > .split-pane-side {
-    min-width: 304px !important;
-    max-width: 304px !important;
+  min-width: 304px !important;
+  max-width: 304px !important;
+}
+
+.modal-class {
+  .modal-wrapper {
+    position: absolute;
+    width: 90vw;
+    height: 50vh;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    border: 0;
+  }
 }
 
 //@import "theme/control-messages";

@@ -16,25 +16,21 @@ export interface Task {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BoardService {
+  constructor(private afAuth: AngularFireAuth, private db: AngularFirestore) {}
 
-  constructor(
-    private afAuth: AngularFireAuth,
-    private db : AngularFirestore, 
-  ) { }
-  
   /* 
     Creates a new board for the current user
   */
-  async createBoard(data: Board){ 
+  async createBoard(data: Board) {
     const user = await this.afAuth.currentUser;
 
     return this.db.collection('boards').add({
       ...data,
       uid: user.uid,
-      tasks: [{description: 'Hello', label: 'yellow'}]
+      tasks: [{ description: 'Hello!', label: 'yellow' }],
     });
   }
 
@@ -42,19 +38,19 @@ export class BoardService {
     Get all boards owned by current user
   */
 
-  getUserBoards(){
+  getUserBoards() {
     return this.afAuth.authState.pipe(
-      switchMap(user => {
+      switchMap((user) => {
         if (user) {
           return this.db
-            .collection<Board>('boards', ref =>
+            .collection<Board>('boards', (ref) =>
               ref.where('uid', '==', user.uid).orderBy('priority')
             )
             .valueChanges({ idField: 'id' });
         } else {
           return [];
         }
-      }),
+      })
     );
   }
 
@@ -63,19 +59,14 @@ export class BoardService {
   */
 
   deleteBoard(boardId: string) {
-    return this.db
-      .collection('boards')
-      .doc(boardId)
-      .delete();
+    return this.db.collection('boards').doc(boardId).delete();
   }
 
   /*
     Updates the tasks on board
   */
+
   updateTasks(boardId: string, tasks: Task[]) {
-    return this.db
-      .collection('boards')
-      .doc(boardId)
-      .update({tasks})
+    return this.db.collection('boards').doc(boardId).update({ tasks });
   }
 }

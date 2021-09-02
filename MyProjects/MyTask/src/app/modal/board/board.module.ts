@@ -4,22 +4,22 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { RegistrationPageRoutingModule } from './registration-routing.module';
+import { BoardPageRoutingModule } from './board-routing.module';
 
-import { RegistrationPage } from './registration.page';
+import { BoardPage } from './board.page';
 import { TranslateModule } from '@ngx-translate/core';
-import { ComponentsModule } from '../components/components.module';
+import { ComponentsModule } from 'src/app/components/components.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    RegistrationPageRoutingModule,
+    BoardPageRoutingModule,
     TranslateModule,
-    ComponentsModule,
     ReactiveFormsModule,
+    ComponentsModule,
   ],
-  declarations: [RegistrationPage]
+  declarations: [BoardPage]
 })
-export class RegistrationPageModule {}
+export class BoardPageModule {}

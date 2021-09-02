@@ -6,7 +6,8 @@ import { HomePage } from './home.page';
 
 import { HomePageRoutingModule } from './home-routing.module';
 import { TranslateModule } from '@ngx-translate/core';
-
+import { BoardService } from '../service/board.service';
+import { BoardPageModule } from '../modal/board/board.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { TranslateModule } from '@ngx-translate/core';
     IonicModule,
     HomePageRoutingModule,
     TranslateModule,
+    BoardPageModule,
   ],
-  declarations: [HomePage]
+  declarations: [HomePage],
 })
 export class HomePageModule {}

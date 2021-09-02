@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title
+      >{{actionsOnAddTask ? ['txt.add-new-task' | translate]:
+      ['txt.update-task-for-board' | translate]}}</ion-title
+    >
+    <ion-buttons slot="end">
+      <ion-button (click)="onClose()"> {{'btn.close' | translate}} </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="forgotTaskForm" autocomplete="off">
+    <ion-item>
+      <ion-label position="stacked"
+        >{{'txt.description' | translate}}</ion-label
+      >
+      <ion-input
+        formControlName="description"
+        type="text"
+        #description
+        required
+        [placeholder]="'txt.ent-task-descr' | translate"
+      ></ion-input>
+    </ion-item>
+    <control-messages
+      [control]="forgotTaskForm.controls.description"
+    ></control-messages>
+    <ion-item>
+      <ion-label position="stacked">{{'txt.label' | translate}}</ion-label>
+      <ion-input
+        formControlName="label"
+        type="text"
+        #label
+        required
+        [placeholder]="'txt.ent-task-label' | translate"
+      ></ion-input>
+    </ion-item>
+    <control-messages
+      [control]="forgotTaskForm.controls.label"
+    ></control-messages>
+    <ion-button
+      (click)="test()"
+      expand="block"
+      fill="clear"
+      shape="round"
+      [disabled]="!forgotTaskForm.valid"
+    >
+      {{actionsOnAddTask ? ['btn.add' | translate] : ['btn.update' |
+      translate]}}
+    </ion-button>
+  </form>
+</ion-content>

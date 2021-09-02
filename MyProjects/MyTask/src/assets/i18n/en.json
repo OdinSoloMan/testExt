@@ -6,7 +6,8 @@
     "auth": "Auth",
     "registration": "Registration",
     "reset-password": "Reset password",
-    "verify-email": "Verify email"
+    "verify-email": "Verify email",
+    "test": "Test"
   },
   "label": {
     "email": "Email",
@@ -23,7 +24,9 @@
     "add": "Add",
     "cancel": "Cancel",
     "update": "Update",
-    "sign-out": "Sign out"
+    "sign-out": "Sign out",
+    "delete": "Delete",
+    "close" : "Close"
   },
   "txt": {
     "or": "or",
@@ -32,8 +35,11 @@
     "add-new-board": "Add new board",
     "ent-new-board-plc": "Enter title board",
     "add-new-task": "Add new task for board",
-    "ent-new-task-descr": "Enter description task",
-    "ent-new-task-label": "Enter label task"
+    "ent-task-descr": "Enter description task",
+    "ent-task-label": "Enter label task",
+    "update-task-for-board": "Update task for board",
+    "label" : "Label",
+    "description": "Description"
   },
   "alert": {
     "email-is-not-verified": "Email is not verified"

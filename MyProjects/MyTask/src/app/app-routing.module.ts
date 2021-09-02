@@ -10,25 +10,38 @@ const routes: Routes = [
     path: '',
     redirectTo: 'home',
     pathMatch: 'full'
-  },  {
+  },
+  {
     path: 'black-list',
     loadChildren: () => import('./black-list/black-list.module').then( m => m.BlackListPageModule)
   },
   {
     path: 'registration',
-    loadChildren: () => import('./registration/registration.module').then( m => m.RegistrationPageModule)
+    loadChildren: () => import('./authorization/registration/registration.module').then( m => m.RegistrationPageModule)
   },
   {
     path: 'verify-email',
-    loadChildren: () => import('./verify-email/verify-email.module').then( m => m.VerifyEmailPageModule)
+    loadChildren: () => import('./authorization/verify-email/verify-email.module').then( m => m.VerifyEmailPageModule)
   },
   {
     path: 'login',
-    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
+    loadChildren: () => import('./authorization/login/login.module').then( m => m.LoginPageModule)
   },
   {
     path: 'forgot-password',
-    loadChildren: () => import('./forgot-password/forgot-password.module').then( m => m.ForgotPasswordPageModule)
+    loadChildren: () => import('./authorization/forgot-password/forgot-password.module').then( m => m.ForgotPasswordPageModule)
+  },
+  {
+    path: 'test',
+    loadChildren: () => import('./test/test.module').then( m => m.TestPageModule)
+  },
+  {
+    path: 'board',
+    loadChildren: () => import('./modal/board/board.module').then( m => m.BoardPageModule)
+  },
+  {
+    path: 'task',
+    loadChildren: () => import('./modal/task/task.module').then( m => m.TaskPageModule)
   },
 
 ];

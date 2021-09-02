@@ -4,22 +4,22 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ForgotPasswordPageRoutingModule } from './forgot-password-routing.module';
+import { LoginPageRoutingModule } from './login-routing.module';
 
-import { ForgotPasswordPage } from './forgot-password.page';
+import { LoginPage } from './login.page';
 import { TranslateModule } from '@ngx-translate/core';
-import { ComponentsModule } from '../components/components.module';
+import { ComponentsModule } from '../../components/components.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ForgotPasswordPageRoutingModule,
+    LoginPageRoutingModule,
     TranslateModule,
     ReactiveFormsModule,
     ComponentsModule,
   ],
-  declarations: [ForgotPasswordPage]
+  declarations: [LoginPage]
 })
-export class ForgotPasswordPageModule {}
+export class LoginPageModule {}

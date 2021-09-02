@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{'title.test' | translate}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button onclick="closeModal()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-button (click)="closeModal()">Close</ion-button>
+
+  <button mat-raised-button color="primary">Primary</button>
+</ion-content>

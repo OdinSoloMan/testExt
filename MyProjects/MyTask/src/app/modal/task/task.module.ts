@@ -4,22 +4,22 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { LoginPageRoutingModule } from './login-routing.module';
+import { TaskPageRoutingModule } from './task-routing.module';
 
-import { LoginPage } from './login.page';
+import { TaskPage } from './task.page';
 import { TranslateModule } from '@ngx-translate/core';
-import { ComponentsModule } from '../components/components.module';
+import { ComponentsModule } from 'src/app/components/components.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    LoginPageRoutingModule,
+    TaskPageRoutingModule,
     TranslateModule,
     ReactiveFormsModule,
     ComponentsModule,
   ],
-  declarations: [LoginPage]
+  declarations: [TaskPage]
 })
-export class LoginPageModule {}
+export class TaskPageModule {}

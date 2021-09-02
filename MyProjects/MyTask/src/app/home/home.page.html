@@ -4,19 +4,11 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title> {{'title.home' | translate}} </ion-title>
-    <ion-buttons slot="end">
-      <ion-icon
-        name="add"
-        color="danger"
-        size="large"
-        (click)="openAlertForAddBoards()"
-      ></ion-icon>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <div *ngFor="let board of boards">
+  <div *ngFor="let board of boards" [attr.board]="board">
     <ion-card>
       <ion-card-header>
         <ion-button
@@ -25,7 +17,7 @@
           fill="clear"
           shape="round"
         >
-          Delete
+          {{'btn.delete' | translate}}
         </ion-button>
         <ion-card-subtitle>Id {{board.id}}</ion-card-subtitle>
         <ion-card-title>Title {{board.title}}</ion-card-title>
@@ -34,14 +26,14 @@
         <ion-icon
           name="pin"
           slot="start"
-          (click)="openAlertForUpdateTask(task, i, board.id)"
+          (click)="workWithTask(board, task, i)"
         ></ion-icon>
         <ion-label [ngClass]="task.label">{{task.description}}</ion-label>
         <ion-button fill="outline" slot="end">Drop</ion-button>
       </ion-item>
     </ion-card>
     <ion-button
-      (click)="openAlertForAddTask(board.tasks, board.id)"
+      (click)="workWithTask(board)"
       expand="block"
       fill="clear"
       shape="round"
@@ -49,6 +41,16 @@
       Add
     </ion-button>
   </div>
+  <ion-fab
+    horizontal="end"
+    vertical="bottom"
+    slot="fixed"
+    *ngIf="this.boards !== undefined"
+  >
+    <ion-fab-button color="danger" (click)="workWithBoards()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
   <div class="ion-text-center" *ngIf="this.boards === undefined">
     <h3>Need auth</h3>
   </div>
