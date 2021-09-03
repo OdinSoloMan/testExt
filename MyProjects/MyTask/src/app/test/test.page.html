@@ -4,14 +4,78 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>{{'title.test' | translate}}</ion-title>
-    <ion-buttons slot="end">
-      <ion-button onclick="closeModal()">Close</ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-button (click)="closeModal()">Close</ion-button>
-
-  <button mat-raised-button color="primary">Primary</button>
+<ion-content class="ion-padding">
+  <div *ngFor="let board of boards">
+    <mat-card [style.background]="'aliceblue'">
+      <mat-card-header>
+        <ng-content></ng-content>
+        <mat-card-title
+          >{{'label.title' | translate}} {{board.title}}
+        </mat-card-title>
+        <mat-card-subtitle
+          >{{'label.id' | translate}} {{board.id}}
+        </mat-card-subtitle>
+        <span
+          class="material-icons-outlined"
+          [style.margin-left]="'auto'"
+          (click)="workDelete(1, board.id, board.title)"
+        >
+          clear
+        </span>
+      </mat-card-header>
+      <br />
+      <div class="tasks" cdkDropList cdkDropListOrientation="vertical">
+        <div
+          class="inner-card"
+          cdkDrag
+          *ngFor="let task of board.tasks; let i = index"
+        >
+          <mat-card
+            [style.background]="task.label"
+            [style.margin-bottom]="'5px'"
+            style="width: 100%"
+          >
+            <span
+              slot="start"
+              class="material-icons-outlined"
+              style="width: 10%"
+              (click)="workWithTask(board, task, i)"
+            >
+              edit
+            </span>
+            <div
+              [style.display]="'inline-flex'"
+              [style.width]="'80%'"
+              [style.position]="'unset'"
+            >
+              {{ task.description }}
+            </div>
+            <span
+              slot="end"
+              class="material-icons-outlined"
+              style="width: 10%"
+              (click)="workDelete(2, board, task, i)"
+            >
+              delete
+            </span>
+          </mat-card>
+        </div>
+        <button mat-stroked-button (click)="workWithTask(board)">Add</button>
+      </div>
+    </mat-card>
+    <br />
+  </div>
+  <ion-fab
+    horizontal="end"
+    vertical="bottom"
+    slot="fixed"
+    *ngIf="this.boards !== undefined"
+  >
+    <ion-fab-button color="danger" (click)="workWithBoards()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

@@ -43,6 +43,10 @@ const routes: Routes = [
     path: 'task',
     loadChildren: () => import('./modal/task/task.module').then( m => m.TaskPageModule)
   },
+  {
+    path: 'confirm',
+    loadChildren: () => import('./modal/confirm/confirm.module').then( m => m.ConfirmPageModule)
+  },
 
 ];
 

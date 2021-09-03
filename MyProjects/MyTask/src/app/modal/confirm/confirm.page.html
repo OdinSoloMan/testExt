@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{data.confirm.title}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="onClose()"> {{'btn.close' | translate}} </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="ion-text-center">
+    <br>
+    <h3>{{data.confirm.message}}</h3>
+  </div>
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col size="6">
+        <ion-button
+          (click)="onClose()"
+          expand="block"
+          shape="round"
+          color="primary"
+        >
+          {{'btn.no' | translate}}
+        </ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button (click)="workingYes()" expand="block" shape="round" color="danger">
+          {{'btn.yes' | translate}}
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

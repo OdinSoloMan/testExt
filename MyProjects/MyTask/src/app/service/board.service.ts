@@ -1,19 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { switchMap, map } from 'rxjs/operators';
-
-export interface Board {
-  id?: string;
-  title?: string;
-  priority?: number;
-  tasks?: Task[];
-}
-
-export interface Task {
-  description?: string;
-  label?: 'purple' | 'blue' | 'green' | 'yellow' | 'red' | 'gray';
-}
+import { switchMap } from 'rxjs/operators';
+import { Board } from '../shared/board';
+import { Task } from '../shared/task';
 
 @Injectable({
   providedIn: 'root',

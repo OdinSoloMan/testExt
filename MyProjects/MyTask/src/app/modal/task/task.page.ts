@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController, NavParams } from '@ionic/angular';
-import { Task } from 'src/app/service/board.service';
 
 @Component({
   selector: 'app-task',
@@ -39,7 +38,7 @@ export class TaskPage implements OnInit {
     await this.modalController.dismiss('');
   }
 
-  async test() {
+  async sendingData () {
     this.param.task = this.forgotTaskForm.value;
     await this.modalController.dismiss(this.param);
   }

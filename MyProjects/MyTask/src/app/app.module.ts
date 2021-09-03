@@ -23,12 +23,12 @@ import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { AuthenticationService } from './service/authentication.service';
 import { ComponentsModule } from './components/components.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { TestPageModule } from './test/test.module';
-import { TestPage } from './test/test.page';
 import { BoardPage } from './modal/board/board.page';
 import { TaskPage } from './modal/task/task.page';
 import { BoardPageModule } from './modal/board/board.module';
 import { TaskPageModule } from './modal/task/task.module';
+import { ConfirmPage } from './modal/confirm/confirm.page';
+import { ConfirmPageModule } from './modal/confirm/confirm.module';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -36,9 +36,8 @@ export function createTranslateLoader(http: HttpClient) {
 
 @NgModule({
   declarations: [AppComponent],
-  entryComponents: [TestPage, BoardPage, TaskPage],
+  entryComponents: [BoardPage, TaskPage, ConfirmPage],
   imports: [
-    BrowserModule,
     IonicModule.forRoot({
       mode: 'md',
     }),
@@ -57,9 +56,9 @@ export function createTranslateLoader(http: HttpClient) {
     AngularFireDatabaseModule,
     ComponentsModule,
     BrowserAnimationsModule,
-    TestPageModule,
     BoardPageModule,
     TaskPageModule,
+    ConfirmPageModule,
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

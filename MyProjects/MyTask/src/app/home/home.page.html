@@ -8,19 +8,64 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <div *ngFor="let board of boards" [attr.board]="board">
-    <ion-card>
-      <ion-card-header>
-        <ion-button
+  <!-- <div *ngFor="let board of boards" [attr.board]="board">
+    <div class="card">
+      <div class="container">
+        <button
           (click)="deleteBord(board.id)"
           expand="block"
           fill="clear"
           shape="round"
         >
           {{'btn.delete' | translate}}
+        </button>
+        <h4><b>Id {{board.id}}</b></h4>
+        <p>Title {{board.title}}</p>
+      </div>
+      <div *ngFor="let task of board.tasks; let i = index">
+        <button name="pin" slot="start" (click)="workWithTask(board, task, i)">
+          /
+        </button>
+        <p [ngClass]="task.label">{{task.description}}</p>
+        <button fill="outline" slot="end">Drop</button>
+      </div>
+      <button
+        (click)="workWithTask(board)"
+        expand="block"
+        fill="clear"
+        shape="round"
+      >
+        Add
+      </button>
+    </div>
+  </div>
+  <ion-fab
+    horizontal="end"
+    vertical="bottom"
+    slot="fixed"
+    *ngIf="this.boards !== undefined"
+  >
+    <ion-fab-button color="danger" (click)="workWithBoards()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab> -->
+  <div *ngFor="let board of boards" [attr.board]="board">
+    <ion-card>
+      <ion-card-header>
+        <ion-button
+          (click)="workDelete(1, board.id, board.title)"
+          expand="block"
+          fill="clear"
+          shape="round"
+        >
+          {{'btn.delete' | translate}}
         </ion-button>
-        <ion-card-subtitle>Id {{board.id}}</ion-card-subtitle>
-        <ion-card-title>Title {{board.title}}</ion-card-title>
+        <ion-card-subtitle
+          >{{'label.id' | translate}} {{board.id}}
+        </ion-card-subtitle>
+        <ion-card-title
+          >{{'label.title' | translate}} {{board.title}}</ion-card-title
+        >
       </ion-card-header>
       <ion-item *ngFor="let task of board.tasks; let i = index">
         <ion-icon
@@ -28,18 +73,25 @@
           slot="start"
           (click)="workWithTask(board, task, i)"
         ></ion-icon>
-        <ion-label [ngClass]="task.label">{{task.description}}</ion-label>
-        <ion-button fill="outline" slot="end">Drop</ion-button>
+        <ion-label [style.background]="task.label"
+          >{{task.description}}</ion-label
+        >
+        <ion-button
+          (click)="workDelete(2, board, task, i)"
+          fill="outline"
+          slot="end"
+          >{{'btn.drop' | translate}}</ion-button
+        >
       </ion-item>
+      <ion-button
+        (click)="workWithTask(board)"
+        expand="block"
+        fill="clear"
+        shape="round"
+      >
+        {{'btn.add' | translate}}
+      </ion-button>
     </ion-card>
-    <ion-button
-      (click)="workWithTask(board)"
-      expand="block"
-      fill="clear"
-      shape="round"
-    >
-      Add
-    </ion-button>
   </div>
   <ion-fab
     horizontal="end"
@@ -52,7 +104,7 @@
     </ion-fab-button>
   </ion-fab>
   <div class="ion-text-center" *ngIf="this.boards === undefined">
-    <h3>Need auth</h3>
+    <h3>{{'txt.need-auth' | translate}}</h3>
   </div>
   <!-- <ion-button (click)="check()" expand="block" fill="clear" shape="round">
     Click me

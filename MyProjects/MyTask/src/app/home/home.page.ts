@@ -3,8 +3,11 @@ import { AlertController, ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { BoardPage } from '../modal/board/board.page';
+import { ConfirmPage } from '../modal/confirm/confirm.page';
 import { TaskPage } from '../modal/task/task.page';
-import { Board, BoardService, Task } from '../service/board.service';
+import { BoardService } from '../service/board.service';
+import { Board } from '../shared/board';
+import { Task } from '../shared/task';
 
 @Component({
   selector: 'app-home',
@@ -12,13 +15,13 @@ import { Board, BoardService, Task } from '../service/board.service';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit, OnDestroy {
+
   boards: Board[];
   sub: Subscription;
   dataReturned: any;
 
   constructor(
     private boardService: BoardService,
-    private alertCtrl: AlertController,
     private translate: TranslateService,
     private modalController: ModalController
   ) {}
@@ -82,7 +85,7 @@ export class HomePage implements OnInit, OnDestroy {
             console.log('add');
             this.boardService.updateTasks(board.id, [
               ...board.tasks,
-              dataReturned.data,
+              dataReturned.data.task,
             ]);
           } else {
             // update
@@ -96,8 +99,54 @@ export class HomePage implements OnInit, OnDestroy {
     return await modal.present();
   }
 
-  deleteBord(val: any) {
-    this.boardService.deleteBoard(val);
+  async workDelete(numberWorking: any, val: any, name: any, i?: any) {
+    const modal = await this.modalController.create({
+      component: ConfirmPage,
+      cssClass: 'modal-class',
+      backdropDismiss: true,
+      componentProps: {
+        confirm:
+          // need to think
+          numberWorking == 1
+            ? {
+                title: 'Delete board',
+                message: `You definitely want to remove the board " ${name} " ?`,
+              }
+            : {
+                title: 'Delete task',
+                message: `You definitely want to delete the task " ${val.tasks[i].description} " from the board  " ${val.title} " ?`,
+              },
+        isWorking: false,
+      },
+    });
+
+    modal.onDidDismiss().then((dataReturned) => {
+      if (dataReturned !== null) {
+        if (dataReturned.data !== '' && dataReturned.role !== 'backdrop') {
+          if (dataReturned.data.isWorking) {
+            switch (numberWorking) {
+              case 1: {
+                this.boardService.deleteBoard(val);
+                break;
+              }
+              case 2: {
+                console.log(val.id, val.tasks);
+                let newTasks = val.tasks.filter(
+                  (item) => item !== val.tasks[i]
+                );
+                this.boardService.updateTasks(val.id, newTasks);
+                break;
+              }
+              default: {
+                break;
+              }
+            }
+          }
+        }
+      }
+    });
+
+    return await modal.present();
   }
 
   ngOnDestroy() {

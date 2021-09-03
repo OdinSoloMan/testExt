@@ -12,7 +12,9 @@
   "label": {
     "email": "Email",
     "password": "Password",
-    "fogot-account-password": "Forgot your account password?"
+    "fogot-account-password": "Forgot your account password?",
+    "title": "Title",
+    "id" : "Id"
   },
   "btn": {
     "login": "Login",
@@ -26,7 +28,10 @@
     "update": "Update",
     "sign-out": "Sign out",
     "delete": "Delete",
-    "close" : "Close"
+    "close": "Close",
+    "drop": "Drop",
+    "yes": "yes",
+    "no": "no"
   },
   "txt": {
     "or": "or",
@@ -38,8 +43,9 @@
     "ent-task-descr": "Enter description task",
     "ent-task-label": "Enter label task",
     "update-task-for-board": "Update task for board",
-    "label" : "Label",
-    "description": "Description"
+    "label": "Label",
+    "description": "Description",
+    "need-auth": "You need to log in"
   },
   "alert": {
     "email-is-not-verified": "Email is not verified"
