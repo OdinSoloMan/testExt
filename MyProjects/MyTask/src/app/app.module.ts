@@ -29,6 +29,8 @@ import { BoardPageModule } from './modal/board/board.module';
 import { TaskPageModule } from './modal/task/task.module';
 import { ConfirmPage } from './modal/confirm/confirm.page';
 import { ConfirmPageModule } from './modal/confirm/confirm.module';
+import { WordPage } from './modal/word/word.page';
+import { WordPageModule } from './modal/word/word.module';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -36,7 +38,7 @@ export function createTranslateLoader(http: HttpClient) {
 
 @NgModule({
   declarations: [AppComponent],
-  entryComponents: [BoardPage, TaskPage, ConfirmPage],
+  entryComponents: [BoardPage, TaskPage, ConfirmPage, WordPage],
   imports: [
     IonicModule.forRoot({
       mode: 'md',
@@ -59,6 +61,7 @@ export function createTranslateLoader(http: HttpClient) {
     BoardPageModule,
     TaskPageModule,
     ConfirmPageModule,
+    WordPageModule,
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title
+      >{{param.isNew ? ['txt.add-word' | translate] : ['txt.update-word' |
+      translate]}}</ion-title
+    >
+    <ion-buttons slot="end">
+      <ion-button (click)="onClose()"> {{'btn.close' | translate}} </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="forgotWordForm" autocomplete="off">
+    <ion-item>
+      <ion-label position="stacked">{{'label.title' | translate}}</ion-label>
+      <ion-input
+        formControlName="title"
+        type="text"
+        #title
+        required
+        [placeholder]="'placeholder.enter-title' | translate"
+      ></ion-input>
+    </ion-item>
+    <control-messages
+      [control]="forgotWordForm.controls.title"
+    ></control-messages>
+    <ion-item>
+      <ion-label position="stacked"
+        >{{'label.translation' | translate}}</ion-label
+      >
+      <ion-textarea
+        formControlName="translation"
+        type="text"
+        #translation
+        required
+        [placeholder]="'placeholder.enter-translation' | translate"
+        rows="9"
+      ></ion-textarea>
+    </ion-item>
+    <control-messages
+      [control]="forgotWordForm.controls.translation"
+    ></control-messages>
+    <br />
+    <ion-button
+      (click)="sendingData()"
+      expand="block"
+      fill="solid"
+      shape="round"
+      [disabled]="!forgotWordForm.valid"
+    >
+      {{param.isNew ? ['btn.add' | translate] : ['btn.update' | translate]}}
+    </ion-button>
+  </form>
+</ion-content>

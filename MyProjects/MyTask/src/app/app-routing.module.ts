@@ -47,6 +47,14 @@ const routes: Routes = [
     path: 'confirm',
     loadChildren: () => import('./modal/confirm/confirm.module').then( m => m.ConfirmPageModule)
   },
+  {
+    path: 'learning-language',
+    loadChildren: () => import('./learning-language/learning-language.module').then( m => m.LearningLanguagePageModule)
+  },
+  {
+    path: 'word',
+    loadChildren: () => import('./modal/word/word.module').then( m => m.WordPageModule)
+  },
 
 ];
 

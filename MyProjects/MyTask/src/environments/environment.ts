@@ -11,7 +11,8 @@ export const environment = {
     storageBucket: "kanbanfire-fe74f.appspot.com",
     messagingSenderId: "750804850822",
     appId: "1:750804850822:web:e103dc91cadc47005d9907",
-    measurementId: "G-D4SPEFV4DF"
+    measurementId: "G-D4SPEFV4DF",
+    databaseURL: "https://kanbanfire-fe74f-default-rtdb.europe-west1.firebasedatabase.app/"
   }
 };
 

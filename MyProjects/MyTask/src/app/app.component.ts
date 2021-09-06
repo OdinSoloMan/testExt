@@ -4,6 +4,7 @@ import {
   trashBin,
   personCircleOutline,
   buildOutline,
+  languageOutline,
 } from 'ionicons/icons';
 import { LanguageService } from './service/language.service';
 
@@ -24,6 +25,11 @@ export class AppComponent {
     { path: '/black-list', title: 'title.black-list', icon: trashBin },
     { path: '/login', title: 'title.auth', icon: personCircleOutline },
     { path: '/test', title: 'title.test', icon: buildOutline },
+    {
+      path: '/learning-language',
+      title: 'title.learning-language',
+      icon: languageOutline,
+    },
   ];
 
   constructor(private lngService: LanguageService) {}
