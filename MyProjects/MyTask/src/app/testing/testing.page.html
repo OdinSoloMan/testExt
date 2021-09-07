@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{title}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="onClose()"> {{'btn.close' | translate}} </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div style="height: 100%">
+    <div style="height: 50%; border: 1px solid #c9c4f5">
+      <ion-item lines="none">
+        <ion-label
+          ><ion-text>{{'label.word' | translate}}: </ion-text> <br />
+          <ion-text> {{param[index-1].title}} </ion-text>
+        </ion-label>
+      </ion-item>
+    </div>
+    <div style="height: 50%; border: 1px solid #c9c4f5">
+      <ion-fab vertical="center" horizontal="end" slot="fixed">
+        <ion-fab-button (click)="onOpenAnswer();" size="small">
+          <ion-icon name="open-outline"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+      <ion-item lines="none">
+        <ion-label
+          ><ion-text>{{'label.answer' | translate}}: </ion-text> <br />
+          <ion-text [hidden]="isHiddenAnswer">
+            {{param[index-1].translation}}
+          </ion-text>
+        </ion-label>
+      </ion-item>
+    </div>
+  </div>
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="onDecrement()">
+        <ion-icon name="arrow-back-circle-outline" size="large"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      <div class="ion-text-center">{{index}} - {{param.length}}</div></ion-title
+    >
+    <ion-buttons slot="end">
+      <ion-button (click)="onIncrement()">
+        <ion-icon name="arrow-forward-circle-outline" size="large"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

@@ -55,6 +55,10 @@ const routes: Routes = [
     path: 'word',
     loadChildren: () => import('./modal/word/word.module').then( m => m.WordPageModule)
   },
+  {
+    path: 'testing',
+    loadChildren: () => import('./testing/testing.module').then( m => m.TestingPageModule)
+  },
 
 ];
 

@@ -6,10 +6,7 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import {
-  TranslateLoader,
-  TranslateModule,
-} from '@ngx-translate/core';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AngularFireModule } from '@angular/fire/compat';
@@ -31,6 +28,9 @@ import { ConfirmPage } from './modal/confirm/confirm.page';
 import { ConfirmPageModule } from './modal/confirm/confirm.module';
 import { WordPage } from './modal/word/word.page';
 import { WordPageModule } from './modal/word/word.module';
+import { TestingPage } from './testing/testing.page';
+import { TestingPageModule } from './testing/testing.module';
+
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -38,7 +38,13 @@ export function createTranslateLoader(http: HttpClient) {
 
 @NgModule({
   declarations: [AppComponent],
-  entryComponents: [BoardPage, TaskPage, ConfirmPage, WordPage],
+  entryComponents: [
+    BoardPage,
+    TaskPage,
+    ConfirmPage,
+    WordPage,
+    TestingPage,
+  ],
   imports: [
     IonicModule.forRoot({
       mode: 'md',
@@ -62,6 +68,7 @@ export function createTranslateLoader(http: HttpClient) {
     TaskPageModule,
     ConfirmPageModule,
     WordPageModule,
+    TestingPageModule,
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

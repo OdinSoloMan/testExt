@@ -1,5 +1,5 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { AlertController, ModalController } from '@ionic/angular';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { BoardPage } from '../modal/board/board.page';
@@ -15,7 +15,6 @@ import { Task } from '../shared/task';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit, OnDestroy {
-
   boards: Board[];
   sub: Subscription;
   dataReturned: any;
@@ -28,8 +27,8 @@ export class HomePage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.sub = this.boardService.getUserBoards().subscribe(
-      (boards) => {
-        this.boards = boards;
+      async (res) => {
+        this.boards = res;
       },
       (error) => {
         console.log(error);
@@ -109,12 +108,18 @@ export class HomePage implements OnInit, OnDestroy {
           // need to think
           numberWorking == 1
             ? {
-                title: 'Delete board',
-                message: `You definitely want to remove the board " ${name} " ?`,
+                title: this.translate.instant('txt.delete-board'),
+                message: `${this.translate.instant(
+                  'txt.remove-the-board'
+                )} " ${name} " ?`,
               }
             : {
-                title: 'Delete task',
-                message: `You definitely want to delete the task " ${val.tasks[i].description} " from the board  " ${val.title} " ?`,
+                title: this.translate.instant('txt.delete-task'),
+                message: `${this.translate.instant('txt.remove-the-task')} " ${
+                  val.tasks[i].description
+                } " ${this.translate.instant('txt.from-the-board')}  " ${
+                  val.title
+                } " ?`,
               },
         isWorking: false,
       },

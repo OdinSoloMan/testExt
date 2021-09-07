@@ -18,7 +18,8 @@
     "id" : "Id",
     "filter": "Filter",
     "translation" : "Translation",
-    "word" : "Word"
+    "word" : "Word",
+    "answer" : "Answer"
   },
   "btn": {
     "login": "Login",
@@ -53,7 +54,13 @@
     "dictionary": "Dictionary",
     "add-word": "Add word",
     "update-word": "Update word",
-    "delete-word": "Delete word"
+    "delete-word": "Delete word",
+    "error": "Error",
+    "delete-board" : "Delete board",
+    "remove-the-board": "You definitely want to remove the board",
+    "delete-task": "Delete task",
+    "remove-the-task" : "You definitely want to delete the task",
+    "from-the-board": "from the board"
   },
   "alert": {
     "email-is-not-verified": "Email is not verified"

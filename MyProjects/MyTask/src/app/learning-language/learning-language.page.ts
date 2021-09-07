@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
-import { map } from 'rxjs/operators';
+import { LoadingController, ModalController } from '@ionic/angular';
+import { map, timeout } from 'rxjs/operators';
 import { ConfirmPage } from '../modal/confirm/confirm.page';
 import { WordPage } from '../modal/word/word.page';
 import { LearningService } from '../service/learning.service';
 import LearningLanguage from '../shared/learningLanguage';
+import { TestingPage } from '../testing/testing.page';
 
 @Component({
   selector: 'app-learning-language',
@@ -16,21 +17,36 @@ export class LearningLanguagePage implements OnInit {
 
   constructor(
     private learningService: LearningService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private loadingController: LoadingController
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
+    const loading = await this.loadingController.create({
+      cssClass: 'my-custom-class',
+      message: 'Please wait...',
+      duration: 2000,
+    });
+    this.getAllWord();
+    await loading.present();
+  }
+
+  async getAllWord() {
     this.learningService
       .getAll()
       .snapshotChanges()
       .pipe(
+        timeout(60000),
         map((changes) =>
           changes.map((c) => ({ key: c.payload.key, ...c.payload.val() }))
         )
       )
-      .subscribe((data) => {
-        this.listWord = data;
-      });
+      .subscribe(
+        async (data) => {
+          this.listWord = data;
+        },
+        async (err) => {}
+      );
   }
 
   /**
@@ -173,29 +189,23 @@ export class LearningLanguagePage implements OnInit {
     return await modal.present();
   }
 
-  testing() {
-    var test = [...this.listWord];
-    this.shuffle(test);
-    console.log(test);
-  }
+  async testing(val: any) {
+    const modal = await this.modalController.create({
+      component: TestingPage,
+      backdropDismiss: true,
+      componentProps: {
+        param: { arr: [...val], title: 'Testing language' },
+      },
+    });
 
-  shuffle(array: any) {
-    var currentIndex = array.length,
-      randomIndex;
+    modal.onDidDismiss().then((dataReturned) => {
+      if (dataReturned !== null) {
+        if (dataReturned.data !== '' && dataReturned.role !== 'backdrop') {
+          console.log('dataReturned.data', dataReturned.data);
+        }
+      }
+    });
 
-    // While there remain elements to shuffle...
-    while (currentIndex != 0) {
-      // Pick a remaining element...
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex--;
-
-      // And swap it with the current element.
-      [array[currentIndex], array[randomIndex]] = [
-        array[randomIndex],
-        array[currentIndex],
-      ];
-    }
-
-    return array;
+    return await modal.present();
   }
 }

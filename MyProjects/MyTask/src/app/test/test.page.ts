@@ -109,12 +109,18 @@ export class TestPage implements OnInit {
           // need to think
           numberWorking == 1
             ? {
-                title: 'Delete board',
-                message: `You definitely want to remove the board " ${name} " ?`,
+                title: this.translate.instant('txt.delete-board'),
+                message: `${this.translate.instant(
+                  'txt.remove-the-board'
+                )} " ${name} " ?`,
               }
             : {
-                title: 'Delete task',
-                message: `You definitely want to delete the task " ${val.tasks[i].description} " from the board  " ${val.title} " ?`,
+                title: this.translate.instant('txt.delete-task'),
+                message: `${this.translate.instant('txt.remove-the-task')} " ${
+                  val.tasks[i].description
+                } " ${this.translate.instant('txt.from-the-board')}  " ${
+                  val.title
+                } " ?`,
               },
         isWorking: false,
       },
