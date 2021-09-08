@@ -1,14 +1,68 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-buttons slot="start">
+    <ion-buttons slot="start" swipe-gesture="false">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>
-      {{'title.black-list' | translate}}
-    </ion-title>
+    <ion-title> {{'title.black-list' | translate}} </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  Black List
+  <form [formGroup]="forgotParsForm" autocomplete="off">
+    <!-- <ion-item>
+      <ion-label position="stacked">Line separator </ion-label>
+      <ion-input
+        formControlName="specialChart"
+        type="text"
+        #specialChart
+        required
+        placeholder="Enter special character"
+      ></ion-input>
+    </ion-item>
+    <control-messages
+      [control]="forgotParsForm.controls.specialChart"
+    ></control-messages> -->
+    <ion-item>
+      <ion-label position="stacked">Separator for words in a line </ion-label>
+      <ion-input
+        formControlName="chartSymbol"
+        type="text"
+        #chartSymbol
+        required
+        placeholder="Enter character"
+      ></ion-input>
+    </ion-item>
+    <control-messages
+      [control]="forgotParsForm.controls.chartSymbol"
+    ></control-messages>
+  </form>
+  <ion-textarea
+    id="file"
+    type="text"
+    #file
+    required
+    placeholder="Enter info file"
+    rows="9"
+    style="border: 1px solid #c9c4f5"
+  ></ion-textarea>
+  <ion-textarea
+    readonly
+    id="test"
+    type="text"
+    required
+    rows="9"
+    style="border: 1px solid #c9c4f5"
+  ></ion-textarea>
+  <ion-button
+    [disabled]="!forgotParsForm.valid"
+    (click)="test(chartSymbol)"
+    expand="block"
+    fill="solid"
+    shape="round"
+  >
+    Parse
+  </ion-button>
+  <ion-button (click)="onAddObj()" expand="block" fill="clear" shape="round">
+    Click me
+  </ion-button>
 </ion-content>

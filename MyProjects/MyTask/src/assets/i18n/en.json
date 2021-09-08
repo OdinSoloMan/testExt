@@ -60,7 +60,9 @@
     "remove-the-board": "You definitely want to remove the board",
     "delete-task": "Delete task",
     "remove-the-task" : "You definitely want to delete the task",
-    "from-the-board": "from the board"
+    "from-the-board": "from the board",
+    "please-wait" : "Please wait...",
+    "remove-the-word": "You definitely want to delete the word"
   },
   "alert": {
     "email-is-not-verified": "Email is not verified"

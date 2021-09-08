@@ -1,5 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { LoadingController, ModalController } from '@ionic/angular';
+import { Component, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
+import {
+  LoadingController,
+  ModalController,
+  NavController,
+} from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 import { map, timeout } from 'rxjs/operators';
 import { ConfirmPage } from '../modal/confirm/confirm.page';
 import { WordPage } from '../modal/word/word.page';
@@ -13,18 +19,22 @@ import { TestingPage } from '../testing/testing.page';
   styleUrls: ['./learning-language.page.scss'],
 })
 export class LearningLanguagePage implements OnInit {
+  @Output() test: any;
   listWord: LearningLanguage[];
 
   constructor(
     private learningService: LearningService,
     private modalController: ModalController,
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    public navController: NavController,
+    public router: Router,
+    private translate: TranslateService
   ) {}
 
   async ngOnInit() {
     const loading = await this.loadingController.create({
       cssClass: 'my-custom-class',
-      message: 'Please wait...',
+      message: this.translate.instant('txt.please-wait'),
       duration: 2000,
     });
     this.getAllWord();
@@ -58,7 +68,6 @@ export class LearningLanguagePage implements OnInit {
   async addWord(word?: any) {
     const modal = await this.modalController.create({
       component: WordPage,
-      cssClass: 'modal-class',
       backdropDismiss: true,
       componentProps: {
         param: word
@@ -96,12 +105,13 @@ export class LearningLanguagePage implements OnInit {
   async onDelete(val: any) {
     const modal = await this.modalController.create({
       component: ConfirmPage,
-      cssClass: 'modal-class',
       backdropDismiss: true,
       componentProps: {
         confirm: {
-          title: 'Delete word',
-          message: `You definitely want to delete the word "${val.title}" ?`,
+          title: this.translate.instant('txt.delete-word'),
+          message: `${this.translate.instant('txt.remove-the-word')} "${
+            val.title
+          }" ?`,
         },
         isWorking: false,
       },
@@ -154,7 +164,6 @@ export class LearningLanguagePage implements OnInit {
   async onDetail(word?: any) {
     const modal = await this.modalController.create({
       component: WordPage,
-      cssClass: 'modal-class',
       backdropDismiss: true,
       componentProps: {
         param: word
@@ -188,24 +197,28 @@ export class LearningLanguagePage implements OnInit {
 
     return await modal.present();
   }
-
   async testing(val: any) {
-    const modal = await this.modalController.create({
-      component: TestingPage,
-      backdropDismiss: true,
-      componentProps: {
-        param: { arr: [...val], title: 'Testing language' },
-      },
-    });
+    let _state = {
+      arr: [...val],
+      title: 'Testing language',
+    };
+    this.navController.navigateForward('/testing', { state: _state });
+    // const modal = await this.modalController.create({
+    //   component: TestingPage,
+    //   backdropDismiss: true,
+    //   componentProps: {
+    //     param: { arr: [...val], title: 'Testing language' },
+    //   },
+    // });
 
-    modal.onDidDismiss().then((dataReturned) => {
-      if (dataReturned !== null) {
-        if (dataReturned.data !== '' && dataReturned.role !== 'backdrop') {
-          console.log('dataReturned.data', dataReturned.data);
-        }
-      }
-    });
+    // modal.onDidDismiss().then((dataReturned) => {
+    //   if (dataReturned !== null) {
+    //     if (dataReturned.data !== '' && dataReturned.role !== 'backdrop') {
+    //       console.log('dataReturned.data', dataReturned.data);
+    //     }
+    //   }
+    // });
 
-    return await modal.present();
+    // return await modal.present();
   }
 }

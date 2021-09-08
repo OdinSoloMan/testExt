@@ -30,7 +30,7 @@ import { WordPage } from './modal/word/word.page';
 import { WordPageModule } from './modal/word/word.module';
 import { TestingPage } from './testing/testing.page';
 import { TestingPageModule } from './testing/testing.module';
-
+import { File } from '@ionic-native/file/ngx';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -38,13 +38,7 @@ export function createTranslateLoader(http: HttpClient) {
 
 @NgModule({
   declarations: [AppComponent],
-  entryComponents: [
-    BoardPage,
-    TaskPage,
-    ConfirmPage,
-    WordPage,
-    TestingPage,
-  ],
+  entryComponents: [BoardPage, TaskPage, ConfirmPage, WordPage, TestingPage],
   imports: [
     IonicModule.forRoot({
       mode: 'md',
@@ -74,6 +68,7 @@ export function createTranslateLoader(http: HttpClient) {
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     AuthenticationService,
     AngularFirestore,
+    File,
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

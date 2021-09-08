@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ModalController, NavParams } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -15,14 +16,22 @@ export class TestingPage implements OnInit {
 
   constructor(
     private modalController: ModalController,
-    private navParams: NavParams,
+    public router: Router,
+    // private navParams: NavParams,
     private translateService: TranslateService
-  ) {}
+  ) {
+    if (router.getCurrentNavigation().extras.state) {
+      const state = (this.router.getCurrentNavigation().extras.state);
+      console.log(state)
+      this.mixArr(state.arr);
+      this.title = state.title;
+    }
+  }
 
   ngOnInit() {
-    console.log(this.navParams.data);
-    this.title = this.navParams.data.param.title;
-    this.mixArr(this.navParams.data.param.arr);
+    // console.log(this.navParams.data);
+    // this.title = this.navParams.data.param.title;
+    // this.mixArr(this.navParams.data.param.arr);
   }
 
   mixArr(val: any) {
@@ -34,7 +43,7 @@ export class TestingPage implements OnInit {
   }
 
   async onClose() {
-    await this.modalController.dismiss('');
+    this.router.navigateByUrl('/learning-language')
   }
 
   shuffle(array: any) {

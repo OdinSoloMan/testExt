@@ -31,6 +31,10 @@ export class LearningService {
     return this.learningLanguageRef.push(learningLanguage);
   }
 
+  createObj(learningLanguageObj: any) {
+    return this.learningLanguageRef.push(learningLanguageObj);
+  }
+
   update(key: string, value: any): Promise<void> {
     return this.learningLanguageRef.update(key, value);
   }
