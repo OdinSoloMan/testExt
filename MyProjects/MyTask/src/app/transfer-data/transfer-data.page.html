@@ -1,27 +1,26 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start" swipe-gesture="false">
+    <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title> {{'title.black-list' | translate}} </ion-title>
+    <ion-title>{{'title.transfer' | translate}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <form [formGroup]="forgotParsForm" autocomplete="off">
-    <!-- <ion-item>
-      <ion-label position="stacked">Line separator </ion-label>
-      <ion-input
-        formControlName="specialChart"
-        type="text"
-        #specialChart
-        required
-        placeholder="Enter special character"
-      ></ion-input>
+  <ion-list>
+    <ion-item>
+      <ion-label>List</ion-label>
+      <ion-select (ionChange)="anyFunc()" #anyName>
+        <ion-select-option
+          *ngFor="let selectL of selectList"
+          [value]="selectL.key"
+          >{{selectL.listName}}</ion-select-option
+        >
+      </ion-select>
     </ion-item>
-    <control-messages
-      [control]="forgotParsForm.controls.specialChart"
-    ></control-messages> -->
+  </ion-list>
+  <form [formGroup]="forgotParsForm" autocomplete="off">
     <ion-item>
       <ion-label position="stacked">Separator for words in a line </ion-label>
       <ion-input
@@ -62,7 +61,13 @@
   >
     Parse
   </ion-button>
-  <ion-button (click)="onAddObj()" expand="block" fill="clear" shape="round">
-    Click me
+  <ion-button
+    [disabled]="!forgotParsForm.valid || keyList == ''"
+    (click)="onAddObj()"
+    expand="block"
+    fill="solid"
+    shape="round"
+  >
+    {{'btn.add' | translate}}
   </ion-button>
 </ion-content>

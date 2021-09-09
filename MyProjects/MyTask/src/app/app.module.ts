@@ -28,9 +28,11 @@ import { ConfirmPage } from './modal/confirm/confirm.page';
 import { ConfirmPageModule } from './modal/confirm/confirm.module';
 import { WordPage } from './modal/word/word.page';
 import { WordPageModule } from './modal/word/word.module';
-import { TestingPage } from './testing/testing.page';
-import { TestingPageModule } from './testing/testing.module';
+import { TestingPage } from './modal/testing/testing.page';
+import { TestingPageModule } from './modal/testing/testing.module';
 import { File } from '@ionic-native/file/ngx';
+import { CategoryPage } from './modal/category/category.page';
+import { CategoryPageModule } from './modal/category/category.module';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -38,7 +40,14 @@ export function createTranslateLoader(http: HttpClient) {
 
 @NgModule({
   declarations: [AppComponent],
-  entryComponents: [BoardPage, TaskPage, ConfirmPage, WordPage, TestingPage],
+  entryComponents: [
+    BoardPage,
+    TaskPage,
+    ConfirmPage,
+    WordPage,
+    TestingPage,
+    CategoryPage,
+  ],
   imports: [
     IonicModule.forRoot({
       mode: 'md',
@@ -63,6 +72,7 @@ export function createTranslateLoader(http: HttpClient) {
     ConfirmPageModule,
     WordPageModule,
     TestingPageModule,
+    CategoryPageModule,
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

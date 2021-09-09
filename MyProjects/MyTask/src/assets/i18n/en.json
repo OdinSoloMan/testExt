@@ -8,7 +8,9 @@
     "reset-password": "Reset password",
     "verify-email": "Verify email",
     "test": "Test",
-    "learning-language" : "Learning language"
+    "learning-language" : "Learning language",
+    "categories" : "Categories",
+    "transfer" : "Transfer"
   },
   "label": {
     "email": "Email",

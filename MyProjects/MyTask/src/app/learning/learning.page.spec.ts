@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { BlackListPage } from './black-list.page';
+import { LearningPage } from './learning.page';
 
-describe('BlackListPage', () => {
-  let component: BlackListPage;
-  let fixture: ComponentFixture<BlackListPage>;
+describe('LearningPage', () => {
+  let component: LearningPage;
+  let fixture: ComponentFixture<LearningPage>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ BlackListPage ],
+      declarations: [ LearningPage ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(BlackListPage);
+    fixture = TestBed.createComponent(LearningPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

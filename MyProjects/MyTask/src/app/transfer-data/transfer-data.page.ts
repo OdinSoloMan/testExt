@@ -1,23 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { File } from '@ionic-native/file/ngx';
+import { map, timeout } from 'rxjs/operators';
 import { LearningService } from '../service/learning.service';
+import { ListCategoriesService } from '../service/list-categories.service';
 
 @Component({
-  selector: 'app-black-list',
-  templateUrl: './black-list.page.html',
-  styleUrls: ['./black-list.page.scss'],
+  selector: 'app-transfer-data',
+  templateUrl: './transfer-data.page.html',
+  styleUrls: ['./transfer-data.page.scss'],
 })
-export class BlackListPage implements OnInit {
+export class TransferDataPage implements OnInit {
+  @ViewChild('anyName') theSelectObject;
+
   forgotParsForm: FormGroup;
-  s: string;
+  selectList: any;
   obj: any;
+  keyList: string = '';
 
   constructor(
-    private file: File,
     public formBuilder: FormBuilder,
     private learningService: LearningService,
+    private listCategoriesService: ListCategoriesService
   ) {
     let self = this;
     self.forgotParsForm = formBuilder.group({
@@ -28,10 +31,27 @@ export class BlackListPage implements OnInit {
 
   ngOnInit() {}
 
+  ionViewWillEnter() {
+    this.listCategoriesService
+      .getAll()
+      .snapshotChanges()
+      .pipe(
+        timeout(60000),
+        map((changes) =>
+          changes.map((c) => ({ key: c.payload.key, ...c.payload.val() }))
+        )
+      )
+      .subscribe(
+        (data) => {
+          this.selectList = data;
+          console.log('this.selectList', this.selectList);
+        },
+        (err) => {}
+      );
+  }
+
   test(chartSymbol: any, specialChart?: any) {
     var inputValue = (<HTMLInputElement>document.getElementById('file')).value;
-    this.s = inputValue;
-    console.log(this.s);
     this.parseString(inputValue, chartSymbol);
   }
 
@@ -51,15 +71,9 @@ export class BlackListPage implements OnInit {
   }
 
   onAddObj() {
-    var user = JSON.parse(localStorage.getItem('user'));
-    let i = this.obj.map((u: { title: any; translation: any }) => ({
-      title: u.title,
-      translation: u.translation,
-      uid: user.uid,
-    }));
-    console.log('iiii', i);
-    for (let j = 0; j < i.length; j++)
-      this.learningService.createObj(i[j]).then(
+    console.log('iiii', this.obj);
+    for (let j = 0; j < this.obj.length; j++)
+      this.learningService.create(this.obj[j], this.keyList).then(
         (res) => {
           console.log(res);
         },
@@ -67,5 +81,11 @@ export class BlackListPage implements OnInit {
           console.log(err);
         }
       );
+  }
+
+  anyFunc() {
+    const theValue = this.theSelectObject.value;
+    console.log(theValue);
+    this.keyList = theValue;
   }
 }

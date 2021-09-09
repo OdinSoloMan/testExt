@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { LearningLanguagePage } from './learning-language.page';
+import { TransferDataPage } from './transfer-data.page';
 
-describe('LearningLanguagePage', () => {
-  let component: LearningLanguagePage;
-  let fixture: ComponentFixture<LearningLanguagePage>;
+describe('TransferDataPage', () => {
+  let component: TransferDataPage;
+  let fixture: ComponentFixture<TransferDataPage>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ LearningLanguagePage ],
+      declarations: [ TransferDataPage ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(LearningLanguagePage);
+    fixture = TestBed.createComponent(TransferDataPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

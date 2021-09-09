@@ -20,41 +20,41 @@ export class LearningService {
     private db: AngularFireDatabase,
     private afAuth: AngularFireAuth
   ) {
-    this.learningLanguageRef = db.list(this.userThread.uid);
+    this.learningLanguageRef = db.list(this.userThread.uid + '/data');
   }
 
-  getAll(): AngularFireList<LearningLanguage> {
-    return this.learningLanguageRef;
+  getAll(keyList: any): AngularFireList<LearningLanguage> {
+    return this.db.list(this.userThread.uid + '/data/' + keyList);
   }
 
-  create(learningLanguage: LearningLanguage): any {
-    return this.learningLanguageRef.push(learningLanguage);
+  create(learningLanguage: LearningLanguage, keyList: string): any {
+    return this.db.list(this.userThread.uid + '/data/' + keyList).push(learningLanguage);
   }
 
-  createObj(learningLanguageObj: any) {
-    return this.learningLanguageRef.push(learningLanguageObj);
+  update(key: string, value: any, keyList: string): Promise<void> {
+    return this.db.list(this.userThread.uid + '/data/' + keyList).update(key, value);
   }
 
-  update(key: string, value: any): Promise<void> {
-    return this.learningLanguageRef.update(key, value);
-  }
-
-  delete(key: string): Promise<void> {
+  deleteCategory(key: string): Promise<void> {
     return this.learningLanguageRef.remove(key);
+  }
+
+  deleteWordOfCategory(key: string, keyList: string): Promise<void> {
+    return this.db.list(this.userThread.uid + '/data/' + keyList).remove(key);
   }
 
   deleteAll(): Promise<void> {
     return this.learningLanguageRef.remove();
   }
 
-  filter(val: any): AngularFireList<LearningLanguage> {
-    return this.db.list(this.userThread.uid, (ref) =>
+  filter(val: any, keyList: string): AngularFireList<LearningLanguage> {
+    return this.db.list(this.userThread.uid + '/data/' + keyList, (ref) =>
       ref.orderByChild('title').startAt(val).endAt(`${val}\uf8ff`)
     );
   }
 
   getWordInfo(val: any): AngularFireList<LearningLanguage> {
-    console.log(val)
+    console.log(val);
     return this.db.list(this.userThread.uid, (ref) =>
       ref.limitToFirst(1).orderByKey().startAt(val)
     );

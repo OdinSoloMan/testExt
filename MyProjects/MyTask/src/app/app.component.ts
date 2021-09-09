@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import {
   home,
-  trashBin,
   personCircleOutline,
   buildOutline,
-  languageOutline,
+  listCircleOutline,
+  carSportOutline,
 } from 'ionicons/icons';
 import { LanguageService } from './service/language.service';
 
@@ -22,14 +22,14 @@ interface Page {
 export class AppComponent {
   pages: Page[] = [
     { path: '/home', title: 'title.home', icon: home },
-    { path: '/black-list', title: 'title.black-list', icon: trashBin },
-    { path: '/login', title: 'title.auth', icon: personCircleOutline },
     { path: '/test', title: 'title.test', icon: buildOutline },
     {
-      path: '/learning-language',
-      title: 'title.learning-language',
-      icon: languageOutline,
+      path: '/list-categories',
+      title: 'title.categories',
+      icon: listCircleOutline,
     },
+    { path: '/transfer-data', title: 'title.transfer', icon: carSportOutline },
+    { path: '/login', title: 'title.auth', icon: personCircleOutline },
   ];
 
   constructor(private lngService: LanguageService) {}

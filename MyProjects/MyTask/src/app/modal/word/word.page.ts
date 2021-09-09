@@ -26,7 +26,7 @@ export class WordPage implements OnInit {
   ngOnInit() {
     console.log(this.navParams.data);
     this.param = this.navParams.data.param;
-    console.log(this.param.isNew)
+    console.log(this.param.isNew);
     if (!this.param.isNew) {
       this.forgotWordForm.get('title').setValue(this.param.word.title);
       this.forgotWordForm
@@ -41,15 +41,10 @@ export class WordPage implements OnInit {
 
   async sendingData() {
     console.log(this.forgotWordForm.value);
-    // Until then I will redo it
-    // to do ...
-    var user = JSON.parse(localStorage.getItem('user'));
-    var s = {
+    this.param.word = {
       title: this.forgotWordForm.get('title').value,
       translation: this.forgotWordForm.get('translation').value,
-      uid: user.uid,
     };
-    this.param.word = s;
     await this.modalController.dismiss(this.param);
     //await this.modalController.dismiss(this.forgotWordForm.value);
   }

@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>List categories</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="ion-text-center">
+    <h3><b> List </b></h3>
+  </div>
+  <ion-list *ngFor="let categ of listCategory">
+    <ion-item-sliding>
+      <ion-item-options side="start" (click)="onDelete(categ)">
+        <ion-item-option color="danger" expandable>
+          {{'btn.delete' | translate}}
+        </ion-item-option>
+      </ion-item-options>
+
+      <ion-item (click)="onReadCategory(categ.key, categ.listName)">
+        <ion-label> Name: {{categ.listName}}</ion-label>
+      </ion-item>
+
+      <ion-item-options side="end" (click)="workingCategory(categ)">
+        <ion-item-option color="tertiary" expandable>
+          {{'btn.update' | translate}}
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+  <ion-fab
+    horizontal="end"
+    vertical="bottom"
+    slot="fixed"
+    *ngIf="this.listCategory !== undefined"
+  >
+    <ion-fab-button color="secondary" (click)="workingCategory()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

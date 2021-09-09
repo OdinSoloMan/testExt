@@ -17,21 +17,21 @@ export class TestingPage implements OnInit {
   constructor(
     private modalController: ModalController,
     public router: Router,
-    // private navParams: NavParams,
+    private navParams: NavParams,
     private translateService: TranslateService
   ) {
-    if (router.getCurrentNavigation().extras.state) {
-      const state = (this.router.getCurrentNavigation().extras.state);
-      console.log(state)
-      this.mixArr(state.arr);
-      this.title = state.title;
-    }
+    // if (router.getCurrentNavigation().extras.state) {
+    //   const state = this.router.getCurrentNavigation().extras.state;
+    //   console.log(state);
+    //   this.mixArr(state.arr);
+    //   this.title = state.title;
+    // }
   }
 
   ngOnInit() {
-    // console.log(this.navParams.data);
-    // this.title = this.navParams.data.param.title;
-    // this.mixArr(this.navParams.data.param.arr);
+    console.log(this.navParams.data);
+    this.title = this.navParams.data.param.title;
+    this.mixArr(this.navParams.data.param.arr);
   }
 
   mixArr(val: any) {
@@ -43,7 +43,7 @@ export class TestingPage implements OnInit {
   }
 
   async onClose() {
-    this.router.navigateByUrl('/learning-language')
+    this.modalController.dismiss('');
   }
 
   shuffle(array: any) {

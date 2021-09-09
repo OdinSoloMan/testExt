@@ -12,10 +12,6 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'black-list',
-    loadChildren: () => import('./black-list/black-list.module').then( m => m.BlackListPageModule)
-  },
-  {
     path: 'registration',
     loadChildren: () => import('./authorization/registration/registration.module').then( m => m.RegistrationPageModule)
   },
@@ -48,17 +44,27 @@ const routes: Routes = [
     loadChildren: () => import('./modal/confirm/confirm.module').then( m => m.ConfirmPageModule)
   },
   {
-    path: 'learning-language',
-    loadChildren: () => import('./learning-language/learning-language.module').then( m => m.LearningLanguagePageModule)
-  },
-  {
     path: 'word',
     loadChildren: () => import('./modal/word/word.module').then( m => m.WordPageModule)
   },
   {
-    path: 'testing',
-    loadChildren: () => import('./testing/testing.module').then( m => m.TestingPageModule)
+    path: 'list-categories',
+    loadChildren: () => import('./list-categories/list-categories.module').then( m => m.ListCategoriesPageModule)
   },
+  {
+    path: 'category',
+    loadChildren: () => import('./modal/category/category.module').then( m => m.CategoryPageModule)
+  },
+  {
+    path: 'learning',
+    loadChildren: () => import('./learning/learning.module').then( m => m.LearningPageModule)
+  },
+  {
+    path: 'transfer-data',
+    loadChildren: () => import('./transfer-data/transfer-data.module').then( m => m.TransferDataPageModule)
+  },
+
+
 
 ];
 

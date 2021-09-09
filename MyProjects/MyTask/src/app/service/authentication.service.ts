@@ -6,7 +6,7 @@ import {
 } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
 import { User } from '../shared/user';
-import { GoogleAuthProvider } from 'firebase/auth';
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 @Injectable({
   providedIn: 'root',
@@ -70,17 +70,35 @@ export class AuthenticationService {
   }
 
   GoogleAuth() {
-    // not working
-    return this.AuthLogin(new GoogleAuthProvider());
+    this.AuthLogin();
   }
 
-  async AuthLogin(provider: any) {
+  async AuthLogin() {
+    var t: any;
     try {
-      const result = await this.ngFireAuth.signInWithPopup(provider);
+      const auth = getAuth();
+      const result = await this.ngFireAuth.signInWithPopup(new GoogleAuthProvider())
+      .then((result: any) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        this.SetUserData(user);
+        // ...
+      }).catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
       this.ngZone.run(() => {
         this.router.navigate(['home']);
       });
-      this.SetUserData(result.user);
     } catch (error) {
       window.alert(error);
     }

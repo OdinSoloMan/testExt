@@ -4,9 +4,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { BlackListPageRoutingModule } from './black-list-routing.module';
+import { TransferDataPageRoutingModule } from './transfer-data-routing.module';
 
-import { BlackListPage } from './black-list.page';
+import { TransferDataPage } from './transfer-data.page';
 import { TranslateModule } from '@ngx-translate/core';
 import { ComponentsModule } from '../components/components.module';
 
@@ -15,12 +15,11 @@ import { ComponentsModule } from '../components/components.module';
     CommonModule,
     FormsModule,
     IonicModule,
-    BlackListPageRoutingModule,
+    TransferDataPageRoutingModule,
     TranslateModule,
-    TranslateModule,
-    ReactiveFormsModule,
     ComponentsModule,
+    ReactiveFormsModule,
   ],
-  declarations: [BlackListPage]
+  declarations: [TransferDataPage]
 })
-export class BlackListPageModule {}
+export class TransferDataPageModule {}

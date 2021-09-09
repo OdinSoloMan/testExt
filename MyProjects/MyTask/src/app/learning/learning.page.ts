@@ -1,4 +1,4 @@
-import { Component, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   LoadingController,
@@ -11,16 +11,16 @@ import { ConfirmPage } from '../modal/confirm/confirm.page';
 import { WordPage } from '../modal/word/word.page';
 import { LearningService } from '../service/learning.service';
 import LearningLanguage from '../shared/learningLanguage';
-import { TestingPage } from '../testing/testing.page';
+import { TestingPage } from '../modal/testing/testing.page';
 
 @Component({
-  selector: 'app-learning-language',
-  templateUrl: './learning-language.page.html',
-  styleUrls: ['./learning-language.page.scss'],
+  selector: 'app-learning',
+  templateUrl: './learning.page.html',
+  styleUrls: ['./learning.page.scss'],
 })
-export class LearningLanguagePage implements OnInit {
-  @Output() test: any;
+export class LearningPage implements OnInit {
   listWord: LearningLanguage[];
+  keyList: any;
 
   constructor(
     private learningService: LearningService,
@@ -29,7 +29,15 @@ export class LearningLanguagePage implements OnInit {
     public navController: NavController,
     public router: Router,
     private translate: TranslateService
-  ) {}
+  ) {
+    if (router.getCurrentNavigation().extras.state) {
+      const state = this.router.getCurrentNavigation().extras.state;
+      console.log(state);
+      this.keyList = state.key;
+    } else {
+      router.navigateByUrl('/list-categories');
+    }
+  }
 
   async ngOnInit() {
     const loading = await this.loadingController.create({
@@ -43,7 +51,7 @@ export class LearningLanguagePage implements OnInit {
 
   async getAllWord() {
     this.learningService
-      .getAll()
+      .getAll(this.keyList)
       .snapshotChanges()
       .pipe(
         timeout(60000),
@@ -59,13 +67,7 @@ export class LearningLanguagePage implements OnInit {
       );
   }
 
-  /**
-   *     key?: string | null;
-    title?: string;
-    translation?: string;
-    uid?: string;
-   */
-  async addWord(word?: any) {
+  async workingWord(word?: any) {
     const modal = await this.modalController.create({
       component: WordPage,
       backdropDismiss: true,
@@ -82,17 +84,23 @@ export class LearningLanguagePage implements OnInit {
           console.log('dataReturned.data', dataReturned.data);
           if (dataReturned.data.isNew) {
             // Add
-            this.learningService.create(dataReturned.data.word).then(
-              (res) => {
-                console.log(res);
-              },
-              (err) => {
-                console.log(err);
-              }
-            );
+            this.learningService
+              .create(dataReturned.data.word, this.keyList)
+              .then(
+                (res) => {
+                  console.log(res);
+                },
+                (err) => {
+                  console.log(err);
+                }
+              );
           } else {
             //update
-            this.learningService.update(word.key, dataReturned.data.word);
+            this.learningService.update(
+              word.key,
+              dataReturned.data.word,
+              this.keyList
+            );
             console.log('update', word.key);
           }
         }
@@ -121,34 +129,27 @@ export class LearningLanguagePage implements OnInit {
       if (dataReturned !== null) {
         if (dataReturned.data !== '' && dataReturned.role !== 'backdrop') {
           if (dataReturned.data.isWorking) {
-            this.learningService.delete(val.key).then(
-              (res) => {
-                console.log(res);
-              },
-              (err) => {
-                console.log(err);
-              }
-            );
+            this.learningService
+              .deleteWordOfCategory(val.key, this.keyList)
+              .then(
+                (res) => {
+                  console.log(res);
+                },
+                (err) => {
+                  console.log(err);
+                }
+              );
           }
         }
       }
     });
 
     return await modal.present();
-    // console.log(val);
-    // this.learningService.delete(val).then(
-    //   (res) => {
-    //     console.log(res);
-    //   },
-    //   (err) => {
-    //     console.log(err);
-    //   }
-    // );
   }
 
   filterFn(val: any) {
     this.learningService
-      .filter(val)
+      .filter(val, this.keyList)
       .snapshotChanges()
       .pipe(
         map((changes) =>
@@ -166,9 +167,7 @@ export class LearningLanguagePage implements OnInit {
       component: WordPage,
       backdropDismiss: true,
       componentProps: {
-        param: word
-          ? { word: word, isNew: false }
-          : { word: null, isNew: true },
+        param: { word: word, isNew: false },
       },
     });
 
@@ -176,19 +175,13 @@ export class LearningLanguagePage implements OnInit {
       if (dataReturned !== null) {
         if (dataReturned.data !== '' && dataReturned.role !== 'backdrop') {
           console.log('dataReturned.data', dataReturned.data);
-          if (dataReturned.data.isNew) {
-            // Add
-            this.learningService.create(dataReturned.data.word).then(
-              (res) => {
-                console.log(res);
-              },
-              (err) => {
-                console.log(err);
-              }
-            );
-          } else {
+          if (!dataReturned.data.isNew) {
             //update
-            this.learningService.update(word.key, dataReturned.data.word);
+            this.learningService.update(
+              word.key,
+              dataReturned.data.word,
+              this.keyList
+            );
             console.log('update', word.key);
           }
         }
@@ -197,28 +190,24 @@ export class LearningLanguagePage implements OnInit {
 
     return await modal.present();
   }
-  async testing(val: any) {
-    let _state = {
-      arr: [...val],
-      title: 'Testing language',
-    };
-    this.navController.navigateForward('/testing', { state: _state });
-    // const modal = await this.modalController.create({
-    //   component: TestingPage,
-    //   backdropDismiss: true,
-    //   componentProps: {
-    //     param: { arr: [...val], title: 'Testing language' },
-    //   },
-    // });
 
-    // modal.onDidDismiss().then((dataReturned) => {
-    //   if (dataReturned !== null) {
-    //     if (dataReturned.data !== '' && dataReturned.role !== 'backdrop') {
-    //       console.log('dataReturned.data', dataReturned.data);
-    //     }
-    //   }
-    // });
+  async onTesting(val: any) {
+    const modal = await this.modalController.create({
+      component: TestingPage,
+      backdropDismiss: true,
+      componentProps: {
+        param: { arr: [...val], title: 'Testing language' },
+      },
+    });
 
-    // return await modal.present();
+    modal.onDidDismiss().then((dataReturned) => {
+      if (dataReturned !== null) {
+        if (dataReturned.data !== '' && dataReturned.role !== 'backdrop') {
+          console.log('dataReturned.data', dataReturned.data);
+        }
+      }
+    });
+
+    return await modal.present();
   }
 }

@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{param.isNew ? "Add category" : "Update category"}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="onClose()"> {{'btn.close' | translate}} </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="forgotCategoryForm" autocomplete="off">
+    <ion-item>
+      <ion-label position="stacked">List name</ion-label>
+      <ion-input
+        formControlName="listName"
+        type="text"
+        #listName
+        required
+        placeholder="Enter list name"
+      ></ion-input>
+    </ion-item>
+    <control-messages
+      [control]="forgotCategoryForm.controls.listName"
+    ></control-messages>
+    <br />
+    <ion-button
+      (click)="sendingData()"
+      expand="block"
+      fill="solid"
+      shape="round"
+      [disabled]="!forgotCategoryForm.valid"
+    >
+      {{param.isNew ? ['btn.add' | translate]: ['btn.update' | translate]}}
+    </ion-button>
+  </form>
+</ion-content>
