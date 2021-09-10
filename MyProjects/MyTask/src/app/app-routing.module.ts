@@ -62,7 +62,11 @@ const routes: Routes = [
   {
     path: 'transfer-data',
     loadChildren: () => import('./transfer-data/transfer-data.module').then( m => m.TransferDataPageModule)
+  },  {
+    path: 'task-manager',
+    loadChildren: () => import('./task-manager/task-manager.module').then( m => m.TaskManagerPageModule)
   },
+
 
 
 

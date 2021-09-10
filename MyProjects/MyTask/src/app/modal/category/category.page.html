@@ -10,13 +10,15 @@
 <ion-content>
   <form [formGroup]="forgotCategoryForm" autocomplete="off">
     <ion-item>
-      <ion-label position="stacked">List name</ion-label>
+      <ion-label position="stacked"
+        >{{'label.list-name' | translate}}</ion-label
+      >
       <ion-input
         formControlName="listName"
         type="text"
         #listName
         required
-        placeholder="Enter list name"
+        [placeholder]="'placeholder.enter-list-name' | translate"
       ></ion-input>
     </ion-item>
     <control-messages

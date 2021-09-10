@@ -1,0 +1,110 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>task-manager</ion-title>
+    <ion-buttons slot="end">
+      <ion-icon
+        name="ellipsis-horizontal-outline"
+        size="large"
+        [style]
+      ></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div>
+    <div *ngFor="let day of dayWeek; let index" style="border-bottom: 1px solid #b1b1b1">
+      <ion-item>
+        <ion-label>{{day.name}}</ion-label>
+      </ion-item>
+      <div>
+        <div class="ion-padding" *ngFor="let d of day.data">
+          <div>
+            <br />
+            <ion-grid fixed>
+              <ion-row>
+                <ion-col size="1"
+                  ><ion-icon name="create-outline"></ion-icon
+                ></ion-col>
+                <ion-col size="11"><b>{{d.name}}</b></ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="1"></ion-col>
+                <ion-col size="1">
+                  <ion-icon name="timer-outline"></ion-icon>
+                </ion-col>
+                <ion-col size="10"> {{d.time}} </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="12"><br /></ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="1"></ion-col>
+                <ion-col size="11"><h3>{{d.description}}</h3></ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="12"><br /></ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="12">
+                  <div style="display: flex; justify-content: flex-end">
+                    <ion-chip style="background: #69bb7b">
+                      <ion-label [style.color]="'#fff'">Mon</ion-label>
+                    </ion-chip>
+                  </div></ion-col
+                >
+              </ion-row>
+            </ion-grid>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="ion-padding">
+    <div>
+      <br />
+      <ion-grid fixed>
+        <ion-row>
+          <ion-col size="1"
+            ><ion-icon name="create-outline"></ion-icon
+          ></ion-col>
+          <ion-col size="11"><b> Task 1</b></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="1"></ion-col>
+          <ion-col size="1">
+            <ion-icon name="timer-outline"></ion-icon>
+          </ion-col>
+          <ion-col size="10"> 03:30 </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12"><br /></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="1"></ion-col>
+          <ion-col size="11"><h3>Bla bla bla</h3></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12"><br /></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <div style="display: flex; justify-content: flex-end">
+              <ion-chip style="background: #69bb7b">
+                <ion-label [style.color]="'#fff'">Mon</ion-label>
+              </ion-chip>
+            </div></ion-col
+          >
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div> -->
+  <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+    <ion-fab-button color="warning" (click)="onWorkingDay()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

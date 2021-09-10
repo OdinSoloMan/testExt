@@ -62,6 +62,7 @@ export class LearningPage implements OnInit {
       .subscribe(
         async (data) => {
           this.listWord = data;
+          console.log(this.listWord)
         },
         async (err) => {}
       );
@@ -196,7 +197,7 @@ export class LearningPage implements OnInit {
       component: TestingPage,
       backdropDismiss: true,
       componentProps: {
-        param: { arr: [...val], title: 'Testing language' },
+        param: { arr: [...val], title: this.translate.instant('txt.testing') },
       },
     });
 

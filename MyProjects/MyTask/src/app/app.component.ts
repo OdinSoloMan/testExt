@@ -5,6 +5,7 @@ import {
   buildOutline,
   listCircleOutline,
   carSportOutline,
+  calendarClearOutline,
 } from 'ionicons/icons';
 import { LanguageService } from './service/language.service';
 
@@ -30,6 +31,14 @@ export class AppComponent {
     },
     { path: '/transfer-data', title: 'title.transfer', icon: carSportOutline },
     { path: '/login', title: 'title.auth', icon: personCircleOutline },
+    // The page needs to be redesigned. Since it does not really work, 
+    // all the functionality works through three knees, which was 
+    // implemented. so I better just hide her
+    // {
+    //   path: '/task-manager',
+    //   title: 'title.task-manager',
+    //   icon: calendarClearOutline,
+    // },
   ];
 
   constructor(private lngService: LanguageService) {}

@@ -50,7 +50,7 @@ export class TransferDataPage implements OnInit {
       );
   }
 
-  test(chartSymbol: any, specialChart?: any) {
+  onParseInfo(chartSymbol: any, specialChart?: any) {
     var inputValue = (<HTMLInputElement>document.getElementById('file')).value;
     this.parseString(inputValue, chartSymbol);
   }
@@ -65,9 +65,7 @@ export class TransferDataPage implements OnInit {
     }
     console.log('arrayJ', arrayJ);
     this.obj = arrayJ;
-    let z = JSON.stringify(arrayJ, null, ' ');
-    console.log(z);
-    (<HTMLInputElement>document.getElementById('test')).value = z;
+    (<HTMLInputElement>document.getElementById('parseInfo')).value = JSON.stringify(arrayJ, null, ' ');
   }
 
   onAddObj() {

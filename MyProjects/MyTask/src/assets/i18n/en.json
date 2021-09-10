@@ -10,7 +10,8 @@
     "test": "Test",
     "learning-language" : "Learning language",
     "categories" : "Categories",
-    "transfer" : "Transfer"
+    "transfer" : "Transfer",
+    "task-manager" : "Task manager"
   },
   "label": {
     "email": "Email",
@@ -21,7 +22,10 @@
     "filter": "Filter",
     "translation" : "Translation",
     "word" : "Word",
-    "answer" : "Answer"
+    "answer" : "Answer",
+    "list" : "List",
+    "list-name" : "List name",
+    "separator-word-line" : "Separator for words in a line"
   },
   "btn": {
     "login": "Login",
@@ -38,7 +42,8 @@
     "close": "Close",
     "drop": "Drop",
     "yes": "yes",
-    "no": "no"
+    "no": "no",
+    "parse": "Parse"
   },
   "txt": {
     "or": "or",
@@ -64,7 +69,11 @@
     "remove-the-task" : "You definitely want to delete the task",
     "from-the-board": "from the board",
     "please-wait" : "Please wait...",
-    "remove-the-word": "You definitely want to delete the word"
+    "remove-the-word": "You definitely want to delete the word",
+    "testing" : "Testing",
+    "name" : "Name",
+    "delete-category": "Delete category",
+    "need-delete": "You need delete"
   },
   "alert": {
     "email-is-not-verified": "Email is not verified"
@@ -77,7 +86,10 @@
     "enter-psw": "Enter password",
     "enter-search": "Search",
     "enter-title": "Enter title",
-    "enter-translation" : "Enter translation"
+    "enter-translation" : "Enter translation",
+    "enter-list-name": "Enter list name",
+    "enter-chart": "Enter character",
+    "enter-info-file": "Enter info file"
   },
   "validators": {
     "required": "This field is required",

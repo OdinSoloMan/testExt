@@ -10,7 +10,7 @@
 <ion-content class="ion-padding">
   <ion-list>
     <ion-item>
-      <ion-label>List</ion-label>
+      <ion-label>{{'label.list' | translate}}</ion-label>
       <ion-select (ionChange)="anyFunc()" #anyName>
         <ion-select-option
           *ngFor="let selectL of selectList"
@@ -22,13 +22,13 @@
   </ion-list>
   <form [formGroup]="forgotParsForm" autocomplete="off">
     <ion-item>
-      <ion-label position="stacked">Separator for words in a line </ion-label>
+      <ion-label position="stacked">{{'label.separator-word-line' | translate}}</ion-label>
       <ion-input
         formControlName="chartSymbol"
         type="text"
         #chartSymbol
         required
-        placeholder="Enter character"
+        [placeholder]="'placeholder.enter-chart' | translate"
       ></ion-input>
     </ion-item>
     <control-messages
@@ -40,13 +40,13 @@
     type="text"
     #file
     required
-    placeholder="Enter info file"
+    [placeholder]="'placeholder.enter-info-file' | translate"
     rows="9"
     style="border: 1px solid #c9c4f5"
   ></ion-textarea>
   <ion-textarea
     readonly
-    id="test"
+    id="parseInfo"
     type="text"
     required
     rows="9"
@@ -54,12 +54,12 @@
   ></ion-textarea>
   <ion-button
     [disabled]="!forgotParsForm.valid"
-    (click)="test(chartSymbol)"
+    (click)="onParseInfo(chartSymbol)"
     expand="block"
     fill="solid"
     shape="round"
   >
-    Parse
+    {{'btn.parse' | translate}}
   </ion-button>
   <ion-button
     [disabled]="!forgotParsForm.valid || keyList == ''"

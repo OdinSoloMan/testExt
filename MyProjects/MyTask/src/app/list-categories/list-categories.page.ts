@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalController, NavController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 import { map, timeout } from 'rxjs/operators';
 import { CategoryPage } from '../modal/category/category.page';
 import { ConfirmPage } from '../modal/confirm/confirm.page';
@@ -21,7 +22,8 @@ export class ListCategoriesPage implements OnInit {
     public router: Router,
     public navController: NavController,
     private learningService: LearningService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private translate: TranslateService
   ) {}
 
   ngOnInit() {
@@ -78,7 +80,10 @@ export class ListCategoriesPage implements OnInit {
             );
           } else {
             //update
-            this.listCategoriesService.update(category.key, dataReturned.data.category);
+            this.listCategoriesService.update(
+              category.key,
+              dataReturned.data.category
+            );
             console.log('update', category.key);
           }
         }
@@ -94,8 +99,10 @@ export class ListCategoriesPage implements OnInit {
       backdropDismiss: true,
       componentProps: {
         confirm: {
-          title: 'Delete category',
-          message: `You need delete "${val.listName}" ?`,
+          title: this.translate.instant('txt.delete-category'),
+          message: `${this.translate.instant('txt.need-delete')} "${
+            val.listName
+          }" ?`,
         },
         isWorking: false,
       },

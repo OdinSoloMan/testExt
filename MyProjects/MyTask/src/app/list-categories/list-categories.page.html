@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>List categories</ion-title>
+    <ion-title>{{'title.categories' | translate}}</ion-title>
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
@@ -9,7 +9,7 @@
 
 <ion-content class="ion-padding">
   <div class="ion-text-center">
-    <h3><b> List </b></h3>
+    <h3><b> {{'label.list' | translate}} </b></h3>
   </div>
   <ion-list *ngFor="let categ of listCategory">
     <ion-item-sliding>
@@ -20,7 +20,7 @@
       </ion-item-options>
 
       <ion-item (click)="onReadCategory(categ.key, categ.listName)">
-        <ion-label> Name: {{categ.listName}}</ion-label>
+        <ion-label> {{'txt.name' | translate}}: {{categ.listName}}</ion-label>
       </ion-item>
 
       <ion-item-options side="end" (click)="workingCategory(categ)">
