@@ -10,6 +10,8 @@ import { TestPage } from './test.page';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   imports: [
@@ -20,6 +22,8 @@ import { MatCardModule } from '@angular/material/card';
     TranslateModule,
     MatButtonModule,
     MatCardModule,
+    DragDropModule,
+    MatDialogModule,
   ],
   declarations: [TestPage],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

@@ -16,9 +16,15 @@ import { Task } from '../shared/task';
   styleUrls: ['./test.page.scss'],
 })
 export class TestPage implements OnInit {
+
   boards: Board[];
   sub: Subscription;
   dataReturned: any;
+
+  taskDrop(event: CdkDragDrop<string[]>, board ) {
+    moveItemInArray(board.tasks, event.previousIndex, event.currentIndex);
+    this.boardService.updateTasks(board.id, board.tasks);
+  }
 
   constructor(
     private boardService: BoardService,

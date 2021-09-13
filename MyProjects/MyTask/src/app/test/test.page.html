@@ -27,7 +27,12 @@
         </span>
       </mat-card-header>
       <br />
-      <div class="tasks" cdkDropList cdkDropListOrientation="vertical">
+      <div
+        class="tasks"
+        cdkDropList
+        cdkDropListOrientation="vertical"
+        (cdkDropListDropped)="taskDrop($event, board)"
+      >
         <div
           class="inner-card"
           cdkDrag

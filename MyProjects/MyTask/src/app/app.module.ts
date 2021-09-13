@@ -33,6 +33,7 @@ import { TestingPageModule } from './modal/testing/testing.module';
 import { File } from '@ionic-native/file/ngx';
 import { CategoryPage } from './modal/category/category.page';
 import { CategoryPageModule } from './modal/category/category.module';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -84,6 +85,7 @@ const firebase = {
     WordPageModule,
     TestingPageModule,
     CategoryPageModule,
+    DragDropModule
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
