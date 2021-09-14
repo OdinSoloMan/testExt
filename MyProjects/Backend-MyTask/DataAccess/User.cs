@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Backend_MyTask.DataAccess
 {
@@ -15,7 +17,7 @@ namespace Backend_MyTask.DataAccess
         public string Password { get; set; }
 
         public ICollection<Task> Tasks { get; set; }
-    
+
         public User()
         {
             Id = new Guid();

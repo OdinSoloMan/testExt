@@ -1,7 +1,10 @@
+using Backend_MyTask.DataAccess;
+using Backend_MyTask.Service.Entity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,6 +28,17 @@ namespace Backend_MyTask
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<ApplicationDatabaseContext>
+                (c => c.UseSqlServer("Data Source=localhost;Initial Catalog={nameof(ApplicationDatabaseContext)};Integrated Security=True"));
+
+            services.AddControllers();
+
+            services.AddCors();
+
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IBoardRepository, BoardRepository>();
+            services.AddTransient<IMyTaskRepository, MyTaskRepository>();
+
             services.AddControllers();
         }
 
@@ -39,6 +53,10 @@ namespace Backend_MyTask
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(
+                options => options.SetIsOriginAllowed(x => _ = true).AllowAnyMethod().AllowAnyHeader().AllowCredentials()
+            );
 
             app.UseAuthorization();
 
