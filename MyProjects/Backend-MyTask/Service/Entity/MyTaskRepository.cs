@@ -16,7 +16,7 @@ namespace Backend_MyTask.Service.Entity
             db.SaveChanges();
         }
 
-        public async Task Delet(Guid id)
+        public async Task Delete(Guid id)
         {
             MyTask myTask = await db.MyTasks.FindAsync(id);
             if (myTask != null)

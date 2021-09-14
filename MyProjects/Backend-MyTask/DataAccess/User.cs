@@ -1,22 +1,32 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Backend_MyTask.DataAccess
 {
-    [MetadataType(typeof(UserMetadata))]
     [Index("Username", IsUnique = true, Name = "Username_Index")]
-    public class User
+    public partial class User
     {
         [Key]
         public Guid Id { get; set; }
+
+        [Required(ErrorMessage = "{0} is required.")]
+        [DisplayName("Username")]
+        [StringLength(50, MinimumLength = 3, ErrorMessage = "Part {0} must be between {2} and {1} character(s) in length.")]
         public string Username { get; set; }
+
+        [Required(ErrorMessage = "{0} is required.")]
+        [DisplayName("Password")]
+        [StringLength(50, MinimumLength = 5, ErrorMessage = "Part {0} must be between {2} and {1} character(s) in length.")]
         public string Password { get; set; }
 
-        public ICollection<Task> Tasks { get; set; }
+        public ICollection<Board> Boards { get; set; }
+
 
         public User()
         {
@@ -24,16 +34,11 @@ namespace Backend_MyTask.DataAccess
             Username = "";
             Password = "";
         }
-    }
 
-    internal sealed class UserMetadata
-    {
-        [Required(ErrorMessage = "Username is required.")]
-        [StringLength(50, ErrorMessage = "Username length it 3 before 50", MinimumLength = 3)]
-        public string Username;
-
-        [Required(ErrorMessage = "Password is required.")]
-        [StringLength(50, ErrorMessage = "Password length it 5 before 50", MinimumLength = 5)]
-        public string Password;
+        public void UserCreate(string _Username, string _Password)
+        {
+            Username = _Username;
+            Password = _Password;
+        }
     }
 }

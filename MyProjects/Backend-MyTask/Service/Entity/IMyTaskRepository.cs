@@ -12,6 +12,6 @@ namespace Backend_MyTask.Service.Entity
         Task Create(MyTask myTask);
         Task<MyTask> Read(Guid id);
         Task Update(MyTask myTask);
-        Task Delet(Guid id);
+        Task Delete(Guid id);
     }
 }
