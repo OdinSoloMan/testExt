@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,9 +25,8 @@ namespace Backend_MyTask.DataAccess
         //public MyTask MyTask { get; set; }
 
         [Required(ErrorMessage = "{0} is required")]
-        [DisplayName("UserId")]
-        public Guid UserId { get; set; }
-        public User User { get; set; }
+        [ForeignKey("User")]
+        public string UserId { get; set; }
 
         public ICollection<MyTask> MyTasks { get; set; }
 
@@ -38,7 +38,7 @@ namespace Backend_MyTask.DataAccess
             Name = "";
         }
 
-        public void BoardCreate(string _Name, Guid _UserId)
+        public void BoardCreate(string _Name, string _UserId)
         {
             Name = _Name;
             UserId = _UserId;

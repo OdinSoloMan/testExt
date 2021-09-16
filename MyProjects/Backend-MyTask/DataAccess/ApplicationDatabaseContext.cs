@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Backend_MyTask.DataAccess
 {
-    public class ApplicationDatabaseContext : DbContext
+    public class ApplicationDatabaseContext : IdentityDbContext<User>
     {
         public ApplicationDatabaseContext(DbContextOptions<ApplicationDatabaseContext> options) :
             base(options)
@@ -18,7 +19,7 @@ namespace Backend_MyTask.DataAccess
         protected override void OnConfiguring(DbContextOptionsBuilder OptionsBuilder) =>
             OptionsBuilder.UseSqlServer($"Data Source=WS-PC-16\\SQLEXPRESS;Initial Catalog={nameof(ApplicationDatabaseContext)};Integrated Security=True");
 
-        public DbSet<User> Users { get; set; }
+        //public DbSet<User> Users { get; set; }
         public DbSet<Board> Boards { get; set; }
         public DbSet<MyTask> MyTasks { get; set; }
     }

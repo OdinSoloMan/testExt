@@ -1,8 +1,10 @@
 using Backend_MyTask.DataAccess;
+using Backend_MyTask.Domain;
 using Backend_MyTask.Service.Entity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -33,9 +35,31 @@ namespace Backend_MyTask
             services.AddDbContext<ApplicationDatabaseContext>
                 (c => c.UseSqlServer($"Data Source=WS-PC-16\\SQLEXPRESS;Initial Catalog={nameof(ApplicationDatabaseContext)};Integrated Security=True"));
 
+            services.AddIdentity<User, IdentityRole>(opt => 
+                {
+                    opt.Password.RequiredLength = 7;
+                    opt.Password.RequireDigit = false;
+                    opt.Password.RequireUppercase = false;
+
+                    opt.User.RequireUniqueEmail = true;
+
+                    //opt.SignIn.RequireConfirmedEmail = true;
+                })
+                .AddEntityFrameworkStores<ApplicationDatabaseContext>()
+                .AddDefaultTokenProviders();
+
             services.AddControllers();
 
-            services.AddCors();
+            services.AddCors(o => o.AddPolicy("CorsPolicy", builder => {
+                builder
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowAnyOrigin()
+                    .AllowCredentials()
+                    .WithOrigins("https://localhost:4200");
+            }));
+
+            services.AddSignalR();
 
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IBoardRepository, BoardRepository>();
@@ -73,10 +97,14 @@ namespace Backend_MyTask
 
             app.UseRouting();
 
-            app.UseCors(
-                options => options.SetIsOriginAllowed(x => _ = true).AllowAnyMethod().AllowAnyHeader().AllowCredentials()
-            );
+            app.UseCors("CorsPolicy");
 
+            //app.UseSignalR(routes =>
+            //{
+            //    routes.MapHub<NotifyHub>("/notify");
+            //});
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

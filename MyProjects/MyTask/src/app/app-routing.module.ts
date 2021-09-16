@@ -66,6 +66,10 @@ const routes: Routes = [
     path: 'task-manager',
     loadChildren: () => import('./task-manager/task-manager.module').then( m => m.TaskManagerPageModule)
   },
+  {
+    path: 'test-hub',
+    loadChildren: () => import('./test-hub/test-hub.module').then( m => m.TestHubPageModule)
+  },
 
 
 
