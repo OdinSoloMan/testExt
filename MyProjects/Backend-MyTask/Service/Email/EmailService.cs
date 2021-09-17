@@ -16,20 +16,18 @@ namespace Backend_MyTask.Service.Email
             emailMessage.From.Add(new MailboxAddress("Admin web-site", "yuraburodext@gmail.com"));
             emailMessage.To.Add(new MailboxAddress("", email));
             emailMessage.Subject = subject;
-
             emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
             {
                 Text = message
             };
 
-
             using (MailKit.Net.Smtp.SmtpClient client = new MailKit.Net.Smtp.SmtpClient())
             {
-                client.Connect("smtp.gmail.com", 465, true); //либо использум порт 465
-                client.Authenticate("yuraburodext@gmail.com", "Naruto1997");
-                client.Send(emailMessage);
+                await client.ConnectAsync("smtp.gmail.com", 465, true); //либо использум порт 465
+                await client.AuthenticateAsync("yuraburodext@gmail.com", "Naruto1997abc");
+                await client.SendAsync(emailMessage);
 
-                client.Disconnect(true);
+                await client.DisconnectAsync(true);
             }
         }
     }

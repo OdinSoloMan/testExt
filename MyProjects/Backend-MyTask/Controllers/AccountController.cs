@@ -42,9 +42,9 @@ namespace Backend_MyTask.Controllers
                         protocol: HttpContext.Request.Scheme);
                     EmailService emailService = new EmailService();
                     await emailService.SendEmailAsync(model.Email, "Confirm your account",
-                        $"Подтвердите регистрацию, перейдя по ссылке: <a href='{callbackUrl}'>link</a>");
+                        $"Confirm registration by following the link: <a href='{callbackUrl}'>link</a>");
 
-                    await _signInManager.SignInAsync(user, false);
+                    //await _signInManager.SignInAsync(user, false);
                     return new OkObjectResult(true);
                 }
                 else
@@ -69,7 +69,7 @@ namespace Backend_MyTask.Controllers
             }
             var result = await _userManager.ConfirmEmailAsync(user, code);
             if (result.Succeeded)
-                return new OkObjectResult(true);
+                return new OkObjectResult(new { Account_activated = true });
             else
                 return new OkObjectResult(false);
         }
@@ -99,6 +99,63 @@ namespace Backend_MyTask.Controllers
         {
             await _signInManager.SignOutAsync();
             return new OkObjectResult(true);
+        }
+
+
+        [HttpPost("reset-password")]
+        [AllowAnonymous]
+        [Authorize]
+        public async Task<ActionResult<string>> ResetPassword([FromBody] ForgotPasswordModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+
+                if(user == null ||  !(await _userManager.IsEmailConfirmedAsync(user)))
+                {
+                    return new OkObjectResult(false);
+                }
+
+                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var callbackUrl = Url.Action(
+                    nameof(ResetPassword),
+                    "Account",
+                    new { userId = user.Id, code = code },
+                    protocol: HttpContext.Request.Scheme);
+                EmailService emailService = new EmailService();
+                await emailService.SendEmailAsync(model.Email, "Confirm your account",
+                    $"Confirm reset password the link: <a href='{callbackUrl}'>link</a>");
+
+
+                //EmailService emailService = new EmailService();
+                //var str = "Confirm reset password by following the link: < a href=" + callbackUrl + ">link</a>";
+                //await emailService.SendEmailAsync(model.Email, "Confirm your account",
+                //    str);
+                return new OkObjectResult(true);
+            }
+            return new OkObjectResult(false);
+        }
+
+        [HttpPost("resetaaa")]
+        [AllowAnonymous]
+        [Authorize]
+        public async Task<ActionResult<string>> ResetPassword(ResetPasswordModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return new OkObjectResult(false);
+            }
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if(user == null)
+            {
+                return new OkObjectResult(false);
+            }
+            var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
+            if (result.Succeeded)
+            {
+                return new OkObjectResult(true);
+            }
+            return new OkObjectResult(false);
         }
     }
 }

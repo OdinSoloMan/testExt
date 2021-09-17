@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
+import { tap, timeout } from 'rxjs/operators';
 import { AuthenticationService } from '../../service/authentication.service';
 import { ValidationService } from '../../service/validation.service';
 
@@ -23,7 +24,7 @@ export class LoginPage implements OnInit {
     let self = this;
     self.forgotAuthForm = formBuilder.group({
       email: ['', [ValidationService.emailValidator]],
-      psw: ['', [Validators.minLength(3), Validators.maxLength(10)]],
+      psw: ['', [Validators.minLength(6), Validators.maxLength(100)]],
     });
   }
 
@@ -40,17 +41,27 @@ export class LoginPage implements OnInit {
   logIn(email: any, password: any) {
     this.authService
       .SignIn(email.value, password.value)
-      .then((res) => {
-        if (this.authService.isEmailVerified) {
-          this.openRoute('home');
-        } else {
-          window.alert(this.translate.instant('alert.email-is-not-verified'));
-          return false;
-        }
-      })
-      .catch((error) => {
-        window.alert(error.message);
-      });
+      .pipe(
+        timeout(60000),
+        tap((result) => console.log('result-->', result))
+      )
+      .subscribe(
+        (res) => console.log(res),
+        (err) => console.log(err)
+      );
+    // this.authService
+    //   .SignIn(email.value, password.value)
+    //   .then((res) => {
+    //     if (this.authService.isEmailVerified) {
+    //       this.openRoute('home');
+    //     } else {
+    //       window.alert(this.translate.instant('alert.email-is-not-verified'));
+    //       return false;
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     window.alert(error.message);
+    //   });
   }
 
   resetPassword() {

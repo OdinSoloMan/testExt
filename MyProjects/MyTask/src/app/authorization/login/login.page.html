@@ -73,7 +73,6 @@
           <ion-button
             type="submit"
             color="danger"
-            (click)="authService.GoogleAuth();"
             expand="block"
           >
             {{'btn.login-with-google'| translate}}
@@ -99,7 +98,6 @@
 
     <ng-template #elseBlock>
       <ion-button
-        (click)="authService.SignOut(); logOut()"
         expand="block"
         shape="round"
       >

@@ -26,6 +26,5 @@ export class ForgotPasswordPage implements OnInit {
 
   PasswordRecover(val : any){
     console.log(val.value);
-    this.authService.PasswordRecover(val.value)
   }
 }

@@ -27,14 +27,14 @@ export class RegistrationPage implements OnInit {
   ngOnInit() {}
 
   signUp(email: any, password: any) {
-    this.authService
-      .RegisterUser(email.value, password.value)
-      .then((res) => {
-        this.authService.SendVerificationMail();
-        this.router.navigate(['verify-email']);
-      })
-      .catch((error) => {
-        window.alert(error.message);
-      });
+    // this.authService
+    //   .RegisterUser(email.value, password.value)
+    //   .then((res) => {
+    //     this.authService.SendVerificationMail();
+    //     this.router.navigate(['verify-email']);
+    //   })
+    //   .catch((error) => {
+    //     window.alert(error.message);
+    //   });
   }
 }

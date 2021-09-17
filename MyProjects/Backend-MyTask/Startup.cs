@@ -43,21 +43,23 @@ namespace Backend_MyTask
 
                     opt.User.RequireUniqueEmail = true;
 
-                    //opt.SignIn.RequireConfirmedEmail = true;
+                    opt.SignIn.RequireConfirmedEmail = true;
                 })
                 .AddEntityFrameworkStores<ApplicationDatabaseContext>()
                 .AddDefaultTokenProviders();
 
             services.AddControllers();
 
-            services.AddCors(o => o.AddPolicy("CorsPolicy", builder => {
-                builder
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowAnyOrigin()
-                    .AllowCredentials()
-                    .WithOrigins("https://localhost:4200");
-            }));
+
+            services.AddCors();
+            //services.AddCors(o => o.AddPolicy("CorsPolicy", builder => {
+            //    builder
+            //        .AllowAnyMethod()
+            //        .AllowAnyHeader()
+            //        .AllowAnyOrigin()
+            //        .AllowCredentials()
+            //        .WithOrigins("https://localhost:4200");
+            //}));
 
             services.AddSignalR();
 
@@ -97,7 +99,11 @@ namespace Backend_MyTask
 
             app.UseRouting();
 
-            app.UseCors("CorsPolicy");
+            app.UseCors(x => x
+                            .AllowAnyMethod()
+                            .AllowAnyHeader()
+                            .SetIsOriginAllowed(origin => true) // allow any origin
+                            .AllowCredentials());
 
             //app.UseSignalR(routes =>
             //{
