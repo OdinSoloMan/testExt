@@ -11,11 +11,14 @@
     "learning-language" : "Learning language",
     "categories" : "Categories",
     "transfer" : "Transfer",
-    "task-manager" : "Task manager"
+    "task-manager" : "Task manager",
+    "switch-password": "Switch password",
+    "confirm-email": "Confirm email"
   },
   "label": {
     "email": "Email",
     "password": "Password",
+    "password-confirm": "Password confirm",
     "fogot-account-password": "Forgot your account password?",
     "title": "Title",
     "id" : "Id",
@@ -73,7 +76,10 @@
     "testing" : "Testing",
     "name" : "Name",
     "delete-category": "Delete category",
-    "need-delete": "You need delete"
+    "need-delete": "You need delete",
+    "check-you-email": "Check you email",
+    "psw-reset-true": "Password reset successfully",
+    "yu-email-is-act": "Your mail is activated"
   },
   "alert": {
     "email-is-not-verified": "Email is not verified"
@@ -89,7 +95,8 @@
     "enter-translation" : "Enter translation",
     "enter-list-name": "Enter list name",
     "enter-chart": "Enter character",
-    "enter-info-file": "Enter info file"
+    "enter-info-file": "Enter info file",
+    "passwords-must-match": "Passwords must match"
   },
   "validators": {
     "required": "This field is required",

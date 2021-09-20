@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Backend_MyTask.Controllers
 {
@@ -35,11 +37,14 @@ namespace Backend_MyTask.Controllers
                 if (result.Succeeded)
                 {
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.Action(
-                        nameof(ConfirmEmail),
-                        "account",
-                        new { userId = user.Id, code = code },
-                        protocol: HttpContext.Request.Scheme);
+                    var callbackUrl = "http://localhost:8100/confirm-email/account?userId=" + user.Id + "&code=" + HttpUtility.UrlEncode(Base64Encode(code));
+
+
+                    //var callbackUrl = Url.Action(
+                    //    nameof(ConfirmEmail),
+                    //    "account",
+                    //    new { userId = user.Id, code = code },
+                    //    protocol: HttpContext.Request.Scheme);
                     EmailService emailService = new EmailService();
                     await emailService.SendEmailAsync(model.Email, "Confirm your account",
                         $"Confirm registration by following the link: <a href='{callbackUrl}'>link</a>");
@@ -49,10 +54,10 @@ namespace Backend_MyTask.Controllers
                 }
                 else
                 {
-                    return new OkObjectResult(false);
+                    return BadRequest();
                 }
             }
-            return new OkObjectResult(false);
+            return BadRequest();
         }
 
         [HttpGet]
@@ -60,18 +65,18 @@ namespace Backend_MyTask.Controllers
         {
             if (userId == null || code == null)
             {
-                return new OkObjectResult(false);
+                return BadRequest();
             }
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                return new OkObjectResult(false);
+                return BadRequest();
             }
-            var result = await _userManager.ConfirmEmailAsync(user, code);
+            var result = await _userManager.ConfirmEmailAsync(user, Base64Decode(HttpUtility.UrlDecode(code)));
             if (result.Succeeded)
-                return new OkObjectResult(new { Account_activated = true });
+                return new OkObjectResult(true);
             else
-                return new OkObjectResult(false);
+                return BadRequest();
         }
 
         [HttpPost("login")]
@@ -102,7 +107,7 @@ namespace Backend_MyTask.Controllers
         }
 
 
-        [HttpPost("reset-password")]
+        [HttpPost("reset-password-msg-email")]
         [AllowAnonymous]
         [Authorize]
         public async Task<ActionResult<string>> ResetPassword([FromBody] ForgotPasswordModel model)
@@ -117,11 +122,15 @@ namespace Backend_MyTask.Controllers
                 }
 
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                var callbackUrl = Url.Action(
-                    nameof(ResetPassword),
-                    "Account",
-                    new { userId = user.Id, code = code },
-                    protocol: HttpContext.Request.Scheme);
+                var callbackUrl = "http://localhost:8100/switch-password/reset-password/?userId=" + user.Id + "&code=" + HttpUtility.UrlEncode(code);
+
+                // Replaced generator with string execution
+
+                //var callbackUrl = Url.Action(
+                //    nameof(ResetPassword),
+                //    "Account",
+                //    new { userId = user.Id, code = code },
+                //    protocol: HttpContext.Request.Scheme);
                 EmailService emailService = new EmailService();
                 await emailService.SendEmailAsync(model.Email, "Confirm your account",
                     $"Confirm reset password the link: <a href='{callbackUrl}'>link</a>");
@@ -136,26 +145,39 @@ namespace Backend_MyTask.Controllers
             return new OkObjectResult(false);
         }
 
-        [HttpPost("resetaaa")]
+        [HttpPost("reset-psw")]
         [AllowAnonymous]
         [Authorize]
         public async Task<ActionResult<string>> ResetPassword(ResetPasswordModel model)
         {
             if (!ModelState.IsValid)
             {
-                return new OkObjectResult(false);
+                return BadRequest();
             }
             var user = await _userManager.FindByEmailAsync(model.Email);
             if(user == null)
             {
-                return new OkObjectResult(false);
+                return BadRequest();
             }
             var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
             if (result.Succeeded)
             {
                 return new OkObjectResult(true);
             }
-            return new OkObjectResult(false);
+            return BadRequest();
+        }
+
+
+        public static string Base64Encode(string plainText)
+        {
+            var plainTextBytes = Encoding.UTF8.GetBytes(plainText);
+            return Convert.ToBase64String(plainTextBytes);
+        }
+
+        public static string Base64Decode(string base64EncodedData)
+        {
+            var base64EncodedBytes = Convert.FromBase64String(base64EncodedData);
+            return Encoding.UTF8.GetString(base64EncodedBytes);
         }
     }
 }

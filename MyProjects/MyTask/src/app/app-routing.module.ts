@@ -62,7 +62,8 @@ const routes: Routes = [
   {
     path: 'transfer-data',
     loadChildren: () => import('./transfer-data/transfer-data.module').then( m => m.TransferDataPageModule)
-  },  {
+  },
+  {
     path: 'task-manager',
     loadChildren: () => import('./task-manager/task-manager.module').then( m => m.TaskManagerPageModule)
   },
@@ -70,6 +71,15 @@ const routes: Routes = [
     path: 'test-hub',
     loadChildren: () => import('./test-hub/test-hub.module').then( m => m.TestHubPageModule)
   },
+  {
+    path: 'switch-password/:reset-password',
+    loadChildren: () => import('./authorization/switch-password/switch-password.module').then( m => m.SwitchPasswordPageModule)
+  },
+  {
+    path: 'confirm-email/:account',
+    loadChildren: () => import('./authorization/confirm-email/confirm-email.module').then( m => m.ConfirmEmailPageModule)
+  },
+
 
 
 

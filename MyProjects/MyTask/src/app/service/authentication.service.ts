@@ -24,6 +24,27 @@ export class AuthenticationService {
     return this.http.post<any>(this.Url + '/account/login', data);
   }
 
+  PasswordRecoverMessageEmail(passwordResetEmail: any) {
+    return this.http.post<any>(
+      this.Url + '/account/reset-password-msg-email',
+      passwordResetEmail
+    );
+  }
+
+  SwitchPassowd(data: any) {
+    return this.http.post<any>(this.Url + '/account/reset-psw', data);
+  }
+
+  ConfirmEmail(userId: string, code: string) {
+    return this.http.get<any>(
+      this.Url + '/account?userId=' + userId + '&code=' + code
+    );
+  }
+
+  RegisterUser(data: any) {
+    return this.http.post<any>(this.Url + '/account/register', data);
+  }
+
   // userData: any;
 
   // constructor(

@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{'title.confirm-email' | translate}}</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="ion-text-center">
+    <h3>{{'title.confirm-email' | translate}} - {{isConfirmationEmail? ['btn.yes' | translate]: ['btn.no' | translate]}} </h3> 
+  </div>
+  <ion-button (click)="onLoginPage()" expand="block" fill="solid" shape="round">
+    {{'btn.login' | translate}}
+  </ion-button>
+</ion-content>

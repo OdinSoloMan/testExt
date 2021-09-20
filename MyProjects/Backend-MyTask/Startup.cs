@@ -33,7 +33,11 @@ namespace Backend_MyTask
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDatabaseContext>
-                (c => c.UseSqlServer($"Data Source=WS-PC-16\\SQLEXPRESS;Initial Catalog={nameof(ApplicationDatabaseContext)};Integrated Security=True"));
+                // Home
+                // Data Source=localhost;Initial Catalog={nameof(ApplicationDatabaseContext)};Integrated Security=True
+                // Work
+                // Data Source=WS-PC-16\\SQLEXPRESS;Initial Catalog={nameof(ApplicationDatabaseContext)};Integrated Security=True
+                (c => c.UseSqlServer($"Data Source=localhost;Initial Catalog={nameof(ApplicationDatabaseContext)};Integrated Security=True"));
 
             services.AddIdentity<User, IdentityRole>(opt => 
                 {
