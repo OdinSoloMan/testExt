@@ -1,54 +1,52 @@
 ﻿using Backend_MyTask.Domain;
+using Backend_MyTask.SIngalR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Backend_MyTask.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("message")]
     [ApiController]
     public class MessagesController : ControllerBase
     {
-        private IHubContext<NotifyHub, ITypedHubClient> _hubContext;
+        private IHubContext<NotificationHub> _hubContext;
 
-        public MessagesController(IHubContext<NotifyHub, ITypedHubClient> hubContext)
+        public MessagesController(IHubContext<NotificationHub> hubContext)
         {
             _hubContext = hubContext;
         }
 
-        public ActionResult<string> Get()
+        /// <summary>
+        /// Sending a message to users (test)
+        /// </summary>
+        /// <returns></returns>
+        // GET api/values
+        [HttpGet("all")]
+        public ActionResult<IEnumerable<string>> Get()
         {
-            string retMessage = string.Empty;
-            var message = new Message() { Type = "Warning", Information = " Test Message" + Guid.NewGuid() };
-            try
-            {
-                _hubContext.Clients.All.BroadcastMessage(message);
-                retMessage = "Success";
-            }
-            catch (Exception e)
-            {
-                retMessage = e.ToString();
-            }
-            return (retMessage);
+            _hubContext.Clients.All.SendAsync("clientMethodName", "get all called");
+            return new string[] { "value1", "value2" };
         }
 
-        public ActionResult<string> Post(Message message)
+        /// <summary>
+        /// Sending a message to a specific user (test)
+        /// </summary>
+        /// <param name="connectionId"></param>
+        /// <returns></returns>
+        // GET api/values/5
+        [HttpGet("user/{connectionId}")]
+        public ActionResult<string> Get(string connectionId)
         {
-            string retMessage = string.Empty;
-            try
-            {
-                _hubContext.Clients.All.BroadcastMessage(message);
-                retMessage = "Success";
-            }
-            catch (Exception e)
-            {
-                retMessage = e.ToString();
-            }
-            return retMessage;
+            _hubContext.Clients.Client(connectionId).SendAsync("clientMethodName", "get called");
+            return "value";
         }
     }
 }

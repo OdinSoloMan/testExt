@@ -7,6 +7,7 @@ namespace Backend_MyTask.Domain
 {
     public interface ITypedHubClient
     {
-        Task BroadcastMessage(Message message);
+        //Task BroadcastMessage(Message message);
+        //Task BroadcastMessage(string message);
     }
 }

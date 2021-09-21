@@ -1,6 +1,7 @@
 using Backend_MyTask.DataAccess;
 using Backend_MyTask.Domain;
 using Backend_MyTask.Service.Entity;
+using Backend_MyTask.SIngalR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,6 +33,8 @@ namespace Backend_MyTask
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHostedService<DashboardHostedService>();
+
             services.AddDbContext<ApplicationDatabaseContext>
                 // Home
                 // Data Source=localhost;Initial Catalog={nameof(ApplicationDatabaseContext)};Integrated Security=True
@@ -51,9 +54,6 @@ namespace Backend_MyTask
                 })
                 .AddEntityFrameworkStores<ApplicationDatabaseContext>()
                 .AddDefaultTokenProviders();
-
-            services.AddControllers();
-
 
             services.AddCors();
             //services.AddCors(o => o.AddPolicy("CorsPolicy", builder => {
@@ -109,9 +109,10 @@ namespace Backend_MyTask
                             .SetIsOriginAllowed(origin => true) // allow any origin
                             .AllowCredentials());
 
+
             //app.UseSignalR(routes =>
             //{
-            //    routes.MapHub<NotifyHub>("/notify");
+            //    routes.MapHub<NotificationHub>("/notificationHub");
             //});
 
             app.UseAuthentication();
@@ -120,6 +121,7 @@ namespace Backend_MyTask
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<NotificationHub>("/notificationHub");
             });
         }
     }

@@ -6,6 +6,7 @@ import { BoardPage } from '../modal/board/board.page';
 import { ConfirmPage } from '../modal/confirm/confirm.page';
 import { TaskPage } from '../modal/task/task.page';
 import { BoardService } from '../service/board.service';
+import { SignalRService } from '../service/signal-r.service';
 import { Board } from '../shared/board';
 import { Task } from '../shared/task';
 
@@ -19,11 +20,24 @@ export class HomePage implements OnInit, OnDestroy {
   sub: Subscription;
   dataReturned: any;
 
+  // Message all users to timer 2 sec
+  private signalRSubscription: Subscription;
+  totalString: string;
+
   constructor(
+    private signalrService: SignalRService,
     private boardService: BoardService,
     private translate: TranslateService,
     private modalController: ModalController
-  ) {}
+  ) {
+    // Signal R Handler
+    // this.signalRSubscription = this.signalrService.getMessage()
+    // .subscribe(
+    //   (message: any) => {
+    //       this.totalString = `${message.val1} ${message.val2} ${message.val3} ${message.val4}`;
+    //       console.log(this.totalString)
+    // });
+  }
 
   ngOnInit() {
     this.sub = this.boardService.getUserBoards().subscribe(

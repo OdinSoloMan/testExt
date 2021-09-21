@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import * as signalR from '@microsoft/signalr';
+import { HubConnection } from '@microsoft/signalr';
 import {
   home,
   personCircleOutline,
@@ -7,7 +9,9 @@ import {
   carSportOutline,
   calendarClearOutline,
 } from 'ionicons/icons';
+import { Subscription } from 'rxjs';
 import { LanguageService } from './service/language.service';
+import { SignalRService } from './service/signal-r.service';
 
 interface Page {
   path: string;
@@ -31,8 +35,8 @@ export class AppComponent {
     },
     { path: '/transfer-data', title: 'title.transfer', icon: carSportOutline },
     { path: '/login', title: 'title.auth', icon: personCircleOutline },
-    // The page needs to be redesigned. Since it does not really work, 
-    // all the functionality works through three knees, which was 
+    // The page needs to be redesigned. Since it does not really work,
+    // all the functionality works through three knees, which was
     // implemented. so I better just hide her
     // {
     //   path: '/task-manager',
@@ -41,9 +45,21 @@ export class AppComponent {
     // },
   ];
 
-  constructor(private lngService: LanguageService) {}
+  private signalRSubscription: Subscription;
+  totalString: string;
+
+  constructor(
+    private lngService: LanguageService,
+    private signalrService: SignalRService
+  ) {}
 
   ngOnInit() {
     this.lngService.setInitialAppLanguage('en');
+
+    this.signalRSubscription = this.signalrService
+      .getMessage()
+      .subscribe((message: any) => {
+        console.log('aaaa', message);
+      });
   }
 }
