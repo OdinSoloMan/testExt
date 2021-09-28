@@ -19,9 +19,11 @@ export class SignalRService {
   private hubConnection: HubConnection;
 
   constructor() {
+    let accessToken = localStorage.getItem('accessToken');
+
     this.message$ = new Subject<Message>();
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(environment.hubUrl)
+      .withUrl(environment.hubUrl, { accessTokenFactory: () => accessToken })
       .build();
 
     this.hubConnection
@@ -53,13 +55,13 @@ export class SignalRService {
      */
     this.hubConnection.on('clientMethodName', (data) => {
       //debugger;
-      console.log("clientMethodName",data);
+      console.log('clientMethodName', data);
       this.message$.next(data);
     });
 
     this.hubConnection.on('WelcomeMethodName', (data) => {
       //debugger;
-      console.log("WelcomeMethodName",data);
+      console.log('WelcomeMethodName', data);
       this.message$.next(data);
       this.hubConnection
         .invoke('GetDataFromClient', 'user id', data)
@@ -70,7 +72,7 @@ export class SignalRService {
      * Spam handler
      */
     this.hubConnection.on('SendMessage', (message) => {
-      console.log("SendMessage",message);
+      console.log('SendMessage', message);
       this.message$.next(message);
     });
   }
@@ -86,5 +88,16 @@ export class SignalRService {
         console.log('stopped');
       })
       .catch((err) => console.log(err));
-  }
+    }
+
+    public SSS (){
+      this.hubConnection.on('Disconnect', (data) => {
+        //debugger;
+        console.log('Disconnect', data);
+        this.message$.next(data);
+        this.hubConnection
+          .invoke('GetDataFromClient', 'user id', data)
+          .catch((err) => console.log(err));
+      });
+    }
 }

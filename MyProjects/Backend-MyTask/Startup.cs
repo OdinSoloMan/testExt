@@ -1,22 +1,27 @@
 using Backend_MyTask.DataAccess;
 using Backend_MyTask.Domain;
 using Backend_MyTask.Service.Entity;
+using Backend_MyTask.Service.Token;
 using Backend_MyTask.SIngalR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Backend_MyTask
@@ -40,7 +45,7 @@ namespace Backend_MyTask
                 // Data Source=localhost;Initial Catalog={nameof(ApplicationDatabaseContext)};Integrated Security=True
                 // Work
                 // Data Source=WS-PC-16\\SQLEXPRESS;Initial Catalog={nameof(ApplicationDatabaseContext)};Integrated Security=True
-                (c => c.UseSqlServer($"Data Source=localhost;Initial Catalog={nameof(ApplicationDatabaseContext)};Integrated Security=True"));
+                (c => c.UseSqlServer($"Data Source=WS-PC-16\\SQLEXPRESS;Initial Catalog={nameof(ApplicationDatabaseContext)};Integrated Security=True"));
 
             services.AddIdentity<User, IdentityRole>(opt => 
                 {
@@ -55,6 +60,43 @@ namespace Backend_MyTask
                 .AddEntityFrameworkStores<ApplicationDatabaseContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddAuthentication(opt =>
+            {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+
+                    ValidIssuer = "http://localhost:5000",
+                    ValidAudience = "http://localhost:5000",
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"))
+                };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+
+                        // If the request is for our hub...
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken) &&
+                            (path.StartsWithSegments("/notificationHub")))
+                        {
+                            // Read the token out of the query string
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
+            });
+
             services.AddCors();
             //services.AddCors(o => o.AddPolicy("CorsPolicy", builder => {
             //    builder
@@ -65,11 +107,16 @@ namespace Backend_MyTask
             //        .WithOrigins("https://localhost:4200");
             //}));
 
-            services.AddSignalR();
+            services.AddSignalR(opt => {
+                opt.EnableDetailedErrors = true;
+            });
+
+            services.AddSingleton<IUserIdProvider, NameUserIdProvider>();
 
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IBoardRepository, BoardRepository>();
             services.AddTransient<IMyTaskRepository, MyTaskRepository>();
+            services.AddTransient<ITokenService, TokenService>();
 
             services.AddControllers();
         }
@@ -124,5 +171,13 @@ namespace Backend_MyTask
                 endpoints.MapHub<NotificationHub>("/notificationHub");
             });
         }
+    }
+}
+
+public class NameUserIdProvider : IUserIdProvider
+{
+    public string GetUserId(HubConnectionContext connection)
+    {
+        return connection.User?.Identity?.Name;
     }
 }

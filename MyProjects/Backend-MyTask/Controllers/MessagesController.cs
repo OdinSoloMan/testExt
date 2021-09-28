@@ -29,10 +29,10 @@ namespace Backend_MyTask.Controllers
         /// </summary>
         /// <returns></returns>
         // GET api/values
-        [HttpGet("all")]
-        public ActionResult<IEnumerable<string>> Get()
+        [HttpGet("all/{message}")]
+        public ActionResult<IEnumerable<string>> GetAll(string message)
         {
-            _hubContext.Clients.All.SendAsync("clientMethodName", "get all called");
+            _hubContext.Clients.All.SendAsync("clientMethodName", new { MessageType= "All", Message = message });
             return new string[] { "value1", "value2" };
         }
 
@@ -42,10 +42,10 @@ namespace Backend_MyTask.Controllers
         /// <param name="connectionId"></param>
         /// <returns></returns>
         // GET api/values/5
-        [HttpGet("user/{connectionId}")]
-        public ActionResult<string> Get(string connectionId)
+        [HttpGet("user/{connectionId}/{message}")]
+        public ActionResult<string> GetUser(string connectionId, string message)
         {
-            _hubContext.Clients.Client(connectionId).SendAsync("clientMethodName", "get called");
+            _hubContext.Clients.User(connectionId).SendAsync("clientMethodName", new { MessageType = "UserMessage", Message = message });
             return "value";
         }
     }

@@ -1,13 +1,15 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Backend_MyTask.SIngalR
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class DashboardHostedService : IHostedService
     {
         /// <summary>
@@ -32,13 +34,7 @@ namespace Backend_MyTask.SIngalR
         private void DoWork(object state)
         {
             _hubContext.Clients.All.SendAsync("SendMessage",
-                new
-                {
-                    val1 = GetRandomString(),
-                    val2 = GetRandomString(),
-                    val3 = GetRandomString(),
-                    val4 = GetRandomString()
-                });
+                 new { MessageType = "AllSpam", Message = GetRandomString() });
         }
 
         private string GetRandomString()

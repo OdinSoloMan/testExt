@@ -1,6 +1,7 @@
 ﻿using Backend_MyTask.DataAccess;
 using Backend_MyTask.Models;
 using Backend_MyTask.Service.Email;
+using Backend_MyTask.Service.Token;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -20,11 +22,13 @@ namespace Backend_MyTask.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly ITokenService _tokenService;
 
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, ITokenService tokenService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _tokenService = tokenService;
         }
 
         [HttpPost("register")]
@@ -82,19 +86,54 @@ namespace Backend_MyTask.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<string>> Login ([FromBody] LoginModel model)
         {
-            if (ModelState.IsValid)
+            var user = await _userManager.FindByNameAsync(model.Email);
+            if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
-                if (result.Succeeded)
+                var userRoles = await _userManager.GetRolesAsync(user);
+                //var nameRole = role.Name;
+                var claims = new List<Claim>
                 {
-                    return new OkObjectResult(true);
-                }
-                else
+                    new Claim(ClaimTypes.NameIdentifier, user.Id),
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    //new Claim(ClaimTypes.Role, nameRole)
+                };
+
+                foreach (var userRole in userRoles)
                 {
-                    return new OkObjectResult(false);
+                    claims.Add(new Claim(ClaimTypes.Role, userRole));
                 }
+
+                var accessToken = _tokenService.GenerateAccessToken(claims);
+                var refreshToken = _tokenService.GenerateRefreshToken();
+
+                var responce = new
+                {
+                    Id_users = user.Id,
+                    AccessToken = accessToken,
+                    RefreshToken = refreshToken
+                };
+
+                //Docker needs to be enabled first
+                //await _bus.ReceiveAsync(Queue.Processing, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(responce)));
+
+                //var aaaa = new Test().TestG();
+
+                return new OkObjectResult(responce);
             }
-            return new OkObjectResult(false);
+            return Unauthorized();
+            //if (ModelState.IsValid)
+            //{
+            //    var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+            //    if (result.Succeeded)
+            //    {
+            //        return new OkObjectResult(true);
+            //    }
+            //    else
+            //    {
+            //        return new OkObjectResult(false);
+            //    }
+            //}
+            //return new OkObjectResult(false);
         }
 
 

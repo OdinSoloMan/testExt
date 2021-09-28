@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ToastController } from '@ionic/angular';
 import * as signalR from '@microsoft/signalr';
 import { HubConnection } from '@microsoft/signalr';
 import {
@@ -50,16 +51,69 @@ export class AppComponent {
 
   constructor(
     private lngService: LanguageService,
-    private signalrService: SignalRService
+    private signalrService: SignalRService,
+    private toastController: ToastController
   ) {}
 
   ngOnInit() {
-    this.lngService.setInitialAppLanguage('en');
+    let self = this;
+    self.lngService.setInitialAppLanguage('en');
 
-    this.signalRSubscription = this.signalrService
+    if (localStorage.getItem('accessToken') != null) {
+      self.singnalRConnect();
+    } else {
+    }
+  }
+
+  singnalRConnect() {
+    console.log("1111")
+    let self = this;
+
+    self.signalRSubscription = self.signalrService
       .getMessage()
-      .subscribe((message: any) => {
-        console.log('aaaa', message);
+      .subscribe((res: any) => {
+        console.log('res', res);
+        if (res.messageType == 'AllSpam') {
+          self.withdrawAllSpamToast(res.message);
+        }
+        if (res.messageType == 'All') {
+          self.withdrawAllToast(res.message);
+        }
+        if (res.messageType == 'UserMessage') {
+          self.withdrawUserMessageToast(res.message);
+        }
       });
+  }
+
+  singnalRDisconnect(){
+    let self = this;
+    self.signalrService.stopConnection()
+  }
+
+  async withdrawAllSpamToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      color: 'secondary',
+    });
+    toast.present();
+  }
+
+  async withdrawAllToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      color: 'tertiary',
+    });
+    toast.present();
+  }
+
+  async withdrawUserMessageToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      color: 'warning',
+    });
+    toast.present();
   }
 }

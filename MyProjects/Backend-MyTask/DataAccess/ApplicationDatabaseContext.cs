@@ -21,7 +21,7 @@ namespace Backend_MyTask.DataAccess
             // Data Source=localhost;Initial Catalog={nameof(ApplicationDatabaseContext)};Integrated Security=True
             // Work
             // Data Source=WS-PC-16\\SQLEXPRESS;Initial Catalog={nameof(ApplicationDatabaseContext)};Integrated Security=True
-            OptionsBuilder.UseSqlServer($"Data Source=localhost;Initial Catalog={nameof(ApplicationDatabaseContext)};Integrated Security=True");
+            OptionsBuilder.UseSqlServer($"Data Source=WS-PC-16\\SQLEXPRESS;Initial Catalog={nameof(ApplicationDatabaseContext)};Integrated Security=True");
 
         //public DbSet<User> Users { get; set; }
         public DbSet<Board> Boards { get; set; }

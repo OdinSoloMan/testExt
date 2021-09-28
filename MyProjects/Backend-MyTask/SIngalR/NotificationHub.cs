@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Backend_MyTask.SIngalR
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class NotificationHub : Hub
     {
         public void GetDataFromClient(string userId, string connectionId)
@@ -15,8 +18,8 @@ namespace Backend_MyTask.SIngalR
 
         public override Task OnConnectedAsync()
         {
-            var connectionId = Context.ConnectionId;
-            Clients.Client(connectionId).SendAsync("WelcomeMethodName", connectionId);
+            var connectionId = Context.User.Identity.Name;
+            Clients.User(connectionId).SendAsync("WelcomeMethodName", connectionId);
             return base.OnConnectedAsync();
         }
 
@@ -24,6 +27,12 @@ namespace Backend_MyTask.SIngalR
         {
             var connectionId = Context.ConnectionId;
             return base.OnDisconnectedAsync(exception);
+        }
+
+        public Task JoinAsync(string clientGuid)
+        {
+            Clients.Client(clientGuid).SendAsync("WelcomeMethodName", clientGuid);
+            return base.OnConnectedAsync();
         }
     }
 }

@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { tap, timeout } from 'rxjs/operators';
+import { AppComponent } from 'src/app/app.component';
+import { SignalRService } from 'src/app/service/signal-r.service';
 import { AuthenticationService } from '../../service/authentication.service';
 import { ValidationService } from '../../service/validation.service';
 
@@ -19,7 +22,10 @@ export class LoginPage implements OnInit {
     public authService: AuthenticationService,
     private translate: TranslateService,
     private navCtrl: NavController,
-    public formBuilder: FormBuilder
+    public formBuilder: FormBuilder,
+    private router: Router,
+    private signalrService: SignalRService,
+    private appComponent : AppComponent,
   ) {
     let self = this;
     self.forgotAuthForm = formBuilder.group({
@@ -31,7 +37,7 @@ export class LoginPage implements OnInit {
   ngOnInit() {}
 
   ionViewWillEnter() {
-    if (localStorage.getItem('user')) {
+    if (localStorage.getItem('accessToken')) {
       this.isUserAuth = true;
     } else {
       this.isUserAuth = false;
@@ -39,14 +45,24 @@ export class LoginPage implements OnInit {
   }
 
   logIn(email: any, password: any) {
-    this.authService
+    let self = this;
+    self.authService
       .SignIn(email.value, password.value)
       .pipe(
         timeout(60000),
         tap((result) => console.log('result-->', result))
       )
       .subscribe(
-        (res) => console.log(res),
+        (res) => {
+          localStorage.setItem("accessToken", res.accessToken);
+          localStorage.setItem("id_users", res.id_users);
+          localStorage.setItem("refreshToken", res.refreshToken);
+          console.log(res);
+          self.isUserAuth = !self.isUserAuth;
+          self.router.navigateByUrl("home");
+
+          this.appComponent.singnalRConnect();
+        },
         (err) => console.log(err)
       );
     // this.authService
@@ -77,7 +93,11 @@ export class LoginPage implements OnInit {
   }
 
   logOut() {
-    this.isUserAuth = !this.isUserAuth;
+    console.log("ggggggg")
+    let self = this;
+    self.isUserAuth = !self.isUserAuth;
+    self.appComponent.singnalRDisconnect();
     localStorage.clear();
+
   }
 }
