@@ -34,5 +34,14 @@ namespace Backend_MyTask.SIngalR
             Clients.Client(clientGuid).SendAsync("WelcomeMethodName", clientGuid);
             return base.OnConnectedAsync();
         }
+
+        //public Task Disconnect(bool stopCalled)
+        //{
+        //    string name = Context.User.Identity.Name;
+
+        //    Clients.User(name).SendAsync;
+
+        //    return base.OnDisconnected(stopCalled);
+        //}
     }
 }

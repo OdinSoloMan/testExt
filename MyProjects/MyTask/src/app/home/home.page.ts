@@ -19,6 +19,7 @@ export class HomePage implements OnInit, OnDestroy {
   boards: Board[];
   sub: Subscription;
   dataReturned: any;
+  fileContent: any;
 
   // Message all users to timer 2 sec
   private signalRSubscription: Subscription;
@@ -170,5 +171,43 @@ export class HomePage implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.sub.unsubscribe();
+  }
+
+  
+  onChange(fileList: Event): void {
+    let input = fileList.target as HTMLInputElement;
+
+    if (!input.files?.length) {
+        console.log("Null")
+        return;
+    }
+
+    let file = input.files[0];
+    console.log(file);
+    // let fileL = fileList.target.fileList;
+    // console.log(fileL)
+    // let file = fileL[0];
+    let fileReader: FileReader = new FileReader();
+    let self = this;
+    fileReader.onloadend = function (x) {
+      self.fileContent = fileReader.result;
+      self.txtCheck();
+    };
+    fileReader.readAsText(file);
+  }
+  
+  txtCheck() {
+    let self = this;
+    var resConvert = window.btoa(unescape(encodeURIComponent(self.fileContent)));
+    console.log(resConvert);
+
+    console.log('------');
+    var resDeconvert = decodeURIComponent(escape(window.atob(resConvert)));
+    console.log(resDeconvert);
+  }
+
+  handleFileInput(event) {
+    console.log(event);
+    console.log(event.target.files[0]);
   }
 }

@@ -115,4 +115,8 @@
   <!-- <ion-button (click)="openDialog()" expand="block" fill="clear" shape="round">
     openDialog
   </ion-button> -->
+  <ion-input type="file" (change)="onChange($event)"> </ion-input>
+  <ion-item>
+    <ion-textarea autofocus="false" disabled="false" autoGrow="true" [value]="fileContent"></ion-textarea>
+  </ion-item>
 </ion-content>

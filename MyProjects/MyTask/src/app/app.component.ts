@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ToastController } from '@ionic/angular';
+import { Platform, ToastController } from '@ionic/angular';
 import * as signalR from '@microsoft/signalr';
 import { HubConnection } from '@microsoft/signalr';
 import {
@@ -52,8 +52,12 @@ export class AppComponent {
   constructor(
     private lngService: LanguageService,
     private signalrService: SignalRService,
-    private toastController: ToastController
-  ) {}
+    private toastController: ToastController,
+    private platform: Platform,
+  ) {
+    let self = this;
+    console.log(self.platform.platforms());
+  }
 
   ngOnInit() {
     let self = this;
@@ -66,9 +70,9 @@ export class AppComponent {
   }
 
   singnalRConnect() {
-    console.log("1111")
     let self = this;
 
+    self.signalrService.singlaRConnect();
     self.signalRSubscription = self.signalrService
       .getMessage()
       .subscribe((res: any) => {
@@ -87,7 +91,7 @@ export class AppComponent {
 
   singnalRDisconnect(){
     let self = this;
-    self.signalrService.stopConnection()
+    self.signalrService.stopConnection();
   }
 
   async withdrawAllSpamToast(message: string) {

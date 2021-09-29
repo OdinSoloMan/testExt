@@ -18,7 +18,9 @@ export class SignalRService {
   private message$: Subject<Message>;
   private hubConnection: HubConnection;
 
-  constructor() {
+  constructor() {  }
+
+  singlaRConnect() {
     let accessToken = localStorage.getItem('accessToken');
 
     this.message$ = new Subject<Message>();
@@ -38,16 +40,24 @@ export class SignalRService {
       /**
        * Time to restart the server 15 seconds
        */
+
       setTimeout(() => {
         //debugger;
-        this.hubConnection
-          .start()
-          .then(() => {
-            //debugger;
-            console.log('connection started');
-          })
-          .catch((err) => console.log(err));
-      }, 15000);
+        console.log(
+          'To understand why the connection is being restored, I spent 2 hours'
+        );
+        /*
+        if (!this.isLogout)
+          this.hubConnection
+            .start()
+            .then(() => {
+              //debugger;
+              console.log('connection started');
+            })
+            .catch((err) => console.log(err));
+            else
+              this.isLogout = !this.isLogout;*/
+      }, 30000);
     });
 
     /**
@@ -82,22 +92,6 @@ export class SignalRService {
   }
 
   public stopConnection() {
-    this.hubConnection
-      .start()
-      .then(() => {
-        console.log('stopped');
-      })
-      .catch((err) => console.log(err));
-    }
-
-    public SSS (){
-      this.hubConnection.on('Disconnect', (data) => {
-        //debugger;
-        console.log('Disconnect', data);
-        this.message$.next(data);
-        this.hubConnection
-          .invoke('GetDataFromClient', 'user id', data)
-          .catch((err) => console.log(err));
-      });
-    }
+    this.hubConnection.stop();
+  }
 }
