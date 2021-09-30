@@ -13,5 +13,6 @@ namespace Backend_MyTask.Service.Entity
         Task<Board> Read(Guid id);
         Task Update(Board board);
         Task Delete(Guid id);
+        Task<object> ReadUserBoard(Guid id);
     }
 }

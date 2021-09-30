@@ -34,20 +34,10 @@ import { File } from '@ionic-native/file/ngx';
 import { CategoryPage } from './modal/category/category.page';
 import { CategoryPageModule } from './modal/category/category.module';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { BoardService } from './service/board.service';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
-}
-
-const firebase = {
-  apiKey: "AIzaSyA76iR9V9xmnOdNwKx39kNZCxxSfZE2-G0",
-  authDomain: "kanbanfire-fe74f.firebaseapp.com",
-  projectId: "kanbanfire-fe74f",
-  storageBucket: "kanbanfire-fe74f.appspot.com",
-  messagingSenderId: "750804850822",
-  appId: "1:750804850822:web:e103dc91cadc47005d9907",
-  measurementId: "G-D4SPEFV4DF",
-  databaseURL: "https://kanbanfire-fe74f-default-rtdb.europe-west1.firebasedatabase.app/"
 }
 
 @NgModule({
@@ -73,10 +63,6 @@ const firebase = {
         deps: [HttpClient],
       },
     }),
-    AngularFireModule.initializeApp(firebase),
-    AngularFirestoreModule,
-    AngularFireAuthModule,
-    AngularFireDatabaseModule,
     ComponentsModule,
     BrowserAnimationsModule,
     BoardPageModule,
@@ -85,12 +71,10 @@ const firebase = {
     WordPageModule,
     TestingPageModule,
     CategoryPageModule,
-    DragDropModule
+    DragDropModule,
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    AuthenticationService,
-    AngularFirestore,
     File,
   ],
   bootstrap: [AppComponent],

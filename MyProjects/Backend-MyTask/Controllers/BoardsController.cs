@@ -78,5 +78,18 @@ namespace Backend_MyTask.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest, new Response { Status = "Error", Message = "An error occurred while uninstalling!" });
             }
         }
+
+
+        // GET board/readuser/{id}
+        [HttpGet("readuser/{id}")]
+        public async Task<ActionResult<string>> GetReadUserBoard(Guid id)
+        {
+            var res = await _repo.ReadUserBoard(id);
+            if (res != null)
+            {
+                return new OkObjectResult(res);
+            }
+            return StatusCode(StatusCodes.Status204NoContent, new Response { Status = "Error", Message = "This board will not find!" });
+        }
     }
 }

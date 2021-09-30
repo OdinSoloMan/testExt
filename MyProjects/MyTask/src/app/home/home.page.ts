@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
+import { timeout } from 'rxjs/operators';
 import { BoardPage } from '../modal/board/board.page';
 import { ConfirmPage } from '../modal/confirm/confirm.page';
 import { TaskPage } from '../modal/task/task.page';
@@ -16,7 +17,7 @@ import { Task } from '../shared/task';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit, OnDestroy {
-  boards: Board[];
+  boards: any[];
   sub: Subscription;
   dataReturned: any;
   fileContent: any;
@@ -41,14 +42,26 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.sub = this.boardService.getUserBoards().subscribe(
-      async (res) => {
-        this.boards = res;
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+    this.boardService
+      .getUserBoards()
+      .pipe(timeout(60000))
+      .subscribe(
+        async (res: any) => {
+          console.log(res);
+          this.boards = res;
+        },
+        async (err: any) => {
+          console.log(err);
+        }
+      );
+    // this.sub = this.boardService.getUserBoards().subscribe(
+    //   async (res) => {
+    //     this.boards = res;
+    //   },
+    //   (error) => {
+    //     console.log(error);
+    //   }
+    // );
   }
 
   async workWithBoards(): Promise<void> {
@@ -66,11 +79,11 @@ export class HomePage implements OnInit, OnDestroy {
       if (dataReturned !== null) {
         this.dataReturned = dataReturned.data;
         console.log(dataReturned);
-        if (dataReturned.data !== '' && dataReturned.role !== 'backdrop')
-          this.boardService.createBoard({
-            title: this.dataReturned,
-            priority: this.boards.length,
-          });
+        // if (dataReturned.data !== '' && dataReturned.role !== 'backdrop')
+        //   this.boardService.createBoard({
+        //     title: this.dataReturned,
+        //     priority: this.boards.length,
+        //   });
       }
     });
 
@@ -93,20 +106,20 @@ export class HomePage implements OnInit, OnDestroy {
     modal.onDidDismiss().then((dataReturned) => {
       if (dataReturned !== null) {
         console.log('data', dataReturned);
-        if (dataReturned.data !== '' && dataReturned.role !== 'backdrop')
-          if (dataReturned.data.isNew) {
-            // add
-            console.log('add');
-            this.boardService.updateTasks(board.id, [
-              ...board.tasks,
-              dataReturned.data.task,
-            ]);
-          } else {
-            // update
-            const update = board.tasks;
-            update.splice(dataReturned.data.idx, 1, dataReturned.data.task);
-            this.boardService.updateTasks(board.id, board.tasks);
-          }
+        // if (dataReturned.data !== '' && dataReturned.role !== 'backdrop')
+        //   if (dataReturned.data.isNew) {
+        //     // add
+        //     console.log('add');
+        //     this.boardService.updateTasks(board.id, [
+        //       ...board.tasks,
+        //       dataReturned.data.task,
+        //     ]);
+        //   } else {
+        //     // update
+        //     const update = board.tasks;
+        //     update.splice(dataReturned.data.idx, 1, dataReturned.data.task);
+        //     this.boardService.updateTasks(board.id, board.tasks);
+        //   }
       }
     });
 
@@ -146,7 +159,7 @@ export class HomePage implements OnInit, OnDestroy {
           if (dataReturned.data.isWorking) {
             switch (numberWorking) {
               case 1: {
-                this.boardService.deleteBoard(val);
+                //this.boardService.deleteBoard(val);
                 break;
               }
               case 2: {
@@ -154,7 +167,7 @@ export class HomePage implements OnInit, OnDestroy {
                 let newTasks = val.tasks.filter(
                   (item) => item !== val.tasks[i]
                 );
-                this.boardService.updateTasks(val.id, newTasks);
+                //this.boardService.updateTasks(val.id, newTasks);
                 break;
               }
               default: {
@@ -173,13 +186,12 @@ export class HomePage implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
-  
   onChange(fileList: Event): void {
     let input = fileList.target as HTMLInputElement;
 
     if (!input.files?.length) {
-        console.log("Null")
-        return;
+      console.log('Null');
+      return;
     }
 
     let file = input.files[0];
@@ -195,11 +207,17 @@ export class HomePage implements OnInit, OnDestroy {
     };
     fileReader.readAsText(file);
   }
-  
+
+  linkFile: any;
+
   txtCheck() {
     let self = this;
-    var resConvert = window.btoa(unescape(encodeURIComponent(self.fileContent)));
+    var resConvert = window.btoa(
+      unescape(encodeURIComponent(self.fileContent))
+    );
     console.log(resConvert);
+
+    self.linkFile = resConvert;
 
     console.log('------');
     var resDeconvert = decodeURIComponent(escape(window.atob(resConvert)));
@@ -209,5 +227,15 @@ export class HomePage implements OnInit, OnDestroy {
   handleFileInput(event) {
     console.log(event);
     console.log(event.target.files[0]);
+  }
+
+  onDowloadFile() {
+    const linkSource = `data:application/txt;base64,${this.linkFile}`;
+    const downloadLink = document.createElement('a');
+    const fileName = 'vct_illustration.txt';
+
+    downloadLink.href = linkSource;
+    downloadLink.download = fileName;
+    downloadLink.click();
   }
 }

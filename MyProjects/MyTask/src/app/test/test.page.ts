@@ -23,7 +23,7 @@ export class TestPage implements OnInit {
 
   taskDrop(event: CdkDragDrop<string[]>, board ) {
     moveItemInArray(board.tasks, event.previousIndex, event.currentIndex);
-    this.boardService.updateTasks(board.id, board.tasks);
+    //this.boardService.updateTasks(board.id, board.tasks);
   }
 
   constructor(
@@ -58,11 +58,11 @@ export class TestPage implements OnInit {
       if (dataReturned !== null) {
         this.dataReturned = dataReturned.data;
         console.log(dataReturned);
-        if (dataReturned.data !== '' && dataReturned.role !== 'backdrop')
-          this.boardService.createBoard({
-            title: this.dataReturned,
-            priority: this.boards.length,
-          });
+        // if (dataReturned.data !== '' && dataReturned.role !== 'backdrop')
+        //   this.boardService.createBoard({
+        //     title: this.dataReturned,
+        //     priority: this.boards.length,
+        //   });
       }
     });
 
@@ -89,15 +89,15 @@ export class TestPage implements OnInit {
           if (dataReturned.data.isNew) {
             // add
             console.log('add');
-            this.boardService.updateTasks(board.id, [
-              ...board.tasks,
-              dataReturned.data.task,
-            ]);
+            // this.boardService.updateTasks(board.id, [
+            //   ...board.tasks,
+            //   dataReturned.data.task,
+            // ]);
           } else {
             // update
             const update = board.tasks;
             update.splice(dataReturned.data.idx, 1, dataReturned.data.task);
-            this.boardService.updateTasks(board.id, board.tasks);
+            //this.boardService.updateTasks(board.id, board.tasks);
           }
       }
     });
@@ -138,7 +138,7 @@ export class TestPage implements OnInit {
           if (dataReturned.data.isWorking) {
             switch (numberWorking) {
               case 1: {
-                this.boardService.deleteBoard(val);
+                //this.boardService.deleteBoard(val);
                 break;
               }
               case 2: {
@@ -146,7 +146,7 @@ export class TestPage implements OnInit {
                 let newTasks = val.tasks.filter(
                   (item) => item !== val.tasks[i]
                 );
-                this.boardService.updateTasks(val.id, newTasks);
+                //this.boardService.updateTasks(val.id, newTasks);
                 break;
               }
               default: {
