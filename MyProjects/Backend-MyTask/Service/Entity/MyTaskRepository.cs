@@ -32,8 +32,23 @@ namespace Backend_MyTask.Service.Entity
 
         public async Task Update(MyTask myTask)
         {
-            db.Entry(myTask).State = EntityState.Modified;
-            await db.SaveChangesAsync();
+            try
+            {
+                await Task.Run(async () =>
+                {
+                    db.MyTasks.Update(new MyTask
+                    {
+                        Id = myTask.Id,
+                        BoardId = myTask.BoardId,
+                        DateTime = myTask.DateTime,
+                        Description = myTask.Description,
+                        File = myTask.File,
+                        Name = myTask.Name
+                    });
+                    await db.SaveChangesAsync();
+                });
+            }
+            catch { }
         }
     }
 }

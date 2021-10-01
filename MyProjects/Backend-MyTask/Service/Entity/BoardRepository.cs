@@ -1,5 +1,6 @@
 ﻿using Backend_MyTask.DataAccess;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,17 +50,30 @@ namespace Backend_MyTask.Service.Entity
          */
         public async Task<object> ReadUserBoard(Guid id)
         {
-            return await (from u in db.Boards
-                   where u.UserId == id.ToString()
-                   join p in db.MyTasks on u.Id equals p.BoardId into gj
-                   from x in gj.DefaultIfEmpty()
-                   select new
-                   {
-                       Id = u.Id,
-                       Name = u.Name,
-                       UserId = u.UserId,
-                       tasks = (x == null ? null : x)
-                   }).ToListAsync();
+            JsonSerializerSettings jss = new JsonSerializerSettings();
+            jss.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            var lst = await db.Boards.Include(c => c.MyTasks).Where(z => z.UserId == id.ToString()).ToListAsync();
+            string json = JsonConvert.SerializeObject(lst, jss);
+            return json;
+
+            //JsonSerializerSettings jss = new JsonSerializerSettings();
+            //jss.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            //var lst = db.Boards.Include(c => c.MyTasks).Where(z => z.UserId == id.ToString()).ToList();
+            //string json = JsonConvert.SerializeObject(lst, jss);
+            //return json;
+
+
+            //return await (from u in db.Boards
+            //       where u.UserId == id.ToString()
+            //       join p in db.MyTasks on u.Id equals p.BoardId into gj
+            //       from x in gj.DefaultIfEmpty()
+            //       select new
+            //       {
+            //           Id = u.Id,
+            //           Name = u.Name,
+            //           UserId = u.UserId,
+            //           tasks = (x == null ? null : x)
+            //       }).ToListAsync();
         }
 
         public async Task Update(Board board)

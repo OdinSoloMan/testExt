@@ -7,8 +7,6 @@ import { BoardPage } from '../modal/board/board.page';
 import { ConfirmPage } from '../modal/confirm/confirm.page';
 import { TaskPage } from '../modal/task/task.page';
 import { BoardService } from '../service/board.service';
-import { SignalRService } from '../service/signal-r.service';
-import { Board } from '../shared/board';
 import { Task } from '../shared/task';
 
 @Component({
@@ -21,25 +19,13 @@ export class HomePage implements OnInit, OnDestroy {
   sub: Subscription;
   dataReturned: any;
   fileContent: any;
-
-  // Message all users to timer 2 sec
-  private signalRSubscription: Subscription;
   totalString: string;
 
   constructor(
-    private signalrService: SignalRService,
     private boardService: BoardService,
     private translate: TranslateService,
     private modalController: ModalController
-  ) {
-    // Signal R Handler
-    // this.signalRSubscription = this.signalrService.getMessage()
-    // .subscribe(
-    //   (message: any) => {
-    //       this.totalString = `${message.val1} ${message.val2} ${message.val3} ${message.val4}`;
-    //       console.log(this.totalString)
-    // });
-  }
+  ) {}
 
   ngOnInit() {
     this.boardService
@@ -54,14 +40,6 @@ export class HomePage implements OnInit, OnDestroy {
           console.log(err);
         }
       );
-    // this.sub = this.boardService.getUserBoards().subscribe(
-    //   async (res) => {
-    //     this.boards = res;
-    //   },
-    //   (error) => {
-    //     console.log(error);
-    //   }
-    // );
   }
 
   async workWithBoards(): Promise<void> {
@@ -79,22 +57,32 @@ export class HomePage implements OnInit, OnDestroy {
       if (dataReturned !== null) {
         this.dataReturned = dataReturned.data;
         console.log(dataReturned);
-        // if (dataReturned.data !== '' && dataReturned.role !== 'backdrop')
-        //   this.boardService.createBoard({
-        //     title: this.dataReturned,
-        //     priority: this.boards.length,
-        //   });
+        if (dataReturned.data !== '' && dataReturned.role !== 'backdrop')
+          this.boardService
+            .createBoard({
+              Name: dataReturned.data,
+              UserId: localStorage.getItem('id_users'),
+            })
+            .pipe(timeout(60000))
+            .subscribe(
+              (res) => {
+                console.log(res);
+                this.addBoard(res);
+              },
+              (err) => {
+                console.log(err);
+              }
+            );
       }
     });
 
     return await modal.present();
   }
 
-  async workWithTask(board: any, task?: Task, idx?: number) {
-    const newTask = { label: 'purple' };
+  async workWithTask(board: any, task?: Task, idx?: string) {
+    const newTask = { BoardId: board.Id };
     const modal = await this.modalController.create({
       component: TaskPage,
-      cssClass: 'modal-class',
       backdropDismiss: true,
       componentProps: {
         paramTask: task
@@ -106,27 +94,46 @@ export class HomePage implements OnInit, OnDestroy {
     modal.onDidDismiss().then((dataReturned) => {
       if (dataReturned !== null) {
         console.log('data', dataReturned);
-        // if (dataReturned.data !== '' && dataReturned.role !== 'backdrop')
-        //   if (dataReturned.data.isNew) {
-        //     // add
-        //     console.log('add');
-        //     this.boardService.updateTasks(board.id, [
-        //       ...board.tasks,
-        //       dataReturned.data.task,
-        //     ]);
-        //   } else {
-        //     // update
-        //     const update = board.tasks;
-        //     update.splice(dataReturned.data.idx, 1, dataReturned.data.task);
-        //     this.boardService.updateTasks(board.id, board.tasks);
-        //   }
+        if (dataReturned.data !== '' && dataReturned.role !== 'backdrop')
+          if (dataReturned.data.isNew) {
+            // add
+            console.log('add');
+            this.boardService
+              .addTaskToBoard(dataReturned.data.task)
+              .pipe(timeout(60000))
+              .subscribe(
+                (res) => {
+                  console.log(res);
+                  this.addTask(res);
+                },
+                (err) => {
+                  console.log(err);
+                }
+              );
+          } else {
+            // update
+            console.log('update');
+            dataReturned.data.task['Id'] = dataReturned.data.idx;
+            this.boardService
+              .updateTaskToBoard(dataReturned.data.idx, dataReturned.data.task)
+              .pipe(timeout(60000))
+              .subscribe(
+                (res) => {
+                  console.log(res);
+                  this.updateTask(res);
+                },
+                (err) => {
+                  console.log(err);
+                }
+              );
+          }
       }
     });
 
     return await modal.present();
   }
 
-  async workDelete(numberWorking: any, val: any, name: any, i?: any) {
+  async workDelete(numberWorking: any, board: any, val: any, i?: any) {
     const modal = await this.modalController.create({
       component: ConfirmPage,
       cssClass: 'modal-class',
@@ -139,14 +146,14 @@ export class HomePage implements OnInit, OnDestroy {
                 title: this.translate.instant('txt.delete-board'),
                 message: `${this.translate.instant(
                   'txt.remove-the-board'
-                )} " ${name} " ?`,
+                )} " ${val} " ?`,
               }
             : {
                 title: this.translate.instant('txt.delete-task'),
                 message: `${this.translate.instant('txt.remove-the-task')} " ${
-                  val.tasks[i].description
+                  board.Name
                 } " ${this.translate.instant('txt.from-the-board')}  " ${
-                  val.title
+                  val.Name
                 } " ?`,
               },
         isWorking: false,
@@ -159,15 +166,39 @@ export class HomePage implements OnInit, OnDestroy {
           if (dataReturned.data.isWorking) {
             switch (numberWorking) {
               case 1: {
-                //this.boardService.deleteBoard(val);
+                console.log(board);
+                this.boardService
+                  .deleteBoard(board)
+                  .pipe(timeout(60000))
+                  .subscribe(
+                    (res) => {
+                      console.log(res);
+                      let ls = JSON.parse(JSON.stringify(res));
+                      let aa = this.deleteBoard(ls.delete_board);
+                    },
+                    (err) => {
+                      console.log(err);
+                    }
+                  );
                 break;
               }
               case 2: {
-                console.log(val.id, val.tasks);
-                let newTasks = val.tasks.filter(
-                  (item) => item !== val.tasks[i]
-                );
+                console.log('delete task');
+                console.log('i', board.Id, val.Id);
                 //this.boardService.updateTasks(val.id, newTasks);
+                this.boardService
+                  .deleteTaskToBoard(val.Id)
+                  .pipe(timeout(60000))
+                  .subscribe(
+                    (res) => {
+                      console.log(res);
+                      let ls = JSON.parse(JSON.stringify(res));
+                      let aa = this.deleteTaskBoard(board.Id, ls.delete_mytask);
+                    },
+                    (err) => {
+                      console.log(err);
+                    }
+                  );
                 break;
               }
               default: {
@@ -196,9 +227,6 @@ export class HomePage implements OnInit, OnDestroy {
 
     let file = input.files[0];
     console.log(file);
-    // let fileL = fileList.target.fileList;
-    // console.log(fileL)
-    // let file = fileL[0];
     let fileReader: FileReader = new FileReader();
     let self = this;
     fileReader.onloadend = function (x) {
@@ -215,13 +243,13 @@ export class HomePage implements OnInit, OnDestroy {
     var resConvert = window.btoa(
       unescape(encodeURIComponent(self.fileContent))
     );
-    console.log(resConvert);
+    //console.log(resConvert);
 
     self.linkFile = resConvert;
 
     console.log('------');
     var resDeconvert = decodeURIComponent(escape(window.atob(resConvert)));
-    console.log(resDeconvert);
+    //console.log(resDeconvert);
   }
 
   handleFileInput(event) {
@@ -230,12 +258,76 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   onDowloadFile() {
-    const linkSource = `data:application/txt;base64,${this.linkFile}`;
+    const linkSource = `data:application/zip;base64,${this.linkFile}`;
     const downloadLink = document.createElement('a');
-    const fileName = 'vct_illustration.txt';
+    const fileName = 'vct_illustration.zip';
 
     downloadLink.href = linkSource;
     downloadLink.download = fileName;
     downloadLink.click();
+  }
+
+  addBoard(newBoard: any) {
+    this.boards.push({
+      Id: newBoard.id,
+      Name: newBoard.name,
+      UserId: newBoard.userId,
+      MyTasks: [],
+    });
+    console.log('push', this.boards);
+  }
+
+  deleteBoard(idDeleteBoardL: any) {
+    var index = this.boards
+      .map((item: { Id: any }) => item.Id)
+      .indexOf(idDeleteBoardL);
+    console.log(index);
+    this.boards.splice(index, 1);
+  }
+
+  addTask(newTask: any) {
+    var index = this.boards
+      .map((item: { Id: any }) => item.Id)
+      .indexOf(newTask.boardId);
+    console.log(index);
+    this.boards[index].MyTasks.push({
+      Id: newTask?.id,
+      Name: newTask?.name,
+      Description: newTask?.description,
+      File: newTask?.file,
+      DateTime: newTask?.dateTime,
+      BoardId: newTask?.boardId,
+    });
+  }
+
+  updateTask(task: any) {
+    var index = this.boards.findIndex(
+      (obj: { Id: string }) => obj.Id === task.boardId
+    );
+    console.log(index);
+    var index1 = this.boards[index].MyTasks.findIndex(
+      (obj: { Id: string }) => obj.Id === task.id
+    );
+    console.log(index1);
+    this.boards[index].MyTasks[index1] = {
+      Id: task?.id,
+      Name: task?.name,
+      Description: task?.description,
+      File: task?.file,
+      DateTime: task?.dateTime,
+      BoardId: task?.boardId,
+    };
+  }
+
+  deleteTaskBoard(boardId: any, taskId: any) {
+    var index = this.boards
+      .map((item: { Id: any }) => item.Id)
+      .indexOf(boardId);
+    console.log(index);
+    var index1 = this.boards[index].MyTasks.findIndex(
+      (obj: { Id: string }) => obj.Id === taskId
+    );
+    console.log(index1);
+    this.boards[index].MyTasks.splice(index1, 1);
   }
 }

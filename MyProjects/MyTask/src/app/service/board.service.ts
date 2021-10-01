@@ -1,11 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
-import { Board } from '../shared/board';
-import { Task } from '../shared/task';
 
 @Injectable({
   providedIn: 'root',
@@ -25,55 +20,70 @@ export class BoardService {
     });
   }
 
-  /* 
-    Creates a new board for the current user
-  */
-  // async createBoard(data: Board) {
-  //   const user = await this.afAuth.currentUser;
-
-  //   return this.db.collection('boards').add({
-  //     ...data,
-  //     uid: user.uid,
-  //     tasks: [{ description: 'Hello!', label: 'yellow' }],
-  //   });
-  // }
-
-  /* 
-    Get all boards owned by current user
-  */
-
+  /**
+   * Select info board user
+   * @returns
+   */
   getUserBoards(): Observable<any> {
     return this.http.get<any>(
-      this.Url + '/board/readuser/' + localStorage.getItem('id_users')
+      this.Url + '/board/readuser/' + localStorage.getItem('id_users'),
+      { headers: this.headers() }
     );
-    // return this.afAuth.authState.pipe(
-    //   switchMap((user) => {
-    //     if (user) {
-    //       return this.db
-    //         .collection<Board>('boards', (ref) =>
-    //           ref.where('uid', '==', user.uid).orderBy('priority')
-    //         )
-    //         .valueChanges({ idField: 'id' });
-    //     } else {
-    //       return [];
-    //     }
-    //   })
-    // );
   }
 
-  /* 
-    Delete board
-  */
+  /**
+   * Delete board
+   * @param boardId id board
+   * @returns
+   */
+  deleteBoard(boardId: any) {
+    return this.http.delete(this.Url + '/board/delete/' + boardId, {
+      headers: this.headers(),
+    });
+  }
 
-  // deleteBoard(boardId: string) {
-  //   return this.db.collection('boards').doc(boardId).delete();
-  // }
+  /**
+   * Create Board
+   * @param val Board
+   * @returns
+   */
+  createBoard(val: any) {
+    return this.http.post(this.Url + '/board/add', val, {
+      headers: this.headers(),
+    });
+  }
 
-  /*
-    Updates the tasks on board
-  */
+  /**
+   * Add task to board
+   * @param val Task
+   * @returns
+   */
+  addTaskToBoard(val: any) {
+    return this.http.post(this.Url + '/mytask/add', val, {
+      headers: this.headers(),
+    });
+  }
 
-  // updateTasks(boardId: string, tasks: Task[]) {
-  //   return this.db.collection('boards').doc(boardId).update({ tasks });
-  // }
+  /**
+   * Update task to board
+   * @param id Id task
+   * @param val body task
+   * @returns
+   */
+  updateTaskToBoard(id: any, val: any) {
+    return this.http.put(this.Url + '/mytask/update/' + id, val, {
+      headers: this.headers(),
+    });
+  }
+
+  /**
+   * Delete task to board
+   * @param id Id task
+   * @returns 
+   */
+  deleteTaskToBoard(id: any) {
+    return this.http.delete(this.Url + '/mytask/delete/' + id, {
+      headers: this.headers(),
+    });
+  }
 }

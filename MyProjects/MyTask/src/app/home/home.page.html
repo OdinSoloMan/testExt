@@ -8,52 +8,11 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <!-- <div *ngFor="let board of boards" [attr.board]="board">
-    <div class="card">
-      <div class="container">
-        <button
-          (click)="deleteBord(board.id)"
-          expand="block"
-          fill="clear"
-          shape="round"
-        >
-          {{'btn.delete' | translate}}
-        </button>
-        <h4><b>Id {{board.id}}</b></h4>
-        <p>Title {{board.title}}</p>
-      </div>
-      <div *ngFor="let task of board.tasks; let i = index">
-        <button name="pin" slot="start" (click)="workWithTask(board, task, i)">
-          /
-        </button>
-        <p [ngClass]="task.label">{{task.description}}</p>
-        <button fill="outline" slot="end">Drop</button>
-      </div>
-      <button
-        (click)="workWithTask(board)"
-        expand="block"
-        fill="clear"
-        shape="round"
-      >
-        Add
-      </button>
-    </div>
-  </div>
-  <ion-fab
-    horizontal="end"
-    vertical="bottom"
-    slot="fixed"
-    *ngIf="this.boards !== undefined"
-  >
-    <ion-fab-button color="danger" (click)="workWithBoards()">
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
-  </ion-fab> -->
   <div *ngFor="let board of boards" [attr.board]="board">
     <ion-card>
       <ion-card-header>
         <ion-button
-          (click)="workDelete(1, board.id, board.name)"
+          (click)="workDelete(1, board.Id, board.Name)"
           expand="block"
           fill="clear"
           shape="round"
@@ -61,20 +20,20 @@
           {{'btn.delete' | translate}}
         </ion-button>
         <ion-card-subtitle
-          >{{'label.id' | translate}} {{board.id}}
+          >{{'label.id' | translate}} {{board.Id}}
         </ion-card-subtitle>
         <ion-card-title
-          >{{'label.title' | translate}} {{board.name}}</ion-card-title
+          >{{'label.title' | translate}} {{board.Name}}</ion-card-title
         >
       </ion-card-header>
-      <ion-item *ngFor="let task of board.tasks; let i = index">
+      <ion-item *ngFor="let task of board.MyTasks; let i = index">
         <ion-icon
           name="pin"
           slot="start"
-          (click)="workWithTask(board, task, i)"
+          (click)="workWithTask(board, task, task.Id)"
         ></ion-icon>
-        <ion-label [style.background]="task.label"
-          >{{task.description}}</ion-label
+        <ion-label [style.background]="task.Name"
+          >{{task.Name}}</ion-label
         >
         <ion-button
           (click)="workDelete(2, board, task, i)"
@@ -106,15 +65,6 @@
   <div class="ion-text-center" *ngIf="this.boards === undefined">
     <h3>{{'txt.need-auth' | translate}}</h3>
   </div>
-  <!-- <ion-button (click)="check()" expand="block" fill="clear" shape="round">
-    Click me
-  </ion-button> -->
-  <!-- <ion-button (click)="updateTest()" expand="block" fill="clear" shape="round">
-    Test
-  </ion-button> -->
-  <!-- <ion-button (click)="openDialog()" expand="block" fill="clear" shape="round">
-    openDialog
-  </ion-button> -->
   <ion-input type="file" (change)="onChange($event)"> </ion-input>
   <ion-item>
     <ion-textarea disabled="false" autoGrow="true" [value]="fileContent"></ion-textarea>
