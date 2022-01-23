@@ -24,7 +24,7 @@ namespace Backend_MyTask.Service.Email
             using (MailKit.Net.Smtp.SmtpClient client = new MailKit.Net.Smtp.SmtpClient())
             {
                 await client.ConnectAsync("smtp.gmail.com", 465, true); //либо использум порт 465
-                await client.AuthenticateAsync("yuraburodext@gmail.com", "Naruto1997abc");
+                await client.AuthenticateAsync("email@gmail.com", "emailpassword");
                 await client.SendAsync(emailMessage);
 
                 await client.DisconnectAsync(true);
